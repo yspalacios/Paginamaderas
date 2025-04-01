@@ -1,0 +1,291 @@
+{% load static %}  <!-- Carga el tag "static" de Django para usar archivos estáticos -->
+<!DOCTYPE html>  <!-- Declara el tipo de documento HTML5 -->
+<html lang="es">  <!-- Inicia el documento HTML y define el idioma en español -->
+<head>  <!-- Inicio de la sección "head" que contiene metadatos y enlaces a recursos -->
+  <meta charset="UTF-8">  <!-- Define la codificación de caracteres como UTF-8 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- Configura el viewport para dispositivos móviles -->
+  <title>Gestión de Imagen</title>  <!-- Título de la página que aparece en la pestaña del navegador -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">  <!-- Enlaza la hoja de estilos de Bootstrap -->
+  <style>
+    /* Reset global */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    /* Fondo del body: tono madera oscuro */
+    body {
+      background: linear-gradient(135deg, #4a2c2a, #2c1a18);
+      font-family: 'Georgia', serif;
+      color: #dcd2c6;
+      background-attachment: fixed;
+    }
+    /* Header: Barra superior completa con el nombre */
+    .header {
+      background-color: #343a40;
+      color: #fff;
+      padding: 15px 30px;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      width: 100%;
+    }
+    .header span {
+      color: #ff9800;
+    }
+    /* Área principal: contenedor flexible para sidebar y contenido */
+    .main-content {
+      display: flex;
+      min-height: calc(100vh - 60px); /* Resta la altura del header */
+    }
+    /* Sidebar (menú vertical izquierdo) */
+    .sidebar {
+      background-color: #212529;
+      width: 250px;
+      padding: 20px;
+      color: #fff;
+    }
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .sidebar .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 10px;
+      color: #adb5bd;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .sidebar .menu a:hover {
+      background-color: #ff9800;
+      color: #fff;
+    }
+    /* Contenido principal a la derecha */
+    .content {
+      flex: 1;
+      padding: 20px;
+      background-color: #e9ecef;
+    }
+    /* Encabezados del contenido */
+    .content h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 32px;
+      animation: fadeInDown 1s ease;
+      color: #8B4513;
+    }
+    .content h3 {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 28px;
+      animation: fadeInUp 1s ease;
+      color: #8B4513;
+    }
+    /* Estilos propios de Gestión de Imagen */
+    .btn {
+      transition: background-color 0.3s, transform 0.3s;
+      border: 2px solid transparent;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+    .btn-primary {
+      background-color: #8B4513;
+      border-color: #8B4513;
+    }
+    .btn-primary:hover {
+      background-color: #A0522D;
+      border-color: #A0522D;
+    }
+    .btn-success {
+      background-color: #556B2F;
+      border-color: #556B2F;
+    }
+    .btn-success:hover {
+      background-color: #6B8E23;
+      border-color: #6B8E23;
+    }
+    .btn-info {
+      background-color: #4682B4;
+      border-color: #4682B4;
+    }
+    .btn-info:hover {
+      background-color: #5A9BD4;
+      border-color: #5A9BD4;
+    }
+    .btn-secondary {
+      background-color: #2F4F4F;
+      border-color: #2F4F4F;
+    }
+    .btn-secondary:hover {
+      background-color: #3C6968;
+      border-color: #3C6968;
+    }
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s, box-shadow 0.3s;
+      overflow: hidden;
+      background: #fff;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.3s;
+      position: relative;
+      border-radius: 8px;
+    }
+    .card-img-top:hover {
+      transform: scale(1.05);
+    }
+    .card-img-top::before {
+      content: "";
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
+      border: 2px solid #8B4513;
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .card-img-top:hover::before {
+      opacity: 1;
+    }
+    .form-control {
+      border: 1px solid #8B4513;
+      border-radius: 5px;
+      background-color: #fff;
+      color: #343a40;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>  <!-- Fin del bloque de estilos CSS -->
+</head>
+<body>  <!-- Inicio del cuerpo del documento -->
+  <!-- Header superior -->
+  <div class="header">Maderas <span>Isabella</span></div>  <!-- Encabezado con el nombre "Maderas Isabella" -->
+  <!-- Contenedor principal con Sidebar y Contenido -->
+  <div class="main-content">  <!-- Inicio del contenedor principal con diseño flex -->
+    <!-- Menú vertical (Sidebar) -->
+    <div class="sidebar">  <!-- Inicio de la barra lateral (sidebar) -->
+      <h2>Menú</h2>  <!-- Título del menú lateral -->
+      <div class="menu">  <!-- Contenedor de los enlaces del menú -->
+        <a href="#">Inicio</a>  <!-- Enlace a la página de inicio -->
+        <a href="#">Mensajes</a>  <!-- Enlace a la sección de mensajes -->
+        <a href="#">Configuración</a>  <!-- Enlace a la configuración -->
+        <a href="#">Perfil</a>  <!-- Enlace al perfil del usuario -->
+        <a href="{% url 'logout' %}">Cerrar Sesión</a>  <!-- Enlace para cerrar sesión mediante Django -->
+        <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>  <!-- Enlace a la galería de publicidad -->
+        <a href="{% url 'lista_login' %}">Listado de Cuentas</a>  <!-- Enlace al listado de cuentas -->
+        <a href="{% url 'carpeta' %}">Documentos de contratación</a>  <!-- Enlace a los documentos de contratación -->
+      </div>  <!-- Fin del contenedor de enlaces del menú -->
+    </div>  <!-- Fin de la barra lateral -->
+    <!-- Contenido principal -->
+    <div class="content">  <!-- Inicio de la sección de contenido principal -->
+      <h2>Gestión de Imagen</h2>  <!-- Título principal de la sección de gestión de imagen -->
+      
+      <div class="mb-4 d-flex justify-content-center gap-3">  <!-- Contenedor para el input de búsqueda con márgenes y diseño flex -->
+        <input type="text" name="query" id="search-input" class="form-control" placeholder="Buscar imágenes..." value="{{ request.GET.query }}">  <!-- Campo de búsqueda para imágenes, con valor obtenido de la petición GET -->
+      </div>  <!-- Fin del contenedor del input de búsqueda -->
+      
+      <div class="mb-4 d-flex justify-content-center gap-3">  <!-- Contenedor para los botones de navegación con márgenes y diseño flex -->
+        <a href="{% url 'index' %}" class="btn btn-primary">Inicio</a>  <!-- Botón que redirige a la página de inicio -->
+        <a href="{% url 'subir_imagen' %}" class="btn btn-success">Subir Nueva Imagen</a>  <!-- Botón para subir una nueva imagen -->
+        <a href="{% url 'inicio_publicados' %}" class="btn btn-info">Ver Publicados</a>  <!-- Botón para ver las imágenes publicadas -->
+      </div>  <!-- Fin del contenedor de botones -->
+      
+      <h3>Imágenes en Gestión</h3>  <!-- Subtítulo para la sección de imágenes en gestión -->
+      <div class="row" id="productos-container">  <!-- Contenedor tipo fila para mostrar los productos/imágenes -->
+        {% include 'libros/productos_partial.html' %}  <!-- Inclusión de una plantilla parcial de Django que muestra los productos -->
+      </div>  <!-- Fin del contenedor de productos -->
+    </div>  <!-- Fin de la sección de contenido principal -->
+  </div>  <!-- Fin del contenedor principal -->
+  
+  <script>  <!-- Inicio del bloque de JavaScript -->
+    function getCookie(name) {  // Función para obtener el valor de una cookie dado su nombre
+      let cookieValue = null;  // Inicializa la variable que almacenará el valor de la cookie
+      if (document.cookie && document.cookie !== '') {  // Verifica si existen cookies en el documento
+        const cookies = document.cookie.split(';');  // Divide las cookies en un arreglo utilizando ";" como separador
+        for (let i = 0; i < cookies.length; i++) {  // Itera sobre cada cookie en el arreglo
+          const cookie = cookies[i].trim();  // Elimina espacios en blanco de la cookie actual
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {  // Comprueba si la cookie comienza con el nombre buscado seguido de "="
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));  // Decodifica y obtiene el valor de la cookie
+            break;  // Sale del ciclo una vez encontrada la cookie
+          }
+        }
+      }
+      return cookieValue;  // Retorna el valor de la cookie o null si no se encontró
+    }
+    const csrftoken = getCookie('csrftoken');  // Almacena en "csrftoken" el valor de la cookie CSRF
+    
+    document.addEventListener("DOMContentLoaded", function(){  // Espera a que el contenido del documento se cargue completamente
+      const searchInput = document.getElementById("search-input");  // Obtiene el elemento input de búsqueda por su ID
+      const productosContainer = document.getElementById("productos-container");  // Obtiene el contenedor de productos por su ID
+      
+      searchInput.addEventListener("input", function(){  // Agrega un evento que se ejecuta cuando se detecta entrada en el input
+        const query = searchInput.value;  // Guarda el valor actual del input en la variable "query"
+        fetch("/busqueda_ajax/?query=" + encodeURIComponent(query))  // Realiza una petición AJAX a la URL de búsqueda, codificando el query
+          .then(response => response.json())  // Convierte la respuesta a formato JSON
+          .then(data => {  // Procesa los datos recibidos de la petición
+             productosContainer.innerHTML = data.html;  // Actualiza el contenido HTML del contenedor de productos con el resultado
+          })
+          .catch(error => console.log('Error en la búsqueda AJAX:', error));  // Muestra un error en la consola en caso de fallo en la petición
+      });
+    });
+    
+    function cambiarEstado(productoId, accion, btn) {  // Función para cambiar el estado de un producto (publicar o quitar publicidad)
+      let url = '';  // Inicializa la variable que contendrá la URL para la petición
+      if (accion === 'publicar') {  // Si la acción es "publicar"
+        url = `/libros/publicar_producto/${productoId}/`;  // Asigna la URL para publicar el producto
+      } else if (accion === 'quitar') {  // Si la acción es "quitar"
+        url = `/libros/quitar_publicidad/${productoId}/`;  // Asigna la URL para quitar la publicidad del producto
+      }
+      
+      fetch(url, {  // Realiza una petición fetch a la URL especificada
+        method: 'POST',  // Define el método HTTP POST para la petición
+        headers: {  // Define los encabezados para la petición
+          'Content-Type': 'application/json',  // Indica que el contenido se envía en formato JSON
+          'X-CSRFToken': csrftoken  // Incluye el token CSRF para seguridad en la petición
+        },
+        body: JSON.stringify({})  // Envía un cuerpo de petición vacío en formato JSON
+      })
+      .then(response => response.json())  // Convierte la respuesta a formato JSON
+      .then(data => {  // Procesa los datos recibidos de la petición
+        if (data.success) {  // Si la respuesta indica éxito
+          if (accion === 'publicar') {  // Si la acción era "publicar"
+            btn.innerText = 'No Publicar';  // Cambia el texto del botón a "No Publicar"
+            btn.classList.remove('btn-info');  // Remueve la clase "btn-info" del botón
+            btn.classList.add('btn-secondary');  // Agrega la clase "btn-secondary" al botón
+            btn.setAttribute('onclick', `cambiarEstado(${productoId}, 'quitar', this)`);  // Actualiza el atributo onclick para que la acción sea "quitar" al hacer clic
+          } else {  // Si la acción era "quitar"
+            btn.innerText = 'Publicar';  // Cambia el texto del botón a "Publicar"
+            btn.classList.remove('btn-secondary');  // Remueve la clase "btn-secondary" del botón
+            btn.classList.add('btn-info');  // Agrega la clase "btn-info" al botón
+            btn.setAttribute('onclick', `cambiarEstado(${productoId}, 'publicar', this)`);  // Actualiza el atributo onclick para que la acción sea "publicar" al hacer clic
+          }
+        } else {  // Si no fue exitoso el cambio de estado
+          console.error('Error al cambiar el estado');  // Muestra un mensaje de error en la consola
+        }
+      })
+      .catch(error => console.error('Error en la petición AJAX:', error));  // Captura y muestra cualquier error durante la petición AJAX
+    }
+  </script>  <!-- Fin del bloque de JavaScript -->
+</body>
+</html>

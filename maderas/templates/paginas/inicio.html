@@ -1,0 +1,251 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block titulo %}Maderas Isabella{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-image: url("{% static 'diseños/imagenes/fond.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .prubli-img {
+            transition: transform 0.3s ease-in-out;
+            width: 100%;
+            max-width: 300px;
+        }
+        .prubli-img:hover {
+            transform: scale(1.1);
+        }
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .whatsapp-icon {
+            width: 60px;
+            height: 60px;
+            transition: transform 0.3s ease-in-out;
+            border-radius: 10px;
+        }
+        .whatsapp-icon:hover {
+            transform: scale(1.1);
+        }
+        /* Botón flotante para volver arriba */
+        #back-to-top {
+            position: fixed;
+            bottom: 80px; /* separa el botón del de WhatsApp */
+            left: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-success text-white text-center py-3">
+        <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" width="250">
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#inicio">🔰 Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#productos">👀 aprende lo que hacemos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#imagenespublicadas">🛒 Ver imagenes Publicadas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#nosotros">🧑‍💻 Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#ubicanos">🗺️ Direccion</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">📱 Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Inicia sesión</a></li>
+                </ul>
+            </div> 
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+        {% block contenido %}
+        <!-- Sección de Inicio -->
+        <section id="inicio" class="bg-white p-4 rounded shadow-sm">
+            <h1>Inicio</h1>
+            <p class="text-center">
+                Bienvenidos a Maderas Isabella, su proveedor de maderas finas.<br>
+                Maderas Isabella AEI SAS es una empresa dedicada a la compra de bosques, tala de árboles, compra y venta de madera y transformación de la misma.
+            </p>
+        </section>
+        
+        <!-- Sección de Productos -->
+        <section id="productos" class="bg-light p-4 rounded shadow-sm mt-4">
+            <h1>Aprende más sobre lo que hacemos</h1>
+            <p>Aquí puedes aprender más sobre lo que hacemos en nuestra empresa:</p>
+            <ul>
+                <li>Maderas para construcción</li>
+                <li>Maderas finas para muebles</li>
+                <li>Maderas tratadas</li>
+                <li>Maderas exóticas</li>
+            </ul>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <img src="{% static 'diseños/imagenes/1.jpg' %}" alt="1" class="img-thumbnail" width="300">
+                <img src="{% static 'diseños/imagenes/2.jpg' %}" alt="2" class="img-thumbnail" width="300">
+                <img src="{% static 'diseños/imagenes/3.jpg' %}" alt="3" class="img-thumbnail" width="300">
+                <img src="{% static 'diseños/imagenes/4.jpg' %}" alt="4" class="img-thumbnail" width="300">
+            </div>
+        </section>    
+
+        <!-- Sección de Imágenes Publicadas -->
+        <section id="imagenespublicadas" class="bg-white p-4 rounded shadow-sm mt-4">
+            <h2>Imágenes Publicadas</h2>
+            <div class="row">
+                {% for imagen in imagenes_publicadas %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        {% if imagen.imagen %}
+                        <img src="{{ imagen.imagen.url }}" class="card-img-top" alt="{{ imagen.nombre_producto }}">
+                        {% else %}
+                        <div class="card-img-top text-center p-3">No hay imagen disponible</div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ imagen.nombre_producto }}</h5>
+                            <p class="card-text">
+                                <strong>Tipo:</strong> {{ imagen.tipo_madera }}<br>
+                                <strong>Descripción:</strong> {{ imagen.descripcion }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <p>No hay imágenes publicadas.</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="mt-4">
+                <a href="{% url 'gestionar_productos' %}" class="btn btn-primary">Volver a Gestión de Imágenes</a>
+            </div>
+        </section>
+
+        <!-- Sección de Información Institucional (Nosotros) -->
+        <section id="nosotros" class="bg-white p-4 rounded shadow-sm mt-4">
+            <h1>Nosotros</h1>
+            <h4>Aprende más sobre nosotros:</h4>
+            <!-- Misión -->
+            <section id="mision" class="mt-3">
+                <h2 class="section-title">Misión</h2>
+                <p>
+                    En Maderas Isabella AEI SAS buscamos satisfacer la demanda integral de madera como materia prima renovable, 
+                    brindando calidad tanto en la selección de nuestros productos como en nuestra calidad humana. Buscamos cumplir 
+                    las expectativas de nuestros clientes, mediante un servicio ágil, garantizando la entrega oportuna, proporcionando 
+                    calidad, a precios muy competitivos, todo de la mano de nuestro talento humano siempre comprometido y motivado a 
+                    trabajar en conjunto, con dedicación y esfuerzo al servicio del cliente.
+                </p>
+            </section>
+
+            <!-- Visión -->
+            <section id="vision" class="mt-3">
+                <h2 class="section-title">Visión</h2>
+                <p>
+                    En Maderas Isabella AEI S.A.S. buscamos consolidarnos como una de las empresas más competitivas, sólidas y reconocidas 
+                    a nivel nacional del sector maderero. Por ello es fundamental contar con la calidad humana de nuestro equipo de trabajo, 
+                    apoyados en la vocación de servicio, la capacidad de respuesta, la calidad, mayor eficiencia, la garantía de entrega y el 
+                    mejoramiento continuo de nuestros procesos operados con responsabilidad al medio ambiente. Queremos alcanzar altos niveles 
+                    de desarrollo generando así calidad de vida para nuestro personal y responsabilidad social con nuestros clientes y entorno.
+                </p>
+            </section>
+
+            <!-- Valores Corporativos -->
+            <section id="valores" class="mt-3">
+                <h2 class="section-title">Valores Corporativos</h2>
+                <ul>
+                    <li><strong>Respeto:</strong> Lo reflejamos en cada una de las relaciones interpersonales que se desarrollan con los clientes internos y externos de la organización.</li>
+                    <li><strong>Honradez:</strong> Actuamos con transparencia en cada una de las acciones que ejecutamos dentro y fuera de la organización.</li>
+                    <li><strong>Iniciativa:</strong> Ejecutamos nuestras labores con entusiasmo, dedicación y dando siempre algo más de nosotros y dejando huella en nuestras acciones.</li>
+                    <li><strong>Compromiso:</strong> Asumimos las acciones con esfuerzo y empeño, generando confianza en nuestras actividades.</li>
+                    <li><strong>Honestidad:</strong> Actuamos y decimos siempre la verdad en nuestras actividades.</li>
+                </ul>
+            </section>
+
+            <!-- Política de Calidad -->
+            <section id="calidad" class="mt-3">
+                <h2 class="section-title">Política de Calidad</h2>
+                <p>
+                    Con el objeto de satisfacer las necesidades y expectativas de nuestros clientes, todos los que pertenecemos a Maderas Isabella AEI S.A.S. 
+                    nos comprometemos a:
+                </p>
+                <ul>
+                    <li>Brindar un servicio de calidad en los productos, impulsando la efectividad, el mejoramiento en los procesos y la racionalización en la utilización de los recursos.</li>
+                    <li>Proteger el medio ambiente, promover el bienestar de cada colaborador y de la comunidad.</li>
+                    <li>Apoyar el empleo y cumplir la ley de forma íntegra.</li>
+                    <li>Capacitar el personal para la optimización de su desempeño y la importancia de un trabajo eficaz y eficiente, así como crear un sentido de pertenencia en cada colaborador.</li>
+                </ul>
+            </section>
+
+            <!-- Política de Seguridad y Salud en el Trabajo -->
+            <section id="seguridad" class="mt-3">
+                <h2 class="section-title">Política de Seguridad y Salud en el Trabajo</h2>
+                <p>
+                    Identificar los peligros, evaluar y valorar los riesgos y establecer los respectivos controles:
+                </p>
+                <ul>
+                    <li>Proteger la seguridad y salud de todos los trabajadores, mediante la mejora continua del SGSST.</li>
+                    <li>Cumplir la normatividad nacional vigente aplicable en materia de riesgos laborales.</li>
+                    <li>Establecer una cultura de prevención de riesgos laborales.</li>
+                </ul>
+            </section>
+        </section>
+
+        <!-- Sección de Contacto -->
+        <section id="ubicanos" class="bg-success text-white p-4 rounded shadow-sm mt-4 text-center">
+            <!-- Mapa responsivo -->
+            <div class="ratio ratio-16x9">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.9834820965357!2d-72.68778035395665!3d5.997003745817748!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e6bd3430ffa69cf%3A0x330b1847b063fa2f!2sMADERAS%20ISABELLA%20AEI%20SAS!5e0!3m2!1ses-419!2sco!4v1740746993197!5m2!1ses-419!2sco" 
+                    style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </section>
+        {% endblock %}
+    </main>
+
+    <footer id="contacto" class="bg-dark text-white text-center py-3 mt-5">
+        <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" width="150">
+            <p>Somos un proveedor de maderas finas dedicada a la compra de bosques, tala y venta de madera y transformación de la misma</p>
+            <h2>CONTACTO</h2>
+            <p>Puede contactarnos a través de:</p>
+            <address>
+                <a class="text-white fw-bold" href="https://web.facebook.com/people/Maderas-Isabella-AEI-SAS/100085008207707/">
+                      Página de Facebook
+                </a><br>
+                📱 Teléfono: +57 3223280615 - +57 3103178649<br>
+                🧭 Dirección: Carrera 1 #No. 3-88, Socha, Boyacá, Colombia
+            </address>
+        <p>&copy; 2024 Maderas Isabella. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Botón flotante para volver arriba -->
+    <a href="#" id="back-to-top" class="btn btn-secondary">
+        ↑ Volver arriba
+    </a>
+
+    <a href="https://wa.me/573223280615" class="whatsapp-float" target="_blank">
+        <img src="{% static 'diseños/imagenes/whst.webp' %}" alt="WhatsApp" class="whatsapp-icon">
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById("back-to-top").addEventListener("click", function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

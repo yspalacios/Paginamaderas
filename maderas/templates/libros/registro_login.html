@@ -1,0 +1,293 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Definición de la codificación y configuración para dispositivos móviles -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: Arial, sans-serif;
+        }
+
+        body {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background: url("{% static 'diseños/imagenes/imag11.jpg' %}");
+          background-size: cover;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .back-button {
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          background-color: #cf9d67;
+          color: #111111;
+          padding: 10px 20px;
+          border-radius: 5px;
+          text-decoration: none;
+          font-weight: bold;
+          transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+          background-color: #fcfbfb;
+        }
+
+        .login-box {
+          position: relative;
+          text-align: center;
+          color: #141414;
+          padding: 30px;
+          background: rgba(241, 238, 238, 0.945);
+          border-radius: 15px;
+          max-width: 350px;
+          width: 100%;
+        }
+
+        .title {
+          font-size: 32px;
+          font-weight: bold;
+          margin-bottom: 20px;
+        }
+
+        /* Contenedor para organizar los campos en dos columnas */
+        .form-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 15px;
+        }
+
+        /* Si la cantidad de campos es impar, el último se centrará en la fila */
+        .form-grid .input-group:last-child {
+          grid-column: span 2;
+          justify-self: center;
+          width: 50%;
+        }
+
+        .input-group {
+          text-align: left;
+          position: relative;
+        }
+
+        .input-group label {
+          display: block;
+          margin-bottom: 5px;
+        }
+
+        .input-group input,
+        .input-group select {
+          width: 100%;
+          padding: 12px;
+          background: rgb(248, 247, 247);
+          border: 2px solid #cf9d67;
+          border-radius: 5px;
+          color: black;
+          outline: none;
+        }
+
+        .buttons {
+          margin-top: 15px;
+        }
+
+        .buttons button {
+          width: 100%;
+          padding: 12px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-weight: bold;
+          background-color: #cf9d67;
+          color: rgb(20, 20, 20);
+          transition: background-color 0.3s;
+        }
+
+        .buttons button:hover {
+          background-color: #cf9d67;
+        }
+
+        p {
+          margin-top: 15px;
+        }
+
+        p a {
+          color: #0c0c0c;
+          text-decoration: none;
+        }
+
+        p a:hover {
+          text-decoration: underline;
+        }
+    </style>
+    <script>
+        // Función para validar el formulario antes de enviar
+        function validarFormulario() {
+            // Se obtienen los valores de cada campo
+            const nombres = document.getElementById('nombres').value;
+            const apellidos = document.getElementById('apellidos').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            const terminos = document.getElementById('terminos').checked;
+            
+            // Expresiones regulares para validaciones
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/;
+            const phoneRegex = /^\d{0,10}$/;
+            
+            if (!nameRegex.test(nombres)) {
+                alert("El campo de Nombres solo debe contener letras.");
+                return false;
+            }
+            
+            if (!nameRegex.test(apellidos)) {
+                alert("El campo de Apellidos solo debe contener letras.");
+                return false;
+            }
+            
+            if (!emailRegex.test(email)) {
+                alert("Ingrese un correo válido.");
+                return false;
+            }
+            
+            if (phone && !phoneRegex.test(phone)) {
+                alert("El Teléfono debe contener solo números y máximo 10 dígitos.");
+                return false;
+            }
+            
+            if (password.length < 6) {
+                alert("La contraseña debe tener al menos 6 caracteres.");
+                return false;
+            }
+            
+            if (password !== confirmPassword) {
+                alert("Las contraseñas no coinciden.");
+                return false;
+            }
+            
+            if (!terminos) {
+                alert("Debe aceptar los Términos y Condiciones.");
+                return false;
+            }
+            
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <!-- Botón para regresar al inicio -->
+    <a href="{% url 'inicio' %}" class="back-button">Regresa al inicio</a>
+    
+    <!-- Caja de registro -->
+    <div class="login-box">
+        <h1 class="title">Registrarse</h1>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        
+        <!-- Formulario de registro -->
+        <form action="{% url 'registro_login' %}" method="post" onsubmit="return validarFormulario();">
+            {% csrf_token %}
+            <!-- Contenedor de campos en dos columnas -->
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="nombres">Nombres:</label>
+                    <input type="text" name="nombres" id="nombres" required pattern="[A-Za-zÀ-ÿ\s]+">
+                    {% if form.nombres.errors %}
+                        <span style="color: red;">{{ form.nombres.errors }}</span>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <label for="apellidos">Apellidos:</label>
+                    <input type="text" name="apellidos" id="apellidos" required pattern="[A-Za-zÀ-ÿ\s]+">
+                    {% if form.apellidos.errors %}
+                        <span style="color: red;">{{ form.apellidos.errors }}</span>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <label for="email">Correo:</label>
+                    <input type="email" name="email" id="email" required>
+                    {% if form.email.errors %}
+                        <span style="color: red;">{{ form.email.errors }}</span>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" name="password" id="password" required>
+                    {% if form.password.errors %}
+                        <span style="color: red;">{{ form.password.errors }}</span>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <label for="confirm_password">Confirmar Contraseña:</label>
+                    <input type="password" name="confirm_password" id="confirm_password" required>
+                    {% if form.confirm_password.errors %}
+                        <span style="color: red;">{{ form.confirm_password.errors }}</span>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <label for="phone">Teléfono:</label>
+                    <input type="tel" name="phone" id="phone" maxlength="10" pattern="\d{0,10}" required>
+                    {% if form.phone.errors %}
+                        <span style="color: red;">{{ form.phone.errors }}</span>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <label for="security_question">Pregunta de seguridad:</label>
+                    <select name="security_question" id="security_question" required>
+                        <option value="">Selecciona una pregunta</option>
+                        <option value="nombre_mascota">¿Cuál es el nombre de tu primera mascota?</option>
+                        <option value="ciudad_nacimiento">¿En qué ciudad naciste?</option>
+                        <option value="color_favorito">¿Cuál es tu color favorito?</option>
+                    </select>
+                    {% if form.security_question.errors %}
+                        <span style="color: red;">{{ form.security_question.errors }}</span>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <label for="security_answer">Respuesta a la pregunta de seguridad:</label>
+                    <input type="text" name="security_answer" id="security_answer" required>
+                    {% if form.security_answer.errors %}
+                        <span style="color: red;">{{ form.security_answer.errors }}</span>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <label for="recovery_email">Correo de recuperación:</label>
+                    <input type="email" name="recovery_email" id="recovery_email" required>
+                    {% if form.recovery_email.errors %}
+                        <span style="color: red;">{{ form.recovery_email.errors }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Campo para términos (fuera del grid) -->
+            <div class="input-group">
+                <input type="checkbox" name="terminos" id="terminos" required>
+                <label for="terminos">
+                    He leído y acepto los <a href="https://www.example.com/terminos" target="_blank">Términos y Condiciones</a>
+                </label>
+            </div>
+            <!-- Botón de envío -->
+            <div class="buttons">
+                <button type="submit">Registrar</button>
+            </div>
+        </form>
+        
+        <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

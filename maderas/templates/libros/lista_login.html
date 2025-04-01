@@ -1,0 +1,227 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Cuentas</title>
+  <style>
+    /* Header: Barra superior */
+    .headermenu {
+      background-color: #6B4021;
+      color: #fff;
+      height: 60px;
+      line-height: 60px;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1001;
+    }
+    .headermenu span {
+      color: #ff9800;
+    }
+    
+    /* Sidebar (menú vertical izquierdo) */
+    .sidebar {
+      background-color: #6B4021;
+      width: 250px;
+      padding: 20px;
+      color: #fff;
+      position: fixed;
+      top: 60px; /* Justo debajo del header */
+      left: 0;
+      height: calc(100vh - 60px);
+    }
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .sidebar .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 10px;
+      color:rgb(0, 0, 0);
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .sidebar .menu a:hover {
+      background-color: #45a049;
+      color: #fff;
+    }
+    
+    /* Área principal: contenedor para el contenido */
+    .main-content {
+      display: flex;
+      margin-top: 60px;  /* Altura del header */
+      margin-left: 250px; /* Ancho del sidebar */
+      min-height: calc(100vh - 60px);
+      padding: 20px;
+    }
+    
+    /* Contenedor principal dentro de la zona de contenido */
+    .container {
+      flex: 1;
+      max-width: 1500px;
+      margin: 0 auto;
+      background: url("{% static 'diseños/imagenes/imglist.jpg' %}") no-repeat center center/cover;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgb(15, 14, 14);
+    }
+    
+    /* Encabezado de acción: título y botones */
+    .action-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .action-header h1 {
+      margin-bottom: 10px;
+    }
+    .action-header .buttons a {
+      margin: 0 10px;
+    }
+    .action-header .buttons button {
+      background-color:  #cf9d67;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .action-header .buttons button:hover {
+      background-color: #45a049;
+    }
+    
+    /* Tabla de usuarios */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    thead {
+      background-color: #cf9d67;
+      color: #fff;
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    tbody tr:hover {
+      background-color:rgb(146, 143, 143);
+    }
+    table a {
+      color:  #cf9d67;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    table a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Body styling */
+    body {
+      background-color:rgb(246, 246, 247);
+      font-family: 'Arial', sans-serif;
+      color: #333;
+      margin: 0;
+      padding: 30px;
+    }
+    
+  </style>
+</head>
+<body>
+  <!-- Header superior -->
+  <div class="headermenu">Maderas <span>Isabella</span></div>
+  
+  <!-- Contenedor principal con Sidebar y Contenido -->
+  <div class="main-content">
+    <!-- Menú vertical (Sidebar) -->
+    <div class="sidebar">
+      <h2 class="title"> Menú</h2>
+      <div class="menu">
+        <a href="#">Inicio</a>
+        <a href="#">Mensajes</a>
+        <a href="#">Configuración</a>
+        <a href="#">Perfil</a>
+        <a href="{% url 'logout' %}">Cerrar Sesión</a>
+        <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>
+        <a href="{% url 'lista_login' %}">Listado de Cuentas</a>
+        <a href="{% url 'carpeta' %}">Documentos de contratación</a>
+      </div>
+    </div>
+    
+    <!-- Contenido principal -->
+    <div class="container">
+      <div class="action-header">
+        <h1>Lista de Cuentas Registradas</h1>
+        <div class="buttons">
+          <a href="{% url 'registro_login' %}">
+            <button type="button">Crear Cuenta</button>
+          </a>
+          <a href="{% url 'index' %}">
+            <button type="button">Regresa al inicio</button>
+          </a>
+        </div>
+      </div>
+      
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Pregunta de Seguridad</th>
+              <th>Respuesta de Seguridad</th>
+              <th>Correo de Recuperación</th>
+              <th>Estado</th>
+              <th>Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for cuenta in cuentas %}
+            <tr>
+              <td>{{ cuenta.nombres }}</td>
+              <td>{{ cuenta.apellidos }}</td>
+              <td>{{ cuenta.email }}</td>
+              <td>{{ cuenta.phone }}</td>
+              <td>{{ cuenta.security_question }}</td>
+              <td>{{ cuenta.security_answer }}</td>
+              <td>{{ cuenta.recovery_email }}</td>
+              <td>{{ cuenta.status }}</td>
+              <td>
+                {% if cuenta.status == 'Activo' %} 
+                  <a href="{% url 'desactivar_cuenta' cuenta.id %}" title="Desactivar">🔓</a>
+                {% else %} 
+                  <a href="{% url 'activar_cuenta' cuenta.id %}" title="Activar">🔒</a>
+                {% endif %} |
+                <a href="{% url 'editar_cuenta' cuenta.id %}">Editar</a> |
+                <a href="{% url 'eliminar_cuenta' cuenta.id %}" onclick="return confirm('¿Está seguro de eliminar esta cuenta?');">Eliminar</a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="9">No hay cuentas registradas.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

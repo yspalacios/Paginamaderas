@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Carpetas y Documentos</title>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/mi_estilo.css' %}">
+  <!-- Asegúrate de incluir estilos que gestionen la visibilidad de los modales (display:none) -->
+  
+  <style>
+    /* Estilos Globales */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: url('/static/diseños/imagenes/ar.JPEG') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+    }
+    
+    /* Header: Barra superior */
+    .header {
+      background-color: #343a40;
+      color: #fff;
+      height: 60px; /* Altura fija */
+      line-height: 60px; /* Centrado vertical */
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1001;
+    }
+    .header span {
+      color: #ff9800;
+    }
+    
+    /* Sidebar (menú vertical izquierdo) */
+    .sidebar {
+      background-color: #212529;
+      width: 250px;
+      padding: 20px;
+      color: #fff;
+      position: fixed;
+      top: 60px; /* Inicia justo debajo del header */
+      left: 0;
+      height: calc(100vh - 60px); /* Ocupa el resto de la pantalla */
+    }
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .sidebar .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 10px;
+      color: #adb5bd;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .sidebar .menu a:hover {
+      background-color: #ff9800;
+      color: #fff;
+    }
+    
+    /* Área principal: contenedor para el contenido (separa del header y sidebar) */
+    .main-content {
+      display: flex;
+      /* Se agrega margen para que el contenido no quede pegado al header y al sidebar */
+      margin-top: 60px;  /* Altura del header */
+      margin-left: 250px; /* Ancho del sidebar */
+      min-height: calc(100vh - 60px);
+    }
+    
+    /* Contenedor principal dentro de la zona de contenido */
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      width: 100%;
+    }
+    
+    /* Encabezado */
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #5A2D0C;
+    }
+    
+    /* Grupos de formulario e inputs */
+    .form-group {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    input[type="text"],
+    input[type="file"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 80%;
+      max-width: 400px;
+      margin: 5px auto;
+      display: block;
+    }
+    
+    /* Botones con estilo de madera */
+    .btn {
+      padding: 10px 20px;
+      background: rgb(160, 113, 56);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 5px;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #1caf28;
+    }
+    
+    /* Estilo para carpetas */
+    .folder {
+      background-color: #FFF8DC;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #deb887;
+      border-radius: 6px;
+    }
+    
+    /* Cabecera de carpeta */
+    .folder-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .folder-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #5A2D0C;
+      flex: 1;
+    }
+    
+    /* Menú de opciones */
+    .options-menu {
+      display: none;
+      margin-top: 10px;
+      background-color: #F5DEB3;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #deb887;
+    }
+    
+    /* Sección de documentos */
+    .documents {
+      margin-top: 10px;
+    }
+    
+    /* Estilos para cada contenedor de documento */
+    .doc-container {
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .doc-name {
+      flex: 1;
+    }
+    .doc-buttons {
+      display: flex;
+      align-items: center;
+    }
+    .doc-buttons button {
+      flex: 1;
+      font-size: 0.8em;
+      padding: 5px 10px;
+      margin: 0 5px;
+    }
+    
+    .separator {
+      color: #555;
+    }
+    
+    /* Estilos para los modales */
+    #modal-editar,
+    #modal-mostrar,
+    #modal-ver {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+    #modal-content-editar,
+    #modal-content-mostrar {
+      background: #fff;
+      padding: 20px;
+      margin: 50px auto;
+      width: 70%;
+      border-radius: 4px;
+      position: relative;
+      overflow-y: auto;
+    }
+    #modal-content-editar-input,
+    #modal-content-mostrar-input, {
+      background border: #1caf28;
+    }
+    
+    /* Estilos para el modal de ver archivo */
+    #modal-content-ver {
+      position: relative;
+      width: 90%;
+      height: 90%;
+      margin: 5% auto;
+      background: #fdfdfd;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      border-radius: 8px;
+      border: 2px solid #8B4513;
+    }
+    #modal-content-ver h2 {
+      color: #5A2D0C;
+    }
+    #modal-content-ver iframe {
+      width: 100%;
+      height: calc(100% - 60px);
+      border: none;
+    }
+    
+    /* Botones superiores */
+    .top-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    /* Ajustes responsivos */
+    @media (max-width: 768px) {
+      #modal-content-editar,
+      #modal-content-mostrar,
+      #modal-content-ver {
+        width: 90%;
+      }
+    }
+  </style>
+  
+
+</head>
+<body>
+ <!-- Header superior -->
+ <div class="header">Maderas <span>Isabella</span></div>  <!-- Encabezado con el nombre "Maderas Isabella" -->
+ <!-- Contenedor principal con Sidebar y Contenido -->
+ <div class="main-content">  <!-- Inicio del contenedor principal con diseño flex -->
+   <!-- Menú vertical (Sidebar) -->
+   <div class="sidebar">  <!-- Inicio de la barra lateral (sidebar) -->
+     <h2>Menú</h2>  <!-- Título del menú lateral -->
+     <div class="menu">  <!-- Contenedor de los enlaces del menú -->
+       <a href="#">Inicio</a>  <!-- Enlace a la página de inicio -->
+       <a href="#">Mensajes</a>  <!-- Enlace a la sección de mensajes -->
+       <a href="#">Configuración</a>  <!-- Enlace a la configuración -->
+       <a href="#">Perfil</a>  <!-- Enlace al perfil del usuario -->
+       <a href="{% url 'logout' %}">Cerrar Sesión</a>  <!-- Enlace para cerrar sesión mediante Django -->
+       <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>  <!-- Enlace a la galería de publicidad -->
+       <a href="{% url 'lista_login' %}">Listado de Cuentas</a>  <!-- Enlace al listado de cuentas -->
+       <a href="{% url 'carpeta' %}">Documentos de contratación</a>  <!-- Enlace a los documentos de contratación -->
+     </div>  <!-- Fin del contenedor de enlaces del menú -->
+   </div>  <!-- Fin de la barra lateral -->
+
+  <div class="container">
+    <!-- Título principal -->
+    <h1>Gestión de Carpetas y Documentos</h1>
+    <!-- Sección de botones para crear carpeta y volver al inicio -->
+    <div class="form-group top-buttons">
+      <input type="text" id="folderName" placeholder="Nombre de la carpeta">
+      <button id="createFolderBtn" class="btn">Crear Carpeta</button>
+      <a href="{% url 'index' %}" class="btn">Volver al Inicio</a>
+    </div>
+
+    <!-- Barra de búsqueda de carpetas -->
+    <div class="form-group">
+      <input type="text" id="searchInput" placeholder="Buscar carpeta...">
+    </div>
+
+    <!-- Contenedor donde se mostrarán las carpetas creadas -->
+    <div id="foldersContainer"></div>
+  </div>
+
+  <!-- Modal para editar prestaciones -->
+  <div id="modal-editar" style="display:none;">
+    <div id="modal-content-editar">
+      <h2>Editar Prestaciones de Servicio</h2>
+      <div id="benefitsForm" class="barra">
+        <div>
+          <label>Fecha de inicio:</label>
+          <input type="text" id="fecha_inicio" placeholder="Ingrese el dato">
+        </div>
+        <div>
+          <label>Puesto designado:</label>
+          <input type="text" id="puesto_designado" placeholder="Ingrese el dato">
+        </div>
+        <div>
+          <label>Salario actual:</label>
+          <input type="text" id="salario_actual" placeholder="Ingrese el dato">
+        </div>
+        <div>
+          <label>Horas de trabajo:</label>
+          <input type="text" id="horas_trabajo" placeholder="Ingrese el dato">
+        </div>
+        <div>
+          <label>Tiempo de contrato:</label>
+          <input type="text" id="tiempo_contrato" placeholder="Ingrese el dato">
+        </div>
+        <div>
+          <label>Número de identidad:</label>
+          <input type="text" id="numero_identidad" placeholder="Ingrese el dato">
+        </div>
+        <div>
+          <label>Número de seguro social:</label>
+          <input type="text" id="numero_seguro_social" placeholder="Ingrese el dato">
+        </div>
+        <div>
+          <label>EPS:</label>
+          <input type="text" id="eps" placeholder="Ingrese el dato">
+        </div>
+        <div>
+          <label>Fondo de pensiones (AFP):</label>
+          <input type="text" id="fondo_pensiones" placeholder="Ingrese el dato">
+        </div>
+        <div>
+          <label>ARL:</label>
+          <input type="text" id="arl" placeholder="Ingrese el dato">
+        </div>
+      </div>
+      <div style="text-align: right; margin-top: 10px;">
+        <button id="saveBenefitsBtn" class="btn">Guardar Prestaciones</button>
+        <button id="closeModalBtn" class="btn" style="background: #6c757d;">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para mostrar prestaciones guardadas -->
+  <div id="modal-mostrar" style="display:none;">
+    <div id="modal-content-mostrar">
+      <h2>Prestaciones de Servicio</h2>
+      <div id="benefitsDisplayContent"></div>
+      <div style="text-align: right; margin-top: 10px;">
+        <button id="closeShowBenefitsBtn" class="btn" style="background: #6c757d;">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para ver el archivo (PDF, imagen, etc.) -->
+  <div id="modal-ver" style="display:none;">
+    <div id="modal-content-ver" style="width:80%; height:80%;">
+      <h2>Vista del Archivo</h2>
+      <div style="width:100%; height: calc(100% - 50px);">
+        <iframe id="fileIframe" src="" style="width:100%; height:100%; border: none;"></iframe>
+      </div>
+      <div style="text-align: right; margin-top: 10px;">
+        <button id="closeFileModalBtn" class="btn" style="background: #6c757d;">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script de funcionalidades -->
+  <script>
+    // Variable global para almacenar el id de la carpeta en edición
+    let currentFolderId = null;
+  
+    // Función para obtener el token CSRF (seguridad en Django)
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  
+    // Actualizar el estado de una carpeta
+    function updateFolderStatus(folderId, newStatus) {
+      fetch(`/update-status/${folderId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: `status=${encodeURIComponent(newStatus)}`
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Estado actualizado exitosamente') {
+          const folderDiv = document.querySelector(`.folder[data-id="${folderId}"]`);
+          if (folderDiv) {
+            const statusText = folderDiv.querySelector('.folder-status');
+            if (statusText) {
+              statusText.textContent = `Estado: ${newStatus}`;
+            }
+          }
+          renderFolders();
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => console.error('Error al actualizar estado:', error));
+    }
+  
+    // Subir documentos a una carpeta
+    function uploadDocuments(folderId) {
+      const input = document.getElementById(`uploadInput-${folderId}`);
+      if (input.files.length === 0) {
+        alert("Seleccione al menos un documento para subir.");
+        return;
+      }
+      const formData = new FormData();
+      for (let i = 0; i < input.files.length; i++) {
+        formData.append('documents', input.files[i]);
+      }
+      fetch(`/upload-documents/${folderId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Documentos subidos exitosamente') {
+          alert("Documentos subidos exitosamente");
+          renderFolders();
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => console.error('Error al subir documentos:', error));
+    }
+  
+    // Crear carpeta
+    document.getElementById('createFolderBtn').addEventListener('click', () => {
+      const folderName = document.getElementById('folderName').value.trim();
+      if (folderName === "") {
+        alert("Por favor, ingrese un nombre para la carpeta.");
+        return;
+      }
+      fetch('/create-folder/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: `folderName=${encodeURIComponent(folderName)}`
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Carpeta creada exitosamente') {
+          renderFolders();
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    });
+  
+    // Renderizar las carpetas y sus documentos
+    function renderFolders() {
+      fetch('/get-folders/')
+      .then(response => response.json())
+      .then(folders => {
+        const container = document.getElementById('foldersContainer');
+        container.innerHTML = "";
+        folders.forEach(folder => {
+          // Contenedor principal de la carpeta
+          const folderDiv = document.createElement('div');
+          folderDiv.classList.add('folder');
+          folderDiv.setAttribute('data-id', folder.id);
+  
+          // Encabezado de la carpeta
+          const headerDiv = document.createElement('div');
+          headerDiv.classList.add('folder-header');
+          const title = document.createElement('div');
+          title.classList.add('folder-title');
+          title.textContent = folder.name;
+  
+          // Botón para editar prestaciones
+          const editBenefitsBtn = document.createElement('button');
+          editBenefitsBtn.textContent = "Editar Prestaciones";
+          editBenefitsBtn.classList.add('btn');
+          editBenefitsBtn.addEventListener('click', () => {
+            currentFolderId = folder.id;
+            document.getElementById('fecha_inicio').value = folder.fecha_inicio || "";
+            document.getElementById('puesto_designado').value = folder.puesto_designado || "";
+            document.getElementById('salario_actual').value = folder.salario_actual || "";
+            document.getElementById('horas_trabajo').value = folder.horas_trabajo || "";
+            document.getElementById('tiempo_contrato').value = folder.tiempo_contrato || "";
+            document.getElementById('numero_identidad').value = folder.numero_identidad || "";
+            document.getElementById('numero_seguro_social').value = folder.numero_seguro_social || "";
+            document.getElementById('eps').value = folder.eps || "";
+            document.getElementById('fondo_pensiones').value = folder.fondo_pensiones || "";
+            document.getElementById('arl').value = folder.arl || "";
+            openEditModal();
+          });
+  
+          // Botón para mostrar prestaciones guardadas
+          const showBenefitsBtn = document.createElement('button');
+          showBenefitsBtn.textContent = "Mostrar Prestaciones";
+          showBenefitsBtn.classList.add('btn');
+          showBenefitsBtn.addEventListener('click', () => openShowModal(folder));
+  
+          // Botón de opciones (cambiar estado y eliminar carpeta)
+          const optionsBtn = document.createElement('button');
+          optionsBtn.innerHTML = "⚙️";
+          optionsBtn.classList.add('btn');
+          optionsBtn.addEventListener("click", (event) => toggleOptions(event, folder.id));
+  
+          headerDiv.appendChild(title);
+          headerDiv.appendChild(editBenefitsBtn);
+          headerDiv.appendChild(showBenefitsBtn);
+          headerDiv.appendChild(optionsBtn);
+          folderDiv.appendChild(headerDiv);
+  
+          // Menú de opciones para estado y eliminar carpeta
+          const optionsMenu = document.createElement("div");
+          optionsMenu.classList.add("options-menu");
+          const statusLabel = document.createElement("label");
+          statusLabel.textContent = "Estado:";
+          const statusSelect = document.createElement("select");
+          const statuses = ["Contratado", "No contratado", "Incapacitado", "En revisión", "No admitido", "Despedido"];
+          statuses.forEach(status => {
+            const option = document.createElement("option");
+            option.value = status;
+            option.textContent = status;
+            if (folder.status === status) { 
+              option.selected = true; 
+            }
+            statusSelect.appendChild(option);
+          });
+          statusSelect.addEventListener("change", () => {
+            updateFolderStatus(folder.id, statusSelect.value);
+          });
+          optionsMenu.appendChild(statusLabel);
+          optionsMenu.appendChild(statusSelect);
+  
+          const deleteBtn = document.createElement("button");
+          deleteBtn.textContent = "Eliminar Carpeta";
+          deleteBtn.classList.add("btn");
+          deleteBtn.style.background = "red";
+          deleteBtn.style.color = "white";
+          deleteBtn.style.marginTop = "10px";
+          deleteBtn.addEventListener("click", () => confirmDelete(folder.id));
+          optionsMenu.appendChild(deleteBtn);
+  
+          folderDiv.appendChild(optionsMenu);
+  
+          // Mostrar estado actual
+          const statusText = document.createElement('p');
+          statusText.classList.add('folder-status');
+          statusText.textContent = `Estado: ${folder.status || "No definido"}`;
+          folderDiv.appendChild(statusText);
+  
+          // Sección para documentos
+          const documentsDiv = document.createElement('div');
+          documentsDiv.classList.add('documents');
+          if (folder.documents && folder.documents.length > 0) {
+            const docsTitle = document.createElement('p');
+            docsTitle.textContent = "Documentos:";
+            documentsDiv.appendChild(docsTitle);
+  
+            // Iteramos cada documento
+            folder.documents.forEach(doc => {
+              // Contenedor para el documento
+              const docContainer = document.createElement('div');
+              docContainer.classList.add('doc-container');
+              
+              // Contenedor para el nombre (a la izquierda)
+              const nameDiv = document.createElement('div');
+              nameDiv.classList.add('doc-name');
+              const docLink = document.createElement('a');
+              docLink.href = doc.url;     // Enlace de descarga
+              docLink.textContent = doc.name;
+              docLink.setAttribute('download', '');
+              nameDiv.appendChild(docLink);
+              
+              // Contenedor para los botones (a la derecha)
+              const buttonsDiv = document.createElement('div');
+              buttonsDiv.classList.add('doc-buttons');
+              
+              // Botón para ver archivo en el modal
+              const viewFileBtn = document.createElement('button');
+              viewFileBtn.innerHTML = "👁️";
+              viewFileBtn.title = "Ver Archivo";
+              viewFileBtn.classList.add('icon-btn', 'view-btn');
+              viewFileBtn.addEventListener('click', () => {
+                console.log("Botón Ver Archivo presionado, URL:", doc.url);
+                openFileModal(doc.url);
+              });
+              
+              const separator = document.createElement('span');
+              separator.classList.add('separator');
+              separator.textContent = " | ";
+              
+              // Botón para eliminar documento (equis)
+              const deleteDocBtn = document.createElement('button');
+              deleteDocBtn.innerHTML = "❌";
+              deleteDocBtn.title = "Eliminar Documento";
+              deleteDocBtn.classList.add('icon-btn', 'delete-btn');
+              deleteDocBtn.addEventListener('click', () => deleteDocument(doc.id));
+              
+              buttonsDiv.appendChild(viewFileBtn);
+              buttonsDiv.appendChild(deleteDocBtn);
+              
+              // Agregar contenedores al docContainer
+              docContainer.appendChild(nameDiv);
+              docContainer.appendChild(buttonsDiv);
+              
+              documentsDiv.appendChild(docContainer);
+            });
+          }
+  
+          // Input para subir nuevos documentos
+          const fileInput = document.createElement('input');
+          fileInput.type = "file";
+          fileInput.multiple = true;
+          // Para limitar a PDF, descomenta la siguiente línea:
+          // fileInput.accept = "application/pdf";
+          fileInput.id = `uploadInput-${folder.id}`;
+          const uploadBtn = document.createElement('button');
+          uploadBtn.textContent = "Subir Documentos";
+          uploadBtn.classList.add('btn');
+          uploadBtn.addEventListener('click', () => uploadDocuments(folder.id));
+          documentsDiv.appendChild(fileInput);
+          documentsDiv.appendChild(uploadBtn);
+  
+          folderDiv.appendChild(documentsDiv);
+          container.appendChild(folderDiv);
+        });
+  
+        // Cada vez que renderizamos, volvemos a aplicar el filtro de búsqueda
+        filterFolders();
+      })
+      .catch(error => console.error('Error:', error));
+    }
+  
+    // Filtrar carpetas según búsqueda (por título y estado)
+    document.getElementById('searchInput').addEventListener('keyup', filterFolders);
+    function filterFolders() {
+      const searchValue = document.getElementById('searchInput').value.toLowerCase();
+      const folderDivs = document.querySelectorAll('.folder');
+      folderDivs.forEach(div => {
+        const title = div.querySelector('.folder-title').textContent.toLowerCase();
+        let status = div.querySelector('.folder-status').textContent.toLowerCase();
+        // Si empieza con "estado:", removemos esa parte para comparar sólo el valor
+        if (status.startsWith('estado:')) {
+          status = status.substring(7).trim();
+        }
+        // Se muestra la carpeta si el título o el estado incluyen el valor buscado
+        div.style.display = (title.includes(searchValue) || status.includes(searchValue)) ? "" : "none";
+      });
+    }
+  
+    // Abrir modal de edición
+    function openEditModal() {
+      document.getElementById('modal-editar').style.display = 'block';
+    }
+    document.getElementById('closeModalBtn').addEventListener('click', () => {
+      document.getElementById('modal-editar').style.display = 'none';
+    });
+  
+    // Guardar prestaciones
+    document.getElementById('saveBenefitsBtn').addEventListener('click', () => {
+      const data = {
+        fecha_inicio: document.getElementById('fecha_inicio').value,
+        puesto_designado: document.getElementById('puesto_designado').value,
+        salario_actual: document.getElementById('salario_actual').value,
+        horas_trabajo: document.getElementById('horas_trabajo').value,
+        tiempo_contrato: document.getElementById('tiempo_contrato').value,
+        numero_identidad: document.getElementById('numero_identidad').value,
+        numero_seguro_social: document.getElementById('numero_seguro_social').value,
+        eps: document.getElementById('eps').value,
+        fondo_pensiones: document.getElementById('fondo_pensiones').value,
+        arl: document.getElementById('arl').value
+      };
+      const formBody = Object.keys(data)
+        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+        .join('&');
+      fetch(`/update-benefits/${currentFolderId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: formBody
+      })
+      .then(response => response.json())
+      .then(resp => {
+        if (resp.message === 'Prestaciones de servicio actualizadas exitosamente') {
+          alert('Prestaciones guardadas correctamente');
+          document.getElementById('modal-editar').style.display = 'none';
+          renderFolders();
+        } else {
+          alert(resp.message);
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    });
+  
+    // Abrir modal para mostrar prestaciones
+    function openShowModal(folder) {
+      const labels = [
+        "Fecha de inicio", "Puesto designado", "Salario actual", "Horas de trabajo",
+        "Tiempo de contrato", "Número de identidad", "Número de seguro social",
+        "EPS", "Fondo de pensiones (AFP)", "ARL"
+      ];
+      let content = "";
+      content += `<div class="benefit-row"><span class="benefit-label">${labels[0]}:</span><span class="benefit-value">${folder.fecha_inicio || "--"}</span></div>`;
+      content += `<div class="benefit-row"><span class="benefit-label">${labels[1]}:</span><span class="benefit-value">${folder.puesto_designado || "--"}</span></div>`;
+      content += `<div class="benefit-row"><span class="benefit-label">${labels[2]}:</span><span class="benefit-value">${folder.salario_actual || "--"}</span></div>`;
+      content += `<div class="benefit-row"><span class="benefit-label">${labels[3]}:</span><span class="benefit-value">${folder.horas_trabajo || "--"}</span></div>`;
+      content += `<div class="benefit-row"><span class="benefit-label">${labels[4]}:</span><span class="benefit-value">${folder.tiempo_contrato || "--"}</span></div>`;
+      content += `<div class="benefit-row"><span class="benefit-label">${labels[5]}:</span><span class="benefit-value">${folder.numero_identidad || "--"}</span></div>`;
+      content += `<div class="benefit-row"><span class="benefit-label">${labels[6]}:</span><span class="benefit-value">${folder.numero_seguro_social || "--"}</span></div>`;
+      content += `<div class="benefit-row"><span class="benefit-label">${labels[7]}:</span><span class="benefit-value">${folder.eps || "--"}</span></div>`;
+      content += `<div class="benefit-row"><span class="benefit-label">${labels[8]}:</span><span class="benefit-value">${folder.fondo_pensiones || "--"}</span></div>`;
+      content += `<div class="benefit-row"><span class="benefit-label">${labels[9]}:</span><span class="benefit-value">${folder.arl || "--"}</span></div>`;
+      document.getElementById('benefitsDisplayContent').innerHTML = content;
+      document.getElementById('modal-mostrar').style.display = 'block';
+    }
+    document.getElementById('closeShowBenefitsBtn').addEventListener('click', () => {
+      document.getElementById('modal-mostrar').style.display = 'none';
+    });
+  
+    // Función que abre el modal para ver un archivo (PDF, imagen, etc.)
+    function openFileModal(fileUrl) {
+      console.log("Abriendo archivo en URL:", fileUrl);
+      const iframe = document.getElementById('fileIframe');
+      if (iframe) {
+        iframe.src = fileUrl;
+      } else {
+        console.error("No se encontró el elemento con id 'fileIframe'");
+      }
+      const modal = document.getElementById('modal-ver');
+      if (modal) {
+        modal.style.display = 'block';
+        console.log("Modal mostrado");
+      } else {
+        console.error("No se encontró el elemento con id 'modal-ver'");
+      }
+    }
+  
+    // Cerrar el modal de visualización de archivo
+    document.getElementById('closeFileModalBtn').addEventListener('click', () => {
+      document.getElementById('modal-ver').style.display = 'none';
+      document.getElementById('fileIframe').src = "";
+    });
+  
+    // Mostrar/ocultar menú de opciones (estado, eliminar)
+    function toggleOptions(event, folderId) {
+      const folderDiv = event.target.closest('.folder');
+      const menu = folderDiv.querySelector('.options-menu');
+      if (menu) {
+        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+      }
+      event.stopPropagation();
+    }
+  
+    // Eliminar documento
+    function deleteDocument(docId) {
+      if (confirm('¿Está seguro de que desea eliminar este documento?')) {
+        fetch(`/delete-document/${docId}/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: `docId=${docId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === 'Documento eliminado exitosamente') {
+            renderFolders();
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch(error => console.error('Error al eliminar documento:', error));
+      }
+    }
+  
+    // Eliminar carpeta
+    function confirmDelete(folderId) {
+      if (confirm('¿Está seguro de que desea eliminar esta carpeta?')) {
+        fetch(`/delete-folder/${folderId}/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: `folderId=${folderId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === 'Carpeta eliminada exitosamente') {
+            renderFolders();
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch(error => console.error('Error al eliminar carpeta:', error));
+      }
+    }
+  
+    // Inicializar renderizado de carpetas
+    renderFolders();
+  </script>
+</body>
+</html>

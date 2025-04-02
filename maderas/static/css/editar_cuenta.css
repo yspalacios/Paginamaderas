@@ -1,0 +1,104 @@
+/* Estilos generales */
+body {
+    background: url("/static/diseños/imagenes/imagen2.jpg") no-repeat center center/cover;
+    background-size: cover;
+    background-position: fixed;
+    font-family: 'Arial', sans-serif;
+    color: #141414;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 500px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.89);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(150, 147, 143, 0.3);
+    backdrop-filter: blur(10px);
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Título */
+h1 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #0a0a0a;
+}
+
+/* Estilos para cada campo del formulario */
+form div {
+    margin-bottom: 15px;
+}
+
+/* Etiquetas */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Estilo de inputs */
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 2px solid #cf9d67;
+    border-radius: 5px;
+    background: rgba(250, 250, 250, 0.87);
+    color: #0a0a0a;
+    outline: none;
+}
+
+input::placeholder {
+    color: rgba(128, 128, 128, 0.7);
+}
+
+/* Estilo de mensajes de error */
+p {
+    color: #ff4d4d;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Botón */
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    background: #cf9d67;
+    border: none;
+    font-size: 16px;
+    color: #141414;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1caf28;
+    transform: scale(1.05);
+}

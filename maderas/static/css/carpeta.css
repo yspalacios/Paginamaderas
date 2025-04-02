@@ -1,0 +1,252 @@
+/* Estilos Globales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    background: url('/static/diseños/imagenes/ar.JPEG') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+  
+  /* Header: Barra superior */
+  .header {
+    background-color: #343a40;
+    color: #fff;
+    height: 60px; /* Altura fija */
+    line-height: 60px; /* Centrado vertical */
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+  }
+  .header span {
+    color: #ff9800;
+  }
+  
+  /* Sidebar (menú vertical izquierdo) */
+  .sidebar {
+    background-color: #212529;
+    width: 250px;
+    padding: 20px;
+    color: #fff;
+    position: fixed;
+    top: 60px; /* Inicia justo debajo del header */
+    left: 0;
+    height: calc(100vh - 60px); /* Ocupa el resto de la pantalla */
+  }
+  .sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .sidebar .menu a {
+    display: block;
+    padding: 12px;
+    margin-bottom: 10px;
+    color: #adb5bd;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .sidebar .menu a:hover {
+    background-color: #ff9800;
+    color: #fff;
+  }
+  
+  /* Área principal: contenedor para el contenido (separa del header y sidebar) */
+  .main-content {
+    display: flex;
+    /* Se agrega margen para que el contenido no quede pegado al header y al sidebar */
+    margin-top: 60px;  /* Altura del header */
+    margin-left: 250px; /* Ancho del sidebar */
+    min-height: calc(100vh - 60px);
+  }
+  
+  /* Contenedor principal dentro de la zona de contenido */
+  .container {
+    max-width: 1000px;
+    margin: 40px auto;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+  }
+  
+  /* Encabezado */
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #5A2D0C;
+  }
+  
+  /* Grupos de formulario e inputs */
+  .form-group {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  input[type="text"],
+  input[type="file"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 80%;
+    max-width: 400px;
+    margin: 5px auto;
+    display: block;
+  }
+  
+  /* Botones con estilo de madera */
+  .btn {
+    padding: 10px 20px;
+    background: rgb(160, 113, 56);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s;
+  }
+  .btn:hover {
+    background: #1caf28;
+  }
+  
+  /* Estilo para carpetas */
+  .folder {
+    background-color: #FFF8DC;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #deb887;
+    border-radius: 6px;
+  }
+  
+  /* Cabecera de carpeta */
+  .folder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .folder-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #5A2D0C;
+    flex: 1;
+  }
+  
+  /* Menú de opciones */
+  .options-menu {
+    display: none;
+    margin-top: 10px;
+    background-color: #F5DEB3;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #deb887;
+  }
+  
+  /* Sección de documentos */
+  .documents {
+    margin-top: 10px;
+  }
+  
+  /* Estilos para cada contenedor de documento */
+  .doc-container {
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .doc-name {
+    flex: 1;
+  }
+  .doc-buttons {
+    display: flex;
+    align-items: center;
+  }
+  .doc-buttons button {
+    flex: 1;
+    font-size: 0.8em;
+    padding: 5px 10px;
+    margin: 0 5px;
+  }
+  
+  .separator {
+    color: #555;
+  }
+  
+  /* Estilos para los modales */
+  #modal-editar,
+  #modal-mostrar,
+  #modal-ver {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  #modal-content-editar,
+  #modal-content-mostrar {
+    background: #fff;
+    padding: 20px;
+    margin: 50px auto;
+    width: 70%;
+    border-radius: 4px;
+    position: relative;
+    overflow-y: auto;
+  }
+  #modal-content-editar-input,
+  #modal-content-mostrar-input {
+    border: #1caf28;
+  }
+  
+  /* Estilos para el modal de ver archivo */
+  #modal-content-ver {
+    position: relative;
+    width: 90%;
+    height: 90%;
+    margin: 5% auto;
+    background: #fdfdfd;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    border-radius: 8px;
+    border: 2px solid #8B4513;
+  }
+  #modal-content-ver h2 {
+    color: #5A2D0C;
+  }
+  #modal-content-ver iframe {
+    width: 100%;
+    height: calc(100% - 60px);
+    border: none;
+  }
+  
+  /* Botones superiores */
+  .top-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  /* Ajustes responsivos */
+  @media (max-width: 768px) {
+    #modal-content-editar,
+    #modal-content-mostrar,
+    #modal-content-ver {
+      width: 90%;
+    }
+  }

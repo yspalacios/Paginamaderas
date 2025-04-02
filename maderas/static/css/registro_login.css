@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url("/static/diseños/imagenes/imag11.jpg");
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #cf9d67;
+    color: #111111;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+
+  .back-button:hover {
+    background-color: #fcfbfb;
+  }
+
+  .login-box {
+    position: relative;
+    text-align: center;
+    color: #141414;
+    padding: 30px;
+    background: rgba(241, 238, 238, 0.945);
+    border-radius: 15px;
+    max-width: 350px;
+    width: 100%;
+  }
+
+  .title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  /* Contenedor para organizar los campos en dos columnas */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  /* Si la cantidad de campos es impar, el último se centrará en la fila */
+  .form-grid .input-group:last-child {
+    grid-column: span 2;
+    justify-self: center;
+    width: 50%;
+  }
+
+  .input-group {
+    text-align: left;
+    position: relative;
+  }
+
+  .input-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .input-group input,
+  .input-group select {
+    width: 100%;
+    padding: 12px;
+    background: rgb(248, 247, 247);
+    border: 2px solid #cf9d67;
+    border-radius: 5px;
+    color: black;
+    outline: none;
+  }
+
+  .buttons {
+    margin-top: 15px;
+  }
+
+  .buttons button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #cf9d67;
+    color: rgb(20, 20, 20);
+    transition: background-color 0.3s;
+  }
+
+  .buttons button:hover {
+    background-color: #cf9d67;
+  }
+
+  p {
+    margin-top: 15px;
+  }
+
+  p a {
+    color: #0c0c0c;
+    text-decoration: none;
+  }
+
+  p a:hover {
+    text-decoration: underline;
+  }

@@ -1,0 +1,89 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  
+  .header {
+    background-color: #343a40;
+    color: #fff;
+    padding: 15px 30px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .header span {
+    color: #ff9800;
+  }
+  
+  
+  .main-content {
+    display: flex;
+    min-height: calc(100vh - 60px); /* Considera la altura del header */
+  }
+  
+  
+  .sidebar {
+    background-color: #212529;
+    width: 250px;
+    padding: 20px;
+    color: #fff;
+  }
+  .sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .sidebar .menu a {
+    display: block;
+    padding: 12px;
+    margin-bottom: 10px;
+    color: #adb5bd;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .sidebar .menu a:hover {
+    background-color: #ff9800;
+    color: #fff;
+  }
+  
+  
+  .container {
+    flex: 1;
+    padding: 20px;
+    background-color: #e9ecef;
+  }
+  .container h3 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: #343a40;
+  }
+  
+  
+  .card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .main-content {
+      flex-direction: column;
+    }
+    .sidebar {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }

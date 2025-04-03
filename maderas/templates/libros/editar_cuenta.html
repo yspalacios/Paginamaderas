@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Editar Cuenta: {{ cuenta.email }}</h1>
+        <h2>Editar Cuenta: {{ cuenta.email }}</h2>
 
         {% if messages %}
             {% for message in messages %}
@@ -21,40 +21,44 @@
         <form action="{% url 'editar_cuenta' cuenta.id %}" method="post" onsubmit="return validarFormulario();">
             {% csrf_token %}
             <div>
-                <label for="email">Correo:</label>
+                <label for="email"><b>Correo:</b></label>
                 <input type="email" name="email" id="email" value="{{ cuenta.email }}" required>
             </div>
             <div>
-                <label for="phone">Teléfono:</label>
+                <label for="phone"><b>Teléfono:</b></label>
                 <input type="tel" name="phone" id="phone" value="{{ cuenta.phone }}">
             </div>
             <div>
-                <label for="security_question">Pregunta de seguridad:</label>
+                <label for="security_question"><b>Pregunta de seguridad:</b></label>
                 <select name="security_question" id="security_question" required>
-                    <option value="">Selecciona una pregunta</option>
+                    <option value=""><b>Selecciona una pregunta</b></option>
                     <option value="nombre_mascota" {% if cuenta.security_question == "nombre_mascota" %}selected{% endif %}>¿Cuál es el nombre de tu primera mascota?</option>
                     <option value="ciudad_nacimiento" {% if cuenta.security_question == "ciudad_nacimiento" %}selected{% endif %}>¿En qué ciudad naciste?</option>
                     <option value="color_favorito" {% if cuenta.security_question == "color_favorito" %}selected{% endif %}>¿Cuál es tu color favorito?</option>
                 </select>
             </div>
             <div>
-                <label for="security_answer">Respuesta a la pregunta de seguridad:</label>
+                <label for="security_answer"><b>Respuesta a la pregunta de seguridad:</b></label>
                 <input type="text" name="security_answer" id="security_answer" value="{{ cuenta.security_answer }}" required>
             </div>
             <div>
-                <label for="recovery_email">Correo de recuperación:</label>
+                <label for="recovery_email"><b>Correo de recuperación:</b></label>
                 <input type="email" name="recovery_email" id="recovery_email" value="{{ cuenta.recovery_email }}" required>
             </div>
             <div>
-                <label for="password">Nueva Contraseña (dejar en blanco para no cambiar):</label>
+                <label for="password"><b>Nueva Contraseña (dejar en blanco para no cambiar):</b></label>
                 <input type="password" name="password" id="password">
             </div>
             <div>
-                <label for="confirm_password">Confirmar Nueva Contraseña:</label>
+                <label for="confirm_password"><b>Confirmar Nueva Contraseña:</b></label>
                 <input type="password" name="confirm_password" id="confirm_password">
             </div>
             <div>
-                <button type="submit">Guardar Cambios</button>
+                <button type="submit" ><b>Guardar Cambios</b></button>
+            </div>
+
+            <div>
+                <button type="button" onclick="window.location.href='{% url 'gestionar_productos' %}'">Volver</button>
             </div>
         </form>
     </div>

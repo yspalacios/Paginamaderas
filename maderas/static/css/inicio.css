@@ -1,0 +1,215 @@
+/* --- Global --- */
+html {
+    scroll-behavior: smooth;
+}
+body {
+    font-family: 'PT Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Fondo con imagen, fixed, cover y dimensiones mínimas */
+    background: url("/static/diseños/imagenes/fond.jpg") no-repeat center center/cover;
+    background-attachment: fixed;
+    min-height: 700px;
+    min-width: 700px;
+    font-size: 1.1rem;
+}
+
+/* --- Header Styles --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #cf9d67; /* Mismo tono que se usa en .bg-dark */
+    padding: 10px 20px;
+}
+header .logo {
+    height: 80px;
+    width: auto;
+    order: 2; /* Cambia el orden para que la imagen quede a la derecha */
+}
+header nav {
+    order: 1; /* Cambia el orden para que la navegación quede a la izquierda */
+}
+header nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center; /* Centra verticalmente los elementos de la lista */
+}
+header nav ul li {
+    margin-right: 20px; /* Cambia margin-left por margin-right para espaciar hacia la derecha */
+}
+header nav ul li a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* --- Estilos específicos para la sección nosotros --- */
+#nosotros {
+    background-color: rgba(255, 255, 255, 0.81);
+    border-radius: 0 12vh;
+    border: 3px solid rgb(95, 95, 95);
+    padding: 28px;
+    margin-top: 10px;
+}
+
+#nosotros h1 {
+    margin: 0;
+    font-size: 36px;
+    color: #2d572c;
+}
+
+#nosotros h4 {
+    margin-bottom: 20px;
+}
+
+/* Estilos para las subsecciones dentro de nosotros */
+#nosotros section {
+    background-color: rgba(255, 255, 255, 0.81);
+    margin: 8px;
+    padding: 28px;
+    border-radius: 0 12vh;
+    border: 3px solid rgb(95, 95, 95);
+    width: 100%;
+    height: auto;
+}
+
+/* Estilo para los títulos de sección */
+#nosotros .section-title {
+    padding: 20px;
+    color: #2d572c;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #2d572c;
+    padding-bottom: 5px;
+    border-radius: 10px;
+}
+
+/* Estilos para listas dentro de la sección nosotros */
+#nosotros ul {
+    padding-left: 20px;
+}
+
+#nosotros ul li {
+    margin-bottom: 10px;
+}
+
+/* --- Imágenes publicitarias (si se usan) --- */
+.prubli-img {
+    transition: transform 0.3s ease-in-out;
+    width: 100%;
+    max-width: 300px;
+}
+.prubli-img:hover {
+    transform: scale(1.1);
+}
+
+/* --- WhatsApp y Botón "Volver arriba" --- */
+.whatsapp-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+.whatsapp-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+.whatsapp-icon:hover {
+    transform: scale(1.1);
+}
+#back-to-top {
+    position: fixed;
+    bottom: 80px; /* Separa del WhatsApp */
+    left: 20px;
+    z-index: 1000;
+}
+
+/* --- Footer normal (sin bordes redondeados) --- */
+footer {
+    background: #6b4021;
+    color: #fff;
+    padding: 30px 15px 15px;
+    text-align: center;
+    margin-top: 50px;
+    /* Se eliminaron los border-radius para dejar el footer normal */
+}
+
+/* --- Estilos para la navegación del original --- */
+.navbar-dark, .navbar[data-bs-theme=dark] {
+    --bs-navbar-background: #ffffff;
+    --bs-navbar-color: rgb(0, 0, 0);
+    --bs-navbar-hover-color: rgb(93, 206, 17);
+}
+
+.bg-dark {
+    --bs-bg-opacity: 1;
+    background-color: #CF9D67 !important;
+}
+
+/* --- Utilidades adicionales --- */
+.text-center { text-align: center !important; }
+.p-4 { padding: 1.5rem !important; }
+.mt-4 { margin-top: 1.5rem !important; }
+.shadow-sm { box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important; }
+
+/* --- Estilos específicos para el Carrusel de Productos --- */
+#productosCarousel {
+    margin-top: 20px;
+}
+#productosCarousel .carousel-item img {
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* --- Adaptación de contenedores para nosotros --- */
+#nosotros .container-secciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 33px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+#nosotros .item {
+    background-color: rgba(255, 255, 255, 0.81);
+    margin: 8px;
+    padding: 28px;
+    border-radius: 0 12vh;
+    border: 3px solid rgb(95, 95, 95);
+    width: 47%;
+    height: 100%;
+}
+
+/* --- Estilos responsivos --- */
+@media (max-width: 768px) {
+    #nosotros section {
+        width: 100%;
+    }
+    
+    #nosotros .item {
+        width: 100%;
+    }
+    
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    header nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    header nav ul li {
+        margin: 5px 0;
+    }
+}

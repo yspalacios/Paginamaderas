@@ -10,8 +10,13 @@
 </head>
 <body>
   <!-- Header superior -->
-  <div class="headermenu">Maderas <span>Isabella</span></div>
-  
+  <div class="headermenu">
+    <div class="hmenu">
+      <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo" class="img">
+      <h4>Maderas <span>Isabella</span></h4>
+    </div>
+  </div>
+
   <!-- Contenedor principal con Sidebar y Contenido -->
   <div class="main-content">
     <!-- Menú vertical (Sidebar) -->
@@ -19,7 +24,6 @@
       <h2 class="title"> Menú</h2>
       <div class="menu">
         <a href="{% url 'index' %}">Inicio</a>
-        
         <a href="{% url 'logout' %}">Cerrar Sesión</a>
         <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>
         <a href="{% url 'lista_login' %}">Listado de Cuentas</a>
@@ -45,35 +49,35 @@
         <table>
           <thead>
             <tr>
-              <th>Nombres</th>
-              <th>Apellidos</th>
-              <th>Correo</th>
-              <th>Teléfono</th>
-              <th>Pregunta de Seguridad</th>
-              <th>Respuesta de Seguridad</th>
-              <th>Correo de Recuperación</th>
-              <th>Estado</th>
-              <th>Opciones</th>
+              <th>Nombres </th>               <th> | </th> 
+              <th>Apellidos</th><th> | </th> 
+              <th>Correo</th><th> | </th> 
+              <th>Teléfono</th><th> | </th> 
+              <th>Pregunta de Seguridad</th><th> | </th> 
+              <th>Respuesta de Seguridad</th><th> | </th> 
+              <th>Correo de Recuperación</th><th> | </th> 
+              <th>Estado</th><th> | </th> 
+              <th>Opciones</th><th> | </th> 
             </tr>
           </thead>
           <tbody>
             {% for cuenta in cuentas %}
             <tr>
-              <td>{{ cuenta.nombres }}</td>
-              <td>{{ cuenta.apellidos }}</td>
-              <td>{{ cuenta.email }}</td>
-              <td>{{ cuenta.phone }}</td>
-              <td>{{ cuenta.security_question }}</td>
-              <td>{{ cuenta.security_answer }}</td>
-              <td>{{ cuenta.recovery_email }}</td>
-              <td>{{ cuenta.status }}</td>
+              <td>{{ cuenta.nombres }}</td><th> | </th> 
+              <td>{{ cuenta.apellidos }}</td><th> | </th> 
+              <td>{{ cuenta.email }}</td><th> | </th> 
+              <td>{{ cuenta.phone }}</td><th> | </th> 
+              <td>{{ cuenta.security_question }}</td><th> | </th> 
+              <td>{{ cuenta.security_answer }}</td><th> | </th> 
+              <td>{{ cuenta.recovery_email }}</td><th> | </th> 
+              <td>{{ cuenta.status }}</td><th> | </th> 
               <td>
                 {% if cuenta.status == 'Activo' %} 
                   <a href="{% url 'desactivar_cuenta' cuenta.id %}" title="Desactivar">🔓</a>
                 {% else %} 
                   <a href="{% url 'activar_cuenta' cuenta.id %}" title="Activar">🔒</a>
-                {% endif %} |
-                <a href="{% url 'editar_cuenta' cuenta.id %}">Editar</a> |
+                {% endif %} 
+                <a href="{% url 'editar_cuenta' cuenta.id %}">Editar</a> 
                 <a href="{% url 'eliminar_cuenta' cuenta.id %}" onclick="return confirm('¿Está seguro de eliminar esta cuenta?');">Eliminar</a>
               </td>
             </tr>

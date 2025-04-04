@@ -11,24 +11,25 @@
 
 </head>
 <body>
- <!-- Header superior -->
- <div class="header">Maderas <span>Isabella</span></div>  <!-- Encabezado con el nombre "Maderas Isabella" -->
- <!-- Contenedor principal con Sidebar y Contenido -->
- <div class="main-content">  <!-- Inicio del contenedor principal con diseño flex -->
-   <!-- Menú vertical (Sidebar) -->
-   <div class="sidebar">  <!-- Inicio de la barra lateral (sidebar) -->
-     <h2>Menú</h2>  <!-- Título del menú lateral -->
-     <div class="menu">  <!-- Contenedor de los enlaces del menú -->
-       <a href="#">Inicio</a>  <!-- Enlace a la página de inicio -->
-       <a href="#">Mensajes</a>  <!-- Enlace a la sección de mensajes -->
-       <a href="#">Configuración</a>  <!-- Enlace a la configuración -->
-       <a href="#">Perfil</a>  <!-- Enlace al perfil del usuario -->
-       <a href="{% url 'logout' %}">Cerrar Sesión</a>  <!-- Enlace para cerrar sesión mediante Django -->
-       <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>  <!-- Enlace a la galería de publicidad -->
-       <a href="{% url 'lista_login' %}">Listado de Cuentas</a>  <!-- Enlace al listado de cuentas -->
-       <a href="{% url 'carpeta' %}">Documentos de contratación</a>  <!-- Enlace a los documentos de contratación -->
-     </div>  <!-- Fin del contenedor de enlaces del menú -->
-   </div>  <!-- Fin de la barra lateral -->
+  <div class="headermenu">
+    <div class="hmenu">
+      <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo" class="img">
+      <h4>Maderas <span>Isabella</span></h4>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <!-- Menú vertical (Sidebar) -->
+    <div class="sidebar">
+      <h2> Menú</h2>
+      <div class="menu">
+        <a href="{% url 'index' %}">Inicio</a>
+        <a href="{% url 'logout' %}">Cerrar Sesión</a>
+        <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>
+        <a href="{% url 'lista_login' %}">Listado de Cuentas</a>
+        <a href="{% url 'carpeta' %}">Documentos de contratación</a>
+      </div>
+    </div>
 
   <div class="container">
     <!-- Título principal -->

@@ -11,22 +11,28 @@
 </head>
 <body>  <!-- Inicio del cuerpo del documento -->
   <!-- Header superior -->
-  <div class="header">Maderas <span>Isabella</span></div>  <!-- Encabezado con el nombre "Maderas Isabella" -->
+  <div class="headermenu">
+    <div class="hmenu">
+      <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo" class="img">
+      <h4>Maderas <span>Isabella</span></h4>
+    </div>
+  </div>
+  
   <!-- Contenedor principal con Sidebar y Contenido -->
-  <div class="main-content">  <!-- Inicio del contenedor principal con diseño flex -->
+  <div class="main-content">
     <!-- Menú vertical (Sidebar) -->
-    <div class="sidebar">  <!-- Inicio de la barra lateral (sidebar) -->
-      <h2>Menú</h2>  <!-- Título del menú lateral -->
-      <div class="menu">  <!-- Contenedor de los enlaces del menú -->
-        <a href="{% url 'index' %}">Inicio</a>  <!-- Enlace a la página de inicio -->
-        <a href="{% url 'logout' %}">Cerrar Sesión</a>  <!-- Enlace para cerrar sesión mediante Django -->
-        <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>  <!-- Enlace a la galería de publicidad -->
-        <a href="{% url 'lista_login' %}">Listado de Cuentas</a>  <!-- Enlace al listado de cuentas -->
-        <a href="{% url 'carpeta' %}">Documentos de contratación</a>  <!-- Enlace a los documentos de contratación -->
-      </div>  <!-- Fin del contenedor de enlaces del menú -->
-    </div>  <!-- Fin de la barra lateral -->
+    <div class="sidebar">
+      <h2 class="title"> Menú</h2>
+      <div class="menu">
+        <a href="{% url 'index' %}">Inicio</a>
+        <a href="{% url 'logout' %}">Cerrar Sesión</a>
+        <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>
+        <a href="{% url 'lista_login' %}">Listado de Cuentas</a>
+        <a href="{% url 'carpeta' %}">Documentos de contratación</a>
+      </div>
+    </div>
     <!-- Contenido principal -->
-    <div class="content">  <!-- Inicio de la sección de contenido principal -->
+    <div class="container mt-5">  <!-- Inicio de la sección de contenido principal -->
       <h2>Gestión de Imagen</h2>  <!-- Título principal de la sección de gestión de imagen -->
       
       <div class="mb-4 d-flex justify-content-center gap-3">  <!-- Contenedor para el input de búsqueda con márgenes y diseño flex -->

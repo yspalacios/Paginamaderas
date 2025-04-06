@@ -1,124 +1,191 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
-  body {
-    display: flex;
+body {
+  min-height: 100vh;
+  background: url("/static/diseños/imagenes/imag11.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Encabezado y navegación */
+header {
+  background-color: #ff9800;
+  padding: 15px 20px;
+  border-bottom: 1px solid #3e3a3a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header .logo {
+  max-height: 80px;
+}
+
+.nav-main {
+  flex: 1;
+}
+
+.nav-main ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: flex-start;
+}
+
+.nav-main ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 700;
+}
+
+.nav-main ul li a:hover {
+  color: #007bff;
+}
+
+/* Formulario de login */
+.login-box {
+  position: relative;
+  margin: 40px auto;
+  text-align: center;
+  color: #141414;
+  padding: 30px;
+  background: rgba(241, 238, 238, 0.945);
+  border-radius: 15px;
+  max-width: 600px;
+  width: 90%;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  text-align: left;
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  background: rgb(248, 247, 247);
+  border: 2px solid #cf9d67;
+  border-radius: 5px;
+  color: black;
+  outline: none;
+}
+
+/* Icono de mostrar contraseña */
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Botón */
+.buttons {
+  margin-top: 15px;
+}
+
+.buttons button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #cf9d67;
+  color: rgb(20, 20, 20);
+  transition: background-color 0.3s;
+}
+
+.buttons button:hover {
+  background-color: #e2b078;
+}
+
+/* Enlaces */
+p {
+  margin-top: 15px;
+}
+
+p a {
+  color: #0c0c0c;
+  text-decoration: none;
+}
+
+p a:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+footer {
+  background-color: #4A4A4A;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  margin-top: auto;
+}
+
+footer img {
+  margin-bottom: 10px;
+}
+
+footer a.footer-link {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .nav-main ul {
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: url("/static/diseños/imagenes/imag6.jpg");
-    background-size: cover;
-    position: relative;
-    overflow: hidden;
+    flex-wrap: wrap;
   }
 
-  .back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background-color: #cf9d67;
-    color: #111111;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s;
+  header {
+    flex-direction: column-reverse;
+    gap: 15px;
   }
 
-  .back-button:hover {
-    background-color: #fcfbfb;
+  header .logo {
+    margin-bottom: 10px;
   }
+}
 
+@media (max-width: 576px) {
   .login-box {
-    position: relative;
-    text-align: center;
-    color: #141414;
-    padding: 30px;
-    background: rgba(241, 238, 238, 0.945);
-    border-radius: 15px;
-    max-width: 350px;
-    width: 100%;
+    padding: 20px 15px;
+    width: 95%;
   }
 
   .title {
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-size: 24px;
   }
-
-  .input-group {
-    margin: 15px 0;
-    text-align: left;
-    position: relative;
-  }
-
-  .input-group label {
-    display: block;
-    margin-bottom: 5px;
-  }
-
-  .input-group input {
-    width: 100%;
-    padding: 12px;
-    background: rgb(248, 247, 247);
-    border: 2px solid #cf9d67;
-    border-radius: 5px;
-    color: black; /* Cambiado para que el texto se vea negro */
-    outline: none;
-  }
-
-  .password-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%; /* Se asegura que ocupe el 100% del ancho */
-  }
-
-  .password-wrapper input {
-    flex: 1;
-    padding-right: 40px; /* Espacio para el icono */
-  }
-
-  .password-wrapper .toggle-password {
-    position: absolute;
-    right: 10px;
-    cursor: pointer;
-    color: #555;
-  }
-
-  .buttons {
-    margin-top: 15px;
-  }
-
-  .buttons button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    background-color: #cf9d67;
-    color: rgb(20, 20, 20);
-    transition: background-color 0.3s;
-  }
-
-  .buttons button:hover {
-    background-color: #cf9d67;
-  }
-
-  p {
-    margin-top: 15px;
-  }
-
-  p a {
-    color: #0c0c0c;
-    text-decoration: none;
-  }
-
-  p a:hover {
-    text-decoration: underline;
-  }
+}

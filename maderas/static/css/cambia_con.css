@@ -1,92 +1,193 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
 body {
-    /* Se utiliza la ruta absoluta relativa al directorio static */
-    background: url("/static/diseños/imagenes/imag11.jpg");
-    background-size: cover;
-    position: relative;
-    font-family: 'Arial', sans-serif;
-    color: #141414;
-    margin: 0;
-  }
-  
-  .full-height {
-    min-height: 100vh;
-    display: flex;
+  min-height: 100vh;
+  background: url("/static/diseños/imagenes/imag11.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Encabezado y navegación */
+header {
+  background-color: #ff9800;
+  padding: 15px 20px;
+  border-bottom: 1px solid #3e3a3a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header .logo {
+  max-height: 80px;
+}
+
+.nav-main {
+  flex: 1;
+}
+
+.nav-main ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: flex-start;
+}
+
+.nav-main ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 700;
+}
+
+.nav-main ul li a:hover {
+  color: #007bff;
+}
+
+/* Contenido principal */
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: 80vh;
+}
+
+/* Estilos para el formulario de recuperación de contraseña */
+.reset-form {
+  position: relative;
+  margin: 40px auto;
+  text-align: center;
+  color: #141414;
+  padding: 30px;
+  background: rgba(241, 238, 238, 0.945);
+  border-radius: 15px;
+  max-width: 600px;
+  width: 90%;
+}
+
+.reset-form h2 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.reset-form p {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  text-align: left;
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  background: rgb(248, 247, 247);
+  border: 2px solid #cf9d67;
+  border-radius: 5px;
+  color: black;
+  outline: none;
+}
+
+.alert {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.reset-form button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #cf9d67;
+  color: rgb(20, 20, 20);
+  transition: background-color 0.3s;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.reset-form button:hover {
+  background-color: #e2b078;
+}
+
+.back-link {
+  display: block;
+  margin-top: 15px;
+  color: #0c0c0c;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* Pie de página */
+footer {
+  background-color: #4A4A4A;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  margin-top: auto;
+}
+
+footer img {
+  margin-bottom: 10px;
+}
+
+footer a.footer-link {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .nav-main ul {
     justify-content: center;
-    align-items: center;
+    flex-wrap: wrap;
   }
   
+  header {
+    flex-direction: column-reverse;
+    gap: 15px;
+  }
+  
+  header .logo {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 576px) {
   .reset-form {
-    background: rgba(241, 238, 238, 0.945);
-    padding: 30px;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
-    text-align: center;
-    max-width: 400px;
-    width: 100%;
-    animation: fadeIn 1s ease-in-out;
+    padding: 20px 15px;
+    width: 95%;
   }
   
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  h2 {
+  .reset-form h2 {
     font-size: 24px;
-    margin-bottom: 15px;
-    color: #0f0f0f;
   }
-  
-  input {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 2px solid #cf9d67;
-    border-radius: 5px;
-    background: rgba(241, 238, 238, 0.945);
-    color: #0f0f0f;
-    outline: none;
-  }
-  
-  input::placeholder {
-    color: rgba(17, 17, 17, 0.7);
-  }
-  
-  p {
-    font-size: 14px;
-  }
-  
-  button {
-    width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    background: #cf9d67;
-    border: none;
-    font-size: 16px;
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background: #1caf28;
-    transform: scale(1.05);
-  }
-  
-  .back-link {
-    display: block;
-    margin-top: 10px;
-    color: #131212;
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  
-  .back-link:hover {
-    color: rgb(16, 113, 35);
-  }
-  
+}

@@ -1,103 +1,102 @@
 body {
-    background: url(img/imag12.jpg) no-repeat center center/cover;
-    font-family: 'Arial', sans-serif;
-    color: rgb(0, 0, 0);
-    padding: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  background: url("/static/diseños/imagenes/15.jpg") no-repeat center center/cover;
+  font-family: 'Arial', sans-serif;
+  color: rgb(0, 0, 0);
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  font-size: 1.1rem;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.86);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: rgb(0, 0, 0);
+  animation: slideDown 1s ease-out;
+  font-size: 2rem;
+}
+
+form {
+  animation: fadeIn 1s ease-out;
+}
+
+form p {
+  margin-bottom: 15px;
+}
+
+input, textarea, select {
+  border: 2px solid #cf9d67;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  transition: border 0.3s;
+  margin-top: 5px;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: rgb(255, 255, 255);
+  outline: none;
+}
+
+button.btn-success {
+  font-size: 1.1rem;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  background-color: #cf9d67;
+  color: white;
+  margin-top: 15px;
+}
+
+button.btn-success:hover {
+  background-color: rgb(175, 129, 80);
+}
+
+a.btn-secondary {
+  background: rgba(161, 161, 161, 0.73);
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+a.btn-secondary:hover {
+  background: rgba(94, 92, 92, 0.84);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-  
-  .container {
-    font-size: 1.1rem;
-    max-width: 600px;
-    background: rgba(255, 255, 255, 0.86);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    animation: fadeIn 1s ease-in-out;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: rgb(0, 0, 0);
-    animation: slideDown 1s ease-out;
-    font-size: 2rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  form {
-    animation: fadeIn 1s ease-out;
+  to {
+    opacity: 1;
   }
-  
-  form p {
-    margin-bottom: 15px;
-  }
-  
-  input, textarea, select {
-    border: 2px solid #cf9d67;
-    padding: 10px;
-    border-radius: 5px;
-    width: 100%;
-    transition: border 0.3s;
-  }
-  
-  input:focus, textarea:focus, select:focus {
-    border-color: rgb(255, 255, 255);
-    outline: none;
-  }
-  
-  .btn {
-    font-size: 1.1rem;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-  }
-  
-  button.btn-success {
-    background-color: #cf9d67;
-    color: white;
-  }
-  
-  button.btn-success:hover {
-    background-color: rgb(175, 129, 80);
-  }
-  
-  a.btn-secondary {
-    background: rgba(161, 161, 161, 0.73);
-    color: white;
-    text-decoration: none;
-    display: inline-block;
-    padding: 10px 15px;
-    border-radius: 5px;
-  }
-  
-  a.btn-secondary:hover {
-    background: rgba(94, 92, 92, 0.84);
-  }
-  
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
+}

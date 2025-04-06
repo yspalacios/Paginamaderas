@@ -1,8 +1,7 @@
 /* Estilos Globales */
-
 body {
-  background: url("/static/diseños/imagenes/15.jpg") no-repeat center center fixed;
-  background-size: cover;
+  background: url("/static/diseños/imagenes/15.jpg") ;
+  background-color: rgb(246, 246, 247);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
   margin: 0;
@@ -13,18 +12,17 @@ body {
 .headermenu {
   background-color: #4A4A4A;
   color: #fff;
-  height: 100px; /* Se usa un valor fijo para evitar problemas con porcentajes */
+  height: 100px; /* Valor fijo para evitar problemas con porcentajes */
   width: 100%;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1001;
-  
-  /* Para alinear correctamente */
   display: flex;
   align-items: center; /* Centra verticalmente */
   justify-content: center; /* Centra horizontalmente el contenido */
 }
+
 /* Contenedor del logo y el texto */
 .hmenu {
   display: flex;
@@ -45,7 +43,7 @@ body {
 /* Imagen del logo */
 .hmenu .img {
   position: absolute;
-  left: -20px; /* Ahora alineada con la palabra "menu" de la barra lateral (padding de 25px en .sidebar) */
+  left: -20px; /* Alineada con la palabra "Menú" del sidebar */
   height: 100px;  /* Centrado verticalmente en el header */
   width: auto;
 }
@@ -56,14 +54,15 @@ body {
 
 /* Sidebar (menú vertical izquierdo) */
 .sidebar {
-  background-color:  #4A4A4A;
-  width: 12%;
+  background-color: #4A4A4A;
+  width: 250px;
   padding: 25px;
   color: #fff;
   position: fixed;
-  top: 60px; /* Justo debajo del header */
+  top: 100px; 
   left: 0;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 100px);
+  box-sizing: border-box;
 }
 
 .sidebar h2 {
@@ -71,6 +70,7 @@ body {
   margin-bottom: 20px;
   text-align: center;
 }
+
 .sidebar .menu a {
   display: block;
   padding: 12px;
@@ -80,6 +80,7 @@ body {
   border-radius: 4px;
   transition: background 0.3s ease, color 0.3s ease;
 }
+
 .sidebar .menu a:hover {
   background-color: #45a049;
   color: #fff;
@@ -88,25 +89,23 @@ body {
 /* Área principal: contenedor para el contenido (separa del header y sidebar) */
 .main-content {
   display: flex;
-  margin-top: 60px;  /* Altura del header + espacio extra */
-  margin-left: 250px; /* Ancho del sidebar */
-  min-height: calc(100vh - 60px);
+  margin-top: 100px;  
+  margin-left: 250px; ;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 /* Contenedor principal dentro de la zona de contenido */
 .container {
   flex: 1;
   max-width: 1500px;
-  background:  rgba(255, 255, 255, 0.77);
+  background: rgba(255, 255, 255, 0.77);
   margin: 0 auto;
   padding: 20px;
   border-radius: 8px;
   box-shadow:
-  0 5px 15px rgb(250, 146, 76),
-  /* Sombra base */
-  0 0 15px 5px rgba(247, 144, 75, 0.89);
-/* Efecto luminiscente */
+    0 5px 15px rgb(250, 146, 76),
+    0 0 15px 5px rgba(247, 144, 75, 0.89);
 }
 
 /* Encabezado */
@@ -136,7 +135,7 @@ input[type="file"] {
 /* Botones con estilo de madera */
 .btn {
   padding: 10px 20px;
-  background:  #cf9d67;
+  background: #cf9d67;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -146,6 +145,7 @@ input[type="file"] {
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   transition: background 0.3s;
 }
+
 .btn:hover {
   background: #45a049;
 }
@@ -167,6 +167,7 @@ input[type="file"] {
   margin-bottom: 10px;
   flex-wrap: wrap;
 }
+
 .folder-title {
   font-size: 1.5em;
   font-weight: bold;
@@ -196,13 +197,16 @@ input[type="file"] {
   align-items: center;
   justify-content: space-between;
 }
+
 .doc-name {
   flex: 1;
 }
+
 .doc-buttons {
   display: flex;
   align-items: center;
 }
+
 .doc-buttons button {
   flex: 1;
   font-size: 0.8em;
@@ -227,6 +231,7 @@ input[type="file"] {
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
+
 #modal-content-editar,
 #modal-content-mostrar {
   background: #fff;
@@ -237,6 +242,7 @@ input[type="file"] {
   position: relative;
   overflow-y: auto;
 }
+
 #modal-content-editar-input,
 #modal-content-mostrar-input {
   border: #1caf28;
@@ -254,9 +260,11 @@ input[type="file"] {
   border-radius: 8px;
   border: 2px solid #8B4513;
 }
+
 #modal-content-ver h2 {
   color: #5A2D0C;
 }
+
 #modal-content-ver iframe {
   width: 100%;
   height: calc(100% - 60px);

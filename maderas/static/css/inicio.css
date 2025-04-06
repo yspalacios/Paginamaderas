@@ -1,215 +1,298 @@
-/* --- Global --- */
-html {
-    scroll-behavior: smooth;
-}
 body {
-    font-family: 'PT Sans', Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    /* Fondo con imagen, fixed, cover y dimensiones mínimas */
-    background: url("/static/diseños/imagenes/fond.jpg") no-repeat center center/cover;
-    background-attachment: fixed;
-    min-height: 700px;
-    min-width: 700px;
-    font-size: 1.1rem;
-}
-
-/* --- Header Styles --- */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #cf9d67; /* Mismo tono que se usa en .bg-dark */
-    padding: 10px 20px;
-}
-header .logo {
-    height: 80px;
-    width: auto;
-    order: 2; /* Cambia el orden para que la imagen quede a la derecha */
-}
-header nav {
-    order: 1; /* Cambia el orden para que la navegación quede a la izquierda */
-}
-header nav ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    align-items: center; /* Centra verticalmente los elementos de la lista */
-}
-header nav ul li {
-    margin-right: 20px; /* Cambia margin-left por margin-right para espaciar hacia la derecha */
-}
-header nav ul li a {
-    color: rgb(0, 0, 0);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-/* --- Estilos específicos para la sección nosotros --- */
-#nosotros {
-    background-color: rgba(255, 255, 255, 0.81);
-    border-radius: 0 12vh;
-    border: 3px solid rgb(95, 95, 95);
-    padding: 28px;
-    margin-top: 10px;
-}
-
-#nosotros h1 {
-    margin: 0;
-    font-size: 36px;
-    color: #2d572c;
-}
-
-#nosotros h4 {
-    margin-bottom: 20px;
-}
-
-/* Estilos para las subsecciones dentro de nosotros */
-#nosotros section {
-    background-color: rgba(255, 255, 255, 0.81);
-    margin: 8px;
-    padding: 28px;
-    border-radius: 0 12vh;
-    border: 3px solid rgb(95, 95, 95);
-    width: 100%;
-    height: auto;
-}
-
-/* Estilo para los títulos de sección */
-#nosotros .section-title {
+    font-family: 'PT Sans', sans-serif;
+    line-height: 1.6;
+    background-color: #58595a;
+    color: #333;
+  }
+  
+  /* Encabezado y navegación */
+  header {
+    background-color: #ff9800;
     padding: 20px;
-    color: #2d572c;
-    margin-bottom: 5px;
-    border-bottom: 2px solid #2d572c;
-    padding-bottom: 5px;
-    border-radius: 10px;
-}
-
-/* Estilos para listas dentro de la sección nosotros */
-#nosotros ul {
+    border-bottom: 1px solid #3e3a3a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  header .logo {
+    max-height: 80px;
+  }
+  .nav-main {
+    flex: 1;
+  }
+  .nav-main ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    justify-content: flex-start;
+  }
+  
+  .nav-main ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 700;
+  }
+  
+  .nav-main ul li a:hover {
+    color: #007bff;
+  }
+  
+  /* Contenedor principal */
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+  }
+  
+  /* Secciones */
+  .section {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .section h1,
+  .section h2,
+  .section h4 {
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .center {
+    text-align: center;
+  }
+  
+  /* Sección de Productos */
+  .lista-productos {
+    margin: 15px 0;
     padding-left: 20px;
-}
-
-#nosotros ul li {
-    margin-bottom: 10px;
-}
-
-/* --- Imágenes publicitarias (si se usan) --- */
-.prubli-img {
-    transition: transform 0.3s ease-in-out;
+  }
+  
+  .carousel {
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  
+  .carousel-inner {
+    position: relative;
+  }
+  
+  .carousel-item {
+    display: none;
+  }
+  
+  .carousel-item img {
     width: 100%;
-    max-width: 300px;
-}
-.prubli-img:hover {
-    transform: scale(1.1);
-}
-
-/* --- WhatsApp y Botón "Volver arriba" --- */
-.whatsapp-float {
+    border-radius: 5px;
+  }
+  
+  .carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.5);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .carousel-control.prev {
+    left: 10px;
+  }
+  
+  .carousel-control.next {
+    right: 10px;
+  }
+  
+  /* Tarjetas en Imágenes Publicadas */
+  .cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: calc(33.333% - 20px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  
+  .card img {
+    width: 100%;
+    display: block;
+  }
+  
+  .card-content {
+    padding: 15px;
+  }
+  
+  .card-content h5 {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+  }
+  
+  .no-image {
+    padding: 30px;
+    text-align: center;
+    background-color: #f0f0f0;
+    color: #888;
+  }
+  
+  /* Sección Nosotros */
+  .info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .info-item h2 {
+    margin-bottom: 10px;
+    color: #007bff;
+  }
+  
+  /* Sub-secciones */
+  .subsection {
+    margin-top: 20px;
+  }
+  
+  .subsection h2 {
+    margin-bottom: 10px;
+  }
+  
+  /* Sección de Ubicación */
+  .map-container {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    position: relative;
+  }
+  
+  .map-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  
+  /* Pie de página */
+  footer {
+    background-color: #4A4A4A;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  footer img {
+    margin-bottom: 10px;
+  }
+  
+  footer a.footer-link {
+    color: #fff;
+    text-decoration: underline;
+  }
+  
+  /* Botón “Volver arriba” */
+  .back-to-top {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 1000;
-}
-.whatsapp-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 10px;
-    transition: transform 0.3s ease-in-out;
-}
-.whatsapp-icon:hover {
-    transform: scale(1.1);
-}
-#back-to-top {
-    position: fixed;
-    bottom: 80px; /* Separa del WhatsApp */
-    left: 20px;
-    z-index: 1000;
-}
-
-/* --- Footer normal (sin bordes redondeados) --- */
-footer {
-    background: #6b4021;
+    background-color: #007bff;
     color: #fff;
-    padding: 30px 15px 15px;
-    text-align: center;
-    margin-top: 50px;
-    /* Se eliminaron los border-radius para dejar el footer normal */
-}
-
-/* --- Estilos para la navegación del original --- */
-.navbar-dark, .navbar[data-bs-theme=dark] {
-    --bs-navbar-background: #ffffff;
-    --bs-navbar-color: rgb(0, 0, 0);
-    --bs-navbar-hover-color: rgb(93, 206, 17);
-}
-
-.bg-dark {
-    --bs-bg-opacity: 1;
-    background-color: #CF9D67 !important;
-}
-
-/* --- Utilidades adicionales --- */
-.text-center { text-align: center !important; }
-.p-4 { padding: 1.5rem !important; }
-.mt-4 { margin-top: 1.5rem !important; }
-.shadow-sm { box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important; }
-
-/* --- Estilos específicos para el Carrusel de Productos --- */
-#productosCarousel {
-    margin-top: 20px;
-}
-#productosCarousel .carousel-item img {
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-/* --- Adaptación de contenedores para nosotros --- */
-#nosotros .container-secciones {
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  /* Botón flotante de WhatsApp */
+  .whatsapp-float {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 33px;
-    justify-content: center;
-    align-items: flex-start;
-    margin-top: 10px;
+    align-items: center;
+  }
+  .whatsapp-float:hover::before {
+    content: "comuniquese por whatsapp";
+    background-color: #25D366; /* Mismo color que el botón de WhatsApp */
+    color: #fff;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    position: absolute;
+    right: 100%;
+    margin-right: 10px;
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+  .whatsapp-float::before {
+    opacity: 0;
+  }
+  .whatsapp-icon {
+    width: 80px;
+  }
+  
+  /* Ajustes responsivos */
+  @media (max-width: 768px) {
+    .nav-main ul {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .cards-container {
+      flex-direction: column;
+    }
+    
+    .card {
+      width: 100%;
+    }
+    
+    .info-container {
+      flex-direction: column;
+    }
+  }
+  /* Menú desplegable */
+.has-submenu {
+  position: relative;
 }
 
-#nosotros .item {
-    background-color: rgba(255, 255, 255, 0.81);
-    margin: 8px;
-    padding: 28px;
-    border-radius: 0 12vh;
-    border: 3px solid rgb(95, 95, 95);
-    width: 47%;
-    height: 100%;
+.submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  padding: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  min-width: 200px;
+  border-radius: 4px;
 }
 
-/* --- Estilos responsivos --- */
-@media (max-width: 768px) {
-    #nosotros section {
-        width: 100%;
-    }
-    
-    #nosotros .item {
-        width: 100%;
-    }
-    
-    header {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    header nav ul {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    header nav ul li {
-        margin: 5px 0;
-    }
+.submenu li {
+  padding: 8px 20px;
+}
+
+.submenu li a {
+  color: #333;
+  text-decoration: none;
+}
+
+.submenu li a:hover {
+  color: #007bff;
+}
+
+/* Mostrar submenu al pasar el mouse */
+.has-submenu:hover .submenu {
+  display: block;
 }

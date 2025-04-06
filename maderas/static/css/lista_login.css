@@ -1,3 +1,13 @@
+/* Body styling */
+body {
+  background: url("/static/diseños/imagenes/14.jpg") ;
+  background-color:rgb(246, 246, 247);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 30px;
+}
+
 /* Header: Barra superior */
 .headermenu {
   background-color: #4A4A4A;
@@ -8,8 +18,6 @@
   top: 0;
   left: 0;
   z-index: 1001;
-  
-  /* Para alinear correctamente */
   display: flex;
   align-items: center; /* Centra verticalmente */
   justify-content: center; /* Centra horizontalmente el contenido */
@@ -47,13 +55,14 @@
 /* Sidebar (menú vertical izquierdo) */
 .sidebar {
   background-color:  #4A4A4A;
-  width: 12%;
+  width: 250px;
   padding: 25px;
   color: #fff;
   position: fixed;
-  top: 60px; /* Justo debajo del header */
+  top: 100px;
   left: 0;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 100px);
+  box-sizing: border-box;
 }
 .sidebar h2 {
   font-size: 20px;
@@ -77,10 +86,10 @@
 /* Área principal: contenedor para el contenido */
 .main-content {
   display: flex;
-  margin-top: 60px;  /* Altura del header */
-  margin-left: 250px; /* Ancho del sidebar */
-  min-height: calc(100vh - 60px);
+  margin-top: 100px;
+  margin-left: 250px;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 /* Contenedor principal dentro de la zona de contenido */
@@ -93,9 +102,7 @@
   border-radius: 8px;
   box-shadow:
   0 5px 15px rgb(250, 146, 76),
-  /* Sombra base */
   0 0 15px 5px rgba(247, 144, 75, 0.89);
-/* Efecto luminiscente */
 }
 
 /* Encabezado de acción: título y botones */
@@ -157,12 +164,3 @@ table a:hover {
   text-decoration: underline;
 }
 
-/* Body styling */
-body {
-  background: url("/static/diseños/imagenes/14.jpg") ;
-  background-color:rgb(246, 246, 247);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
-  margin: 0;
-  padding: 30px;
-}

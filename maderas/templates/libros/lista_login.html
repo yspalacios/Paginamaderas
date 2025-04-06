@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lista de Cuentas</title>
   <link rel="stylesheet" href="{% static 'css/lista_login.css' %}">
-
 </head>
 <body>
+
   <!-- Header superior -->
   <div class="headermenu">
     <div class="hmenu">
@@ -21,16 +21,16 @@
   <div class="main-content">
     <!-- Menú vertical (Sidebar) -->
     <div class="sidebar">
-      <h2 class="title"> Menú</h2>
+      <h2 class="title">Menú</h2>
       <div class="menu">
         <a href="{% url 'index' %}">Inicio</a>
-        <a href="{% url 'logout' %}">Cerrar Sesión</a>
         <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>
         <a href="{% url 'lista_login' %}">Listado de Cuentas</a>
         <a href="{% url 'carpeta' %}">Documentos de contratación</a>
+        <a href="{% url 'logout' %}">Cerrar Sesión</a>
       </div>
     </div>
-    
+
     <!-- Contenido principal -->
     <div class="container">
       <div class="action-header">
@@ -44,46 +44,46 @@
           </a>
         </div>
       </div>
-      
+
       <div class="table-container">
         <table>
           <thead>
             <tr>
-              <th>Nombres </th>               <th> | </th> 
-              <th>Apellidos</th><th> | </th> 
-              <th>Correo</th><th> | </th> 
-              <th>Teléfono</th><th> | </th> 
-              <th>Pregunta de Seguridad</th><th> | </th> 
-              <th>Respuesta de Seguridad</th><th> | </th> 
-              <th>Correo de Recuperación</th><th> | </th> 
-              <th>Estado</th><th> | </th> 
-              <th>Opciones</th><th> | </th> 
+              <th>Nombres</th><th>|</th>
+              <th>Apellidos</th><th>|</th>
+              <th>Correo</th><th>|</th>
+              <th>Teléfono</th><th>|</th>
+              <th>Pregunta de Seguridad</th><th>|</th>
+              <th>Respuesta de Seguridad</th><th>|</th>
+              <th>Correo de Recuperación</th><th>|</th>
+              <th>Estado</th><th>|</th>
+              <th>Opciones</th>
             </tr>
           </thead>
           <tbody>
             {% for cuenta in cuentas %}
             <tr>
-              <td>{{ cuenta.nombres }}</td><th> | </th> 
-              <td>{{ cuenta.apellidos }}</td><th> | </th> 
-              <td>{{ cuenta.email }}</td><th> | </th> 
-              <td>{{ cuenta.phone }}</td><th> | </th> 
-              <td>{{ cuenta.security_question }}</td><th> | </th> 
-              <td>{{ cuenta.security_answer }}</td><th> | </th> 
-              <td>{{ cuenta.recovery_email }}</td><th> | </th> 
-              <td>{{ cuenta.status }}</td><th> | </th> 
+              <td>{{ cuenta.nombres }}</td><th>|</th>
+              <td>{{ cuenta.apellidos }}</td><th>|</th>
+              <td>{{ cuenta.email }}</td><th>|</th>
+              <td>{{ cuenta.phone }}</td><th>|</th>
+              <td>{{ cuenta.security_question }}</td><th>|</th>
+              <td>{{ cuenta.security_answer }}</td><th>|</th>
+              <td>{{ cuenta.recovery_email }}</td><th>|</th>
+              <td>{{ cuenta.status }}</td><th>|</th>
               <td>
-                {% if cuenta.status == 'Activo' %} 
+                {% if cuenta.status == 'Activo' %}
                   <a href="{% url 'desactivar_cuenta' cuenta.id %}" title="Desactivar">🔓</a>
-                {% else %} 
+                {% else %}
                   <a href="{% url 'activar_cuenta' cuenta.id %}" title="Activar">🔒</a>
-                {% endif %} 
-                <a href="{% url 'editar_cuenta' cuenta.id %}">Editar</a> 
+                {% endif %}
+                <a href="{% url 'editar_cuenta' cuenta.id %}">Editar</a>
                 <a href="{% url 'eliminar_cuenta' cuenta.id %}" onclick="return confirm('¿Está seguro de eliminar esta cuenta?');">Eliminar</a>
               </td>
             </tr>
             {% empty %}
             <tr>
-              <td colspan="9">No hay cuentas registradas.</td>
+              <td colspan="15">No hay cuentas registradas.</td>
             </tr>
             {% endfor %}
           </tbody>

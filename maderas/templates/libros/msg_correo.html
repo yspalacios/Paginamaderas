@@ -1,0 +1,44 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperación de Contraseña</title>
+    <link rel="stylesheet" href="{% static 'css/msg_correo.css' %}">
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="logo">
+
+            <h1>Recuperación de Contraseña</h1>
+        </div>
+        
+        <div class="content">
+            <p>Hola {{ username }},</p>
+            
+            <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en <strong>{{ site_name }}</strong>.</p>
+            
+            <p>Para establecer una nueva contraseña, haz clic en el siguiente <b> enlace</b>:</p>
+            <p class="link-text">{{ reset_url }}</p>
+
+            <p>O copia y pega el siguiente enlace en tu navegador:</p>
+            
+            <div class="note">
+                <p><strong>Nota:</strong> Este enlace será válido por 1 hora. Si no solicitaste un cambio de contraseña, puedes ignorar este mensaje.</p>
+            </div>
+            
+            <p>Si tienes problemas o preguntas, no dudes en contactarnos.</p>
+            
+            <p>Saludos,<br>El equipo de {{ site_name }}</p>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2025 {{ site_name }}. Todos los derechos reservados.</p>
+            <p>Este es un correo electrónico automático, por favor no respondas a este mensaje.</p>
+        </div>
+    </div>
+</body>
+</html>

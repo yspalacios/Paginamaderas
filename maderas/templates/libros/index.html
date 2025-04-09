@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>Galería de Publicidad</title>
   <link rel="stylesheet" href="{% static 'css/index.css' %}">
+  
 </head>
 <body>
   <!-- Header -->
@@ -12,6 +13,20 @@
     <div class="hmenu">
       <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo" class="img">
       <h4>Maderas <span>Isabella</span></h4>
+    </div>
+    
+    <!-- Menú circular desplegable -->
+    <div class="user-menu">
+      <div class="user-circle">YC</div>
+      <div class="dropdown-content">
+        <a href="#">Perfil</a>
+        <a href="#">Calificaciones</a>
+        <a href="#">Calendario</a>
+        <a href="#">Archivos privados</a>
+        <a href="#">Informes</a>
+        <a href="#">Preferencias</a>
+        <a href="{% url 'logout' %}">Cerrar sesión</a>
+      </div>
     </div>
   </div>
 

@@ -1,31 +1,36 @@
 {% for producto in productos %}
-  <div class="col-md-6 mb-4">
-    <div class="card">
+  <div class="producto-item">
+    <div class="producto-card">
       {% if producto.imagen %}
-        <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre_producto }}">
+        <img src="{{ producto.imagen.url }}" class="producto-img" alt="{{ producto.nombre_producto }}">
       {% else %}
-        <div class="card-img-top text-center p-3">No hay imagen disponible</div>
+        <div class="producto-noimg">No hay imagen disponible</div>
       {% endif %}
-      <div class="card-body">
-        <h5 class="card-title">{{ producto.nombre_producto }}</h5>
-        <p class="card-text">
-          <strong>Tipo:</strong> {{ producto.tipo_madera }}<br>
-          <strong>Descripción:</strong> {{ producto.descripcion }}
-        </p>
-        <div class="d-grid gap-2">
-          <a href="{% url 'editar_producto' producto.id %}" class="btn btn-warning">Editar</a>
-          <a href="{% url 'confirmar_eliminar' producto.id %}" class="btn btn-danger">Eliminar</a>
+      <div class="producto-body">
+        <h3 class="producto-title">{{ producto.nombre_producto }}</h3>
+        <div class="producto-info">
+          <p><strong>Tipo:</strong> {{ producto.tipo_madera }}</p>
+          <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
+        </div>
+        <div class="producto-buttons">
+          <button class="btn-editar" data-producto-id="{{ producto.id }}">Editar</button>
+          <button class="btn-eliminar" 
+                  data-producto-id="{{ producto.id }}" 
+                  data-producto-nombre="{{ producto.nombre_producto }}" 
+                  data-eliminar-url="{% url 'confirmar_eliminar' producto.id %}">
+            Eliminar
+          </button>
           {% if not producto.publicado %}
-            <button class="btn btn-info" onclick="cambiarEstado({{ producto.id }}, 'publicar', this)">Publicar</button>
+            <button class="btn-publish" onclick="cambiarEstado({{ producto.id }}, 'publicar', this)">Publicar</button>
           {% else %}
-            <button class="btn btn-secondary" onclick="cambiarEstado({{ producto.id }}, 'quitar', this)">No Publicar</button>
+            <button class="btn-unpublish" onclick="cambiarEstado({{ producto.id }}, 'quitar', this)">No Publicar</button>
           {% endif %}
         </div>
       </div>
     </div>
   </div>
 {% empty %}
-  <div class="col-12">
-    <p>No hay productos publicados.</p>
+  <div class="no-productos">
+    <p>No hay productos disponibles.</p>
   </div>
 {% endfor %}

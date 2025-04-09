@@ -1,20 +1,21 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, JsonResponse, HttpResponseNotAllowed, FileResponse, HttpResponseForbidden
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.http import JsonResponse, FileResponse, HttpResponseForbidden
+from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 from .models import Producto, datos, Folder, Document
 from .forms import ProductoForm, RegistroForm
 from django.core.mail import send_mail
+from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.conf import settings
-from django.urls import reverse
 from django.views.decorators.cache import never_cache
-from django.contrib.admin.views.decorators import staff_member_required
 from django.template.loader import render_to_string
 from django.db.models import Q
 import os
 from django.utils._os import safe_join
+from django.utils.html import strip_tags
+from django.core.mail import EmailMultiAlternatives
 
 # --------------------------
 # Vistas para páginas estáticas
@@ -82,7 +83,7 @@ def gestionar_productos(request):
 @login_required(login_url="/libros/login/")
 @never_cache
 def editar_producto(request, producto_id):
-    producto = get_object_or_404(Producto, id=producto_id)
+    producto = get_object_or_404(Producto, pk=producto_id)
     if request.method == "POST":
         form = ProductoForm(request.POST, request.FILES, instance=producto)
         if form.is_valid():
@@ -90,7 +91,9 @@ def editar_producto(request, producto_id):
             return redirect('gestionar_productos')
     else:
         form = ProductoForm(instance=producto)
-    return render(request, 'libros/editar_producto.html', {'form': form})
+
+    return render(request, 'libros/editar_producto_form.html', {'form': form, 'producto': producto})
+
 
 @login_required(login_url="/libros/login/")
 @never_cache
@@ -311,15 +314,25 @@ def delete_document(request, doc_id):
 # Vistas para espacio de búsqueda de productos
 # --------------------------
 def gestionar_productos_ajax(request):
-    query = request.GET.get('query', '')
+    query = request.GET.get('query', '').strip()
+    wood_filter = request.GET.get('wood_filter', '').strip()
+
+    # Empieza obteniendo todos los productos
+    productos = Producto.objects.all()
+
+    # Si se ha seleccionado un tipo de madera, filtra por ese campo
+    if wood_filter:
+        productos = productos.filter(tipo_madera=wood_filter)
+
+    # Si se ingresó un término de búsqueda, se filtran por nombre o descripción
     if query:
-        productos = Producto.objects.filter(
-            Q(nombre_producto__icontains=query) | Q(descripcion__icontains=query)
+        productos = productos.filter(
+            Q(nombre_producto__icontains=query)
         )
-    else:
-        productos = Producto.objects.all()
+
     html = render_to_string('libros/productos_partial.html', {'productos': productos})
     return JsonResponse({'html': html})
+
 
 
 # --------------------------
@@ -327,11 +340,7 @@ def gestionar_productos_ajax(request):
 # --------------------------
 
 def recu_contra(request):
-    """
-    Vista para validar los datos ingresados (correo, nombres, apellidos, 
-    pregunta y respuesta de seguridad, teléfono) y guardar el correo en la sesión
-    para posteriormente cambiar la contraseña.
-    """
+    
     if request.method == 'POST':
         email = request.POST.get('email')
         security_question = request.POST.get('security_question')
@@ -356,18 +365,54 @@ def recu_contra(request):
                 messages.error(request, "La respuesta de seguridad no es correcta.")
                 return render(request, 'libros/recu_contra.html')
         
-        # Guardamos el email en la sesión para usarlo en la vista de cambio de contraseña
-        request.session['reset_email'] = email
-        return redirect('cambia_con')  # Asegúrate de que en urls.py esta URL se llame 'cambia_con'
-    
+        recovery_email = user.recovery_email
+
+        # Generamos un token único con un tiempo de expiración (por ejemplo, 1 hora)
+        signer = TimestampSigner()
+        token = signer.sign(str(user.pk))
+        
+        # Construir la URL absoluta para cambiar la contraseña
+        reset_url = request.build_absolute_uri(f"/libros/cambia_con/{token}/")
+        
+         # Renderizar la plantilla para el correo
+        html_message = render_to_string('libros/msg_correo.html', {
+            'username': user.nombres,  # Ajusta esto según los campos de tu modelo
+            'reset_url': reset_url,
+            'site_name': 'Maderas Isabella SAS',  # Personaliza con el nombre de tu sitio
+        })
+        
+        # Preparar y enviar el correo al 'recovery_email'
+        subject = "Recuperación de contraseña"
+        text_message = strip_tags(html_message)
+        
+        try:
+            email = EmailMultiAlternatives(
+                subject=subject,
+                body=text_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[recovery_email]
+            )
+            email.encoding = 'utf-8'  
+            email.send()
+            messages.success(request, "Se ha enviado un enlace a tu correo de recuperación para cambiar la contraseña.")
+            return redirect("login")
+        except Exception as e:
+            messages.error(request, f"Error al enviar el correo: {str(e)}")
+            return render(request, 'libros/recu_contra.html')
+        
     return render(request, 'libros/recu_contra.html')
 
 
-def cambia_con(request):
-    """
-    Vista para cambiar la contraseña una vez que se ha validado el usuario.
-    Se comprueba que ambas contraseñas ingresadas sean iguales y se actualiza el password.
-    """
+def cambia_con(request, token):
+    
+    signer = TimestampSigner()
+    try:
+        user_id = signer.unsign(token, max_age=3600)
+        usuario = get_object_or_404(datos, pk=user_id)
+    except (BadSignature, SignatureExpired):
+        messages.error(request, "El enlace de recuperación es inválido o ha expirado.")
+        return redirect("recu_contra")
+    
     if request.method == 'POST':
         new_password = request.POST.get('new_password')
         confirm_password = request.POST.get('confirm_password')
@@ -376,21 +421,12 @@ def cambia_con(request):
             messages.error(request, "Las contraseñas no coinciden.")
             return render(request, 'libros/cambia_con.html')
         
-        email = request.session.get('reset_email')
-        if not email:
-            messages.error(request, "La sesión ha expirado. Por favor, vuelve a solicitar la recuperación de contraseña.")
-            return redirect('recu_contra')
+        # Se actualiza la contraseña en la base de datos
+        usuario.password = make_password(new_password)
+        usuario.save()
         
-        try:
-            user = datos.objects.get(email=email)
-            user.set_password(new_password)
-            user.save()
-            messages.success(request, "Contraseña cambiada exitosamente.")
-            # Limpiamos la variable de sesión
-            del request.session['reset_email']
-            return redirect('login')  # Redirige a la página de inicio de sesión (asegúrate de tener definida la URL 'login')
-        except datos.DoesNotExist:
-            messages.error(request, "No se encontró un usuario con ese correo.")
+        messages.success(request, "La contraseña se ha cambiado correctamente.")
+        return redirect("login")
     
     return render(request, 'libros/cambia_con.html')
 

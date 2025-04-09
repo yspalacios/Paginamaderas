@@ -1,0 +1,206 @@
+:root {
+    --acc-widget-bg: #989898;
+    --acc-widget-text: #333333;
+    --acc-widget-border: #cccccc;
+    --acc-widget-accent: #007bff;
+    --acc-widget-shadow: rgba(0, 0, 0, 0.2);
+    --acc-widget-btn-bg: #333333;
+    --acc-widget-btn-color: #ffffff;
+  }
+
+  /* Botón flotante */
+  .acc-widget-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 12px;
+    border-radius: 50%;
+    border: none;
+    background: var(--acc-widget-btn-bg);
+    color: var(--acc-widget-btn-color);
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px var(--acc-widget-shadow);
+  }
+
+  /* Panel de accesibilidad */
+  .acc-widget-panel {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 300px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: var(--acc-widget-bg);
+    border: 1px solid var(--acc-widget-border);
+    box-shadow: 0 0 10px var(--acc-widget-shadow);
+    border-radius: 8px;
+    display: none;
+    flex-direction: column;
+    z-index: 9999;
+    font-family: sans-serif;
+    color: var(--acc-widget-text);
+  }
+  .acc-widget-panel.open {
+    display: flex;
+  }
+
+  /* Encabezado del panel */
+  .acc-widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--acc-widget-border);
+    background: var(--acc-widget-bg);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  .acc-widget-header h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+  .acc-widget-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  /* Secciones del panel */
+  .acc-widget-section {
+    padding: 12px;
+  }
+  .acc-widget-section h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .acc-widget-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .acc-widget-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border: 1px solid var(--acc-widget-border);
+    border-radius: 4px;
+    background: var(--acc-widget-bg);
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+  }
+  .acc-widget-option:hover {
+    background: var(--acc-widget-accent);
+    color: #fff;
+  }
+  .acc-font-size-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  .acc-font-size-controls button {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    border: 1px solid var(--acc-widget-border);
+    background: var(--acc-widget-bg);
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .acc-font-size-value {
+    margin: 0 8px;
+    font-weight: bold;
+  }
+
+  /* Funcionalidades de accesibilidad */
+
+  /* Resaltar títulos */
+  .acc-highlight-titles h1,
+  .acc-highlight-titles h2,
+  .acc-highlight-titles h3,
+  .acc-highlight-titles h4,
+  .acc-highlight-titles h5,
+  .acc-highlight-titles h6 {
+    outline: 2px dashed var(--acc-widget-accent);
+  }
+
+  /* Resaltar enlaces */
+  .acc-highlight-links a {
+    outline: 2px dashed var(--acc-widget-accent);
+  }
+
+  /* Fuente para dislexia (asegúrate de incluir la fuente OpenDyslexic o similar) */
+  .acc-dyslexia-font {
+    font-family: 'OpenDyslexic', sans-serif !important;
+  }
+
+  /* Aumentar espaciado entre letras */
+  .acc-letter-spacing * {
+    letter-spacing: 0.1em !important;
+  }
+
+  /* Aumentar interlineado */
+  .acc-line-height * {
+    line-height: 1.8 !important;
+  }
+
+  /* Aumentar grosor de fuente */
+  .acc-font-weight * {
+    font-weight: 700 !important;
+  }
+
+  /* Contraste oscuro */
+  .acc-dark-contrast {
+    filter: invert(1) hue-rotate(180deg) !important;
+  }
+
+  /* Contraste claro */
+  .acc-light-contrast {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Alto contraste */
+  .acc-high-contrast {
+    background-color: #000000 !important;
+    color: rgb(81, 0, 255) !important;
+  }
+
+  /* Alta saturación */
+  .acc-high-saturation {
+    filter: saturate(2) !important;
+  }
+
+  /* Baja saturación */
+  .acc-low-saturation {
+    filter: saturate(0.5) !important;
+  }
+
+  /* Monocromo */
+  .acc-monochrome {
+    filter: grayscale(100%) !important;
+  }
+
+  /* Pausar animaciones y transiciones */
+  .acc-stop-animations * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Guía de lectura: barra horizontal que sigue el cursor vertical */
+  .acc-reading-guide {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--acc-widget-accent);
+    pointer-events: none;
+    z-index: 10000;
+  }

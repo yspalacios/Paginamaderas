@@ -5,8 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Imagen</title>
-  <!-- Se elimina la referencia a Bootstrap -->
-  
   <!-- Tu CSS personalizado -->
   <link rel="stylesheet" href="{% static 'css/gestionar_productos.css' %}">
 </head>
@@ -46,21 +44,90 @@
           placeholder="Buscar imágenes..." 
           value="{{ request.GET.query }}"
         >
+        <!-- Nuevo select para filtrar por tipo de madera -->
+        <select name="wood_filter" id="wood-filter">
+          <option value="">Todos los tipos</option>
+          <option value="pino">Pino</option>
+          <option value="roble">Roble</option>
+          <option value="cedro">Cedro</option>
+          <option value="nogal">Nogal</option>
+        </select>
       </div>
       
       <div class="buttons-container">
         <a href="{% url 'index' %}" class="btn">Inicio</a>
-        <a href="{% url 'subir_imagen' %}" class="btn">Subir Nueva Imagen</a>
+        <button class="btn" onclick="abrirModal('modal-subir')">Subir Nueva Imagen</button>
         <a href="{% url 'inicio_publicados' %}" class="btn">Ver Publicados</a>
       </div>
       
       <h3>Imágenes en Gestión</h3>
-      <div class="productos-container">
+      <!-- Se agrega un id al contenedor para que el script pueda actualizar su contenido -->
+      <div id="productos-container" class="productos-container">
         {% include 'libros/productos_partial.html' %}
       </div>
     </div>
   </div>
   
+  <!-- Modal de Editar Producto -->
+<div id="modal-editar" class="modal hidden">
+  <div class="modal-content">
+    <span class="close" onclick="cerrarModal('modal-editar')">&times;</span>
+    <div id="editar-form-container">
+      <!-- Este contenido se cargará vía AJAX -->
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Confirmación de Eliminación -->
+<div id="modal-eliminar" class="modal hidden">
+  <div class="modal-content">
+    <span class="close" onclick="cerrarModal('modal-eliminar')">&times;</span>
+    <h3>¿Estás seguro que deseas eliminar el producto <span id="producto-nombre"></span>?</h3>
+    <form id="form-eliminar" method="POST">
+      {% csrf_token %}
+      <button type="submit" class="btn-danger">Sí, eliminar</button>
+      <button type="button" class="btn-secondary" onclick="cerrarModal('modal-eliminar')">Cancelar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de Subir Imagen -->
+<div id="modal-subir" class="modal hidden">
+  <div class="modal-content">
+    <span class="close" onclick="cerrarModal('modal-subir')">&times;</span>
+    <div class="container">
+      <h2>Subir Nueva Imagen</h2>
+      <form method="POST" action="{% url 'subir_imagen' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-group">
+          <label for="tipo_madera">Tipo de madera:</label>
+          <select name="tipo_madera" id="tipo_madera" required>
+            <option value="">Selecciona un tipo de madera</option>
+            <option value="pino">Pino</option>
+            <option value="roble">Roble</option>
+            <option value="cedro">Cedro</option>
+            <option value="nogal">Nogal</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="nombre_producto">Nombre del producto:</label>
+          <input type="text" name="nombre_producto" required>
+        </div>
+        <div class="input-group">
+          <label for="descripcion">Descripción:</label>
+          <textarea name="descripcion" required></textarea>
+        </div>
+        <div class="input-group">
+          <label for="imagen">Imagen:</label>
+          <input type="file" name="imagen" required>
+        </div>
+        <button type="submit" class="btn-success">Subir Imagen</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
   <script src="{% static 'js/gestionar_productos.js' %}"></script>
 </body>
 </html>

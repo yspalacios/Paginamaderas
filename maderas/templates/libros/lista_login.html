@@ -70,13 +70,15 @@
               <td>{{ cuenta.security_question }}</td><th>|</th>
               <td>{{ cuenta.security_answer }}</td><th>|</th>
               <td>{{ cuenta.recovery_email }}</td><th>|</th>
-              <td>{{ cuenta.status }}</td><th>|</th>
-              <td>
+              <td>{{ cuenta.status }}
                 {% if cuenta.status == 'Activo' %}
                   <a href="{% url 'desactivar_cuenta' cuenta.id %}" title="Desactivar">🔓</a>
                 {% else %}
                   <a href="{% url 'activar_cuenta' cuenta.id %}" title="Activar">🔒</a>
                 {% endif %}
+              </td><th>|</th>
+              <td>
+                
                 <a href="{% url 'editar_cuenta' cuenta.id %}">Editar</a>
                 <a href="{% url 'eliminar_cuenta' cuenta.id %}" onclick="return confirm('¿Está seguro de eliminar esta cuenta?');">Eliminar</a>
               </td>

@@ -1,0 +1,75 @@
+<h2>Editar Producto</h2>
+<form method="POST" action="{% url 'editar_producto' producto.id %}" enctype="multipart/form-data" id="form-editar-producto">
+  {% csrf_token %}
+
+  <div class="input-group">
+    <label for="tipo_madera_select">Cambiar Tipo de Madera:</label>
+    <select id="tipo_madera_select" name="tipo_madera">
+      <option value="">Selecciona un tipo de madera</option>
+      <option value="pino" {% if form.tipo_madera.value == "pino" %}selected{% endif %}>Pino</option>
+      <option value="roble" {% if form.tipo_madera.value == "roble" %}selected{% endif %}>Roble</option>
+      <option value="cedro" {% if form.tipo_madera.value == "cedro" %}selected{% endif %}>Cedro</option>
+      <option value="nogal" {% if form.tipo_madera.value == "nogal" %}selected{% endif %}>Nogal</option>
+    </select>
+  </div>
+
+  <div class="input-group">
+    <label for="tipo_madera_display">Tipo de Madera Actual:</label>
+    <input type="text" id="tipo_madera_display" value="{{ form.tipo_madera.value }}" disabled>
+  </div>
+
+  <div class="input-group">
+    <label for="{{ form.nombre_producto.id_for_label }}">Nombre del Producto:</label>
+    {{ form.nombre_producto }}
+    {% if form.nombre_producto.errors %}
+      <span style="color: red;">{{ form.nombre_producto.errors }}</span>
+    {% endif %}
+  </div>
+
+  <div class="input-group">
+    <label for="{{ form.descripcion.id_for_label }}">Descripción:</label>
+    {{ form.descripcion }}
+    {% if form.descripcion.errors %}
+      <span style="color: red;">{{ form.descripcion.errors }}</span>
+    {% endif %}
+  </div>
+
+  <div class="input-group">
+    <label for="{{ form.imagen.id_for_label }}">Imagen:</label>
+    {{ form.imagen }}
+    {% if form.imagen.errors %}
+      <span style="color: red;">{{ form.imagen.errors }}</span>
+    {% endif %}
+  </div>
+
+  <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+</form>
+
+<script>
+  // Actualiza el campo de visualización del tipo de madera según la selección
+  const woodSelect = document.getElementById("tipo_madera_select");
+  const woodDisplay = document.getElementById("tipo_madera_display");
+  
+  woodSelect.addEventListener("change", function () {
+    const selectedText = woodSelect.options[woodSelect.selectedIndex].text;
+    woodDisplay.value = selectedText;
+  });
+
+  // Envía el formulario vía AJAX y procesa la respuesta
+  document.getElementById("form-editar-producto").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    fetch(form.action, {  // Ahora form.action tiene la URL correcta
+      method: "POST",
+      body: formData,
+    }).then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          location.reload();  // Recarga la página para ver los cambios guardados
+        } else {
+          console.error("Errores en el formulario:", data.errors);
+        }
+      });
+  });
+</script>

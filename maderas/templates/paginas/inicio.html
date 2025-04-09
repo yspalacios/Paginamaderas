@@ -7,6 +7,8 @@
   <title>{% block titulo %}Maderas Isabella{% endblock %}</title>
   <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
+  <link rel="stylesheet" href="static/css/accessibility.css">
+
 </head>
 <body>
   <header>
@@ -23,7 +25,7 @@
     </nav>
     <a href="{% url 'inicio'%}">
       <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="logo">
-      </a>
+    </a>
   </header>
 
   <main class="container">
@@ -105,12 +107,14 @@
     </section>
 
     <!-- Sección de Información Institucional (Nosotros) -->
-    <section id="nosotros" class="section nosotros">
+    <section id="nosotros">
       <h1>Nosotros</h1>
       <h4>Aprende más sobre nosotros:</h4>
-      <div class="info-container">
-        <div class="info-item">
-          <h2>Misión</h2>
+      <!-- Contenedor para subsecciones -->
+      <div class="container-secciones">
+        <!-- Misión -->
+        <div class="item">
+          <h2 class="section-title">Misión</h2>
           <p>
             En Maderas Isabella AEI SAS buscamos satisfacer la demanda integral de madera como materia prima renovable, 
             brindando calidad tanto en la selección de nuestros productos como en nuestra calidad humana. Buscamos cumplir 
@@ -119,8 +123,9 @@
             trabajar en conjunto, con dedicación y esfuerzo al servicio del cliente.
           </p>
         </div>
-        <div class="info-item">
-          <h2>Visión</h2>
+        <!-- Visión -->
+        <div class="item">
+          <h2 class="section-title">Visión</h2>
           <p>
             En Maderas Isabella AEI S.A.S. buscamos consolidarnos como una de las empresas más competitivas, sólidas y reconocidas 
             a nivel nacional del sector maderero. Por ello es fundamental contar con la calidad humana de nuestro equipo de trabajo, 
@@ -129,43 +134,46 @@
             de desarrollo generando así calidad de vida para nuestro personal y responsabilidad social con nuestros clientes y entorno.
           </p>
         </div>
+      
+          <!-- Valores Corporativos -->
+          <div class="item">
+            <h2 class="section-title">Valores Corporativos</h2>
+            <ul>
+              <li><strong>Respeto:</strong> Lo reflejamos en cada una de las relaciones interpersonales que se desarrollan con los clientes internos y externos de la organización.</li>
+              <li><strong>Honradez:</strong> Actuamos con transparencia en cada una de las acciones que ejecutamos dentro y fuera de la organización.</li>
+              <li><strong>Iniciativa:</strong> Ejecutamos nuestras labores con entusiasmo, dedicación y dando siempre algo más de nosotros y dejando huella en nuestras acciones.</li>
+              <li><strong>Compromiso:</strong> Asumimos las acciones con esfuerzo y empeño, generando confianza en nuestras actividades.</li>
+              <li><strong>Honestidad:</strong> Actuamos y decimos siempre la verdad en nuestras actividades.</li>
+            </ul>
+          </div>
+          <!-- Política de Calidad -->
+          <div class="item">
+            <h2 class="section-title">Política de Calidad</h2>
+            <p>
+              Con el objeto de satisfacer las necesidades y expectativas de nuestros clientes, todos los que pertenecemos a Maderas Isabella AEI S.A.S. 
+              nos comprometemos a:
+            </p>
+            <ul>
+              <li>Brindar un servicio de calidad en los productos, impulsando la efectividad, el mejoramiento en los procesos y la racionalización en la utilización de los recursos.</li>
+              <li>Proteger el medio ambiente, promover el bienestar de cada colaborador y de la comunidad.</li>
+              <li>Apoyar el empleo y cumplir la ley de forma íntegra.</li>
+              <li>Capacitar el personal para la optimización de su desempeño y la importancia de un trabajo eficaz y eficiente, así como crear un sentido de pertenencia en cada colaborador.</li>
+            </ul>
+          </div>
+          <!-- Política de Seguridad y Salud en el Trabajo -->
+          <div class="item">
+            <h2 class="section-title">Política de Seguridad y Salud en el Trabajo</h2>
+            <p>
+              Identificar los peligros, evaluar y valorar los riesgos y establecer los respectivos controles:
+            </p>
+            <ul>
+              <li>Proteger la seguridad y salud de todos los trabajadores, mediante la mejora continua del SGSST.</li>
+              <li>Cumplir la normatividad nacional vigente aplicable en materia de riesgos laborales.</li>
+              <li>Establecer una cultura de prevención de riesgos laborales.</li>
+            </ul>
+          </div>
       </div>
-      <section id="valores" class="subsection">
-        <h2>Valores Corporativos</h2>
-        <ul>
-          <li><strong>Respeto:</strong> Lo reflejamos en cada una de las relaciones interpersonales que se desarrollan con los clientes internos y externos de la organización.</li>
-          <li><strong>Honradez:</strong> Actuamos con transparencia en cada una de las acciones que ejecutamos dentro y fuera de la organización.</li>
-          <li><strong>Iniciativa:</strong> Ejecutamos nuestras labores con entusiasmo, dedicación y dando siempre algo más de nosotros y dejando huella en nuestras acciones.</li>
-          <li><strong>Compromiso:</strong> Asumimos las acciones con esfuerzo y empeño, generando confianza en nuestras actividades.</li>
-          <li><strong>Honestidad:</strong> Actuamos y decimos siempre la verdad en nuestras actividades.</li>
-        </ul>
-      </section>
-      <section id="calidad" class="subsection">
-        <h2>Política de Calidad</h2>
-        <p>
-          Con el objeto de satisfacer las necesidades y expectativas de nuestros clientes, todos los que pertenecemos a Maderas Isabella AEI S.A.S. 
-          nos comprometemos a:
-        </p>
-        <ul>
-          <li>Brindar un servicio de calidad en los productos, impulsando la efectividad, el mejoramiento en los procesos y la racionalización en la utilización de los recursos.</li>
-          <li>Proteger el medio ambiente, promover el bienestar de cada colaborador y de la comunidad.</li>
-          <li>Apoyar el empleo y cumplir la ley de forma íntegra.</li>
-          <li>Capacitar el personal para la optimización de su desempeño y la importancia de un trabajo eficaz y eficiente, así como crear un sentido de pertenencia en cada colaborador.</li>
-        </ul>
-      </section>
-      <section id="seguridad" class="subsection">
-        <h2>Política de Seguridad y Salud en el Trabajo</h2>
-        <p>
-          Identificar los peligros, evaluar y valorar los riesgos y establecer los respectivos controles:
-        </p>
-        <ul>
-          <li>Proteger la seguridad y salud de todos los trabajadores, mediante la mejora continua del SGSST.</li>
-          <li>Cumplir la normatividad nacional vigente aplicable en materia de riesgos laborales.</li>
-          <li>Establecer una cultura de prevención de riesgos laborales.</li>
-        </ul>
-      </section>
-    </section>
-
+    
     <!-- Sección de Ubicación -->
     <section id="ubicanos" class="section ubicacion">
       <div class="map-container">
@@ -230,5 +238,9 @@
       showItem(currentIndex);
     })();
   </script>
+
+  <script src="static/js/accessibility.js"></script>
+
+
 </body>
 </html>

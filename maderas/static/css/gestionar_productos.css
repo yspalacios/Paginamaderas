@@ -118,11 +118,9 @@ body {
   color: #000000;
 }
 
-/* SISTEMA DE GRILLA PARA PRODUCTOS */
+/* CONTENEDOR DE PRODUCTOS */
 .productos-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  display: block;
   padding: 20px 0;
 }
 
@@ -130,6 +128,7 @@ body {
 .producto-item {
   margin-bottom: 20px;
   transition: all 0.3s ease;
+  /* Se ajustará con el layout flex en .productos-horizontal */
 }
 
 .producto-card {
@@ -302,6 +301,7 @@ body {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
 .modal.hidden {
   display: none;
 }
@@ -326,4 +326,54 @@ body {
   float: right;
   cursor: pointer;
   font-size: 1.5rem;
+}
+
+/* ========= ESTILOS PARA PRODUCTOS AGRUPADOS POR TIPO Y RESPONSIVIDAD ========= */
+
+/* Contenedor para los productos agrupados: cada sección */
+.productos-horizontal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+
+/* Cada producto se mostrará como columna flexible para 4 elementos por fila en pantallas grandes */
+.producto-item {
+  flex: 1 1 calc(25% - 20px); /* 4 columnas (100/4 - gap) */
+  max-width: calc(25% - 20px);
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+/* Para pantallas medianas: 3 columnas */
+@media (max-width: 1200px) {
+  .producto-item {
+    flex: 1 1 calc(33.33% - 20px);
+    max-width: calc(33.33% - 20px);
+  }
+}
+
+/* Para pantallas pequeñas: 2 columnas */
+@media (max-width: 768px) {
+  .producto-item {
+    flex: 1 1 calc(50% - 20px);
+    max-width: calc(50% - 20px);
+  }
+}
+
+/* Para dispositivos muy pequeños: 1 columna */
+@media (max-width: 480px) {
+  .producto-item {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+/* Títulos de sección (por tipo de madera) centrados */
+.seccion-tipo h2 {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 20px;
 }

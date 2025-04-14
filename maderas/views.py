@@ -16,12 +16,14 @@ import os
 from django.utils._os import safe_join
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
+from datetime import datetime
+
 
 # --------------------------
 # Vistas para páginas estáticas
 # --------------------------
 def inicio(request):
-    imagenes_publicadas = Producto.objects.filter(publicado=True)
+    imagenes_publicadas = Producto.objects.filter(publicado=True).order_by('tipo_madera','id')
     return render(request, 'paginas/inicio.html', {'imagenes_publicadas': imagenes_publicadas})
 
 def libros(request):
@@ -64,6 +66,32 @@ def logout_view(request):
 
 
 # --------------------------
+# Vistas para espacio de búsqueda de productos
+# --------------------------
+def gestionar_productos_ajax(request):
+    query = request.GET.get('query', '').strip()
+    wood_filter = request.GET.get('wood_filter', '').strip()
+
+    # Empieza obteniendo todos los productos
+    productos = Producto.objects.all().order_by('tipo_madera','id')
+
+    # Si se ha seleccionado un tipo de madera, filtra por ese campo
+    if wood_filter:
+        productos = productos.filter(tipo_madera=wood_filter)
+
+    # Si se ingresó un término de búsqueda, se filtran por nombre o descripción
+    if query:
+        productos = productos.filter(
+            Q(nombre_producto__icontains=query)
+        )
+        
+    productos = productos.order_by('tipo_madera','id')
+
+    html = render_to_string('libros/productos_partial.html', {'productos': productos})
+    return JsonResponse({'html': html})
+
+
+# --------------------------
 # Vistas para gestión de productos
 # --------------------------
 
@@ -77,9 +105,25 @@ def gestionar_productos(request):
             return redirect('gestionar_productos')
     else:
         form = ProductoForm()
-    productos = Producto.objects.all()
-    return render(request, 'libros/gestionar_productos.html', {'form': form, 'productos': productos})
-
+    
+    # Obtener todos los productos
+    productos = Producto.objects.all().order_by('tipo_madera','id')
+    
+    # Agrupar productos por tipo de madera
+    productos_por_tipo = {}
+    for producto in productos:
+        tipo_madera = producto.tipo_madera
+        if tipo_madera not in productos_por_tipo:
+            productos_por_tipo[tipo_madera] = []
+        productos_por_tipo[tipo_madera].append(producto)
+    
+    return render(request, 'libros/gestionar_productos.html', {
+        'form': form, 
+        'productos': productos,  # Mantenemos esta variable por compatibilidad
+        'productos_por_tipo': productos_por_tipo
+    })
+    
+    
 @login_required(login_url="/libros/login/")
 @never_cache
 def editar_producto(request, producto_id):
@@ -310,29 +354,6 @@ def delete_document(request, doc_id):
         return JsonResponse({'message': 'Documento eliminado exitosamente'})
     return JsonResponse({'message': 'Método no permitido'}, status=405)
 
-# --------------------------
-# Vistas para espacio de búsqueda de productos
-# --------------------------
-def gestionar_productos_ajax(request):
-    query = request.GET.get('query', '').strip()
-    wood_filter = request.GET.get('wood_filter', '').strip()
-
-    # Empieza obteniendo todos los productos
-    productos = Producto.objects.all()
-
-    # Si se ha seleccionado un tipo de madera, filtra por ese campo
-    if wood_filter:
-        productos = productos.filter(tipo_madera=wood_filter)
-
-    # Si se ingresó un término de búsqueda, se filtran por nombre o descripción
-    if query:
-        productos = productos.filter(
-            Q(nombre_producto__icontains=query)
-        )
-
-    html = render_to_string('libros/productos_partial.html', {'productos': productos})
-    return JsonResponse({'html': html})
-
 
 
 # --------------------------
@@ -451,4 +472,8 @@ def vista_archivos(request, file_path):
     response['Content-Disposition'] = 'inline'  # Mostrar el archivo en el navegador
     return response
 
-    
+
+def mi_vista(request):
+    return render(request, 'mi_template.html', {
+        'timestamp': datetime.now().timestamp()
+    })

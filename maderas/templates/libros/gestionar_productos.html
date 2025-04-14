@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Imagen</title>
   <!-- Tu CSS personalizado -->
-  <link rel="stylesheet" href="{% static 'css/gestionar_productos.css' %}">
+  <link rel="stylesheet" href="{% static 'css/gestionar_productos.css' %}?v={{ timestamp }}">
 </head>
 <body>
   <!-- Header superior -->
@@ -47,10 +47,10 @@
         <!-- Nuevo select para filtrar por tipo de madera -->
         <select name="wood_filter" id="wood-filter">
           <option value="">Todos los tipos</option>
-          <option value="pino">Pino</option>
-          <option value="roble">Roble</option>
-          <option value="cedro">Cedro</option>
-          <option value="nogal">Nogal</option>
+          <option value="pino">PINO</option>
+          <option value="roble">ROBLE</option>
+          <option value="cedro">CEDRO</option>
+          <option value="nogal">NOGAL</option>
         </select>
       </div>
       
@@ -103,10 +103,10 @@
           <label for="tipo_madera">Tipo de madera:</label>
           <select name="tipo_madera" id="tipo_madera" required>
             <option value="">Selecciona un tipo de madera</option>
-            <option value="pino">Pino</option>
-            <option value="roble">Roble</option>
-            <option value="cedro">Cedro</option>
-            <option value="nogal">Nogal</option>
+            <option value="pino">PINO</option>
+            <option value="roble">ROBLE</option>
+            <option value="cedro">CEDRO</option>
+            <option value="nogal">NOGAL</option>
           </select>
         </div>
         <div class="input-group">

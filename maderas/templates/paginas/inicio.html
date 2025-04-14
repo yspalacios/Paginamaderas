@@ -6,9 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block titulo %}Maderas Isabella{% endblock %}</title>
   <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
-  <link rel="stylesheet" href="static/css/accessibility.css">
-
+  <link rel="stylesheet" href="{% static 'css/inicio.css' %}?v={{ timestamp }}">
+  <link rel="stylesheet" href="{% static 'css/accessibility.css' %}?v={{ timestamp }}">
 </head>
 <body>
   <header>
@@ -79,28 +78,38 @@
     <!-- Sección de Imágenes Publicadas -->
     <section id="imagenespublicadas" class="section imagenes-publicadas">
       <h2>Imágenes Publicadas</h2>
-      <div class="cards-container">
-        {% for imagen in imagenes_publicadas %}
-        <div class="card">
-          {% if imagen.imagen %}
-          <img src="{{ imagen.imagen.url }}" alt="{{ imagen.nombre_producto }}">
-          {% else %}
-          <div class="no-image">No hay imagen disponible</div>
-          {% endif %}
-          <div class="card-content">
-            <h5>{{ imagen.nombre_producto }}</h5>
-            <p>
-              <strong>Tipo:</strong> {{ imagen.tipo_madera }}<br>
-              <strong>Descripción:</strong> {{ imagen.descripcion }}
-            </p>
+      {% regroup imagenes_publicadas by tipo_madera as imagenes_por_tipo %}
+      {% if imagenes_por_tipo %}
+        {% for grupo in imagenes_por_tipo %}
+          <div class="tipo-madera-header">
+            <h3>MADERA DE {{ grupo.grouper }}</h3>
           </div>
-        </div>
-        {% empty %}
+          <div class="cards-container">
+            {% for imagen in grupo.list %}
+              <div class="product-card">
+                {% if imagen.imagen %}
+                <div class="product-image">
+                  <img src="{{ imagen.imagen.url }}" alt="{{ imagen.nombre_producto }}">
+                </div>
+                {% else %}
+                  <div class="no-image">No hay imagen disponible</div>
+                {% endif %}
+                <div class="product-title">
+                  <h4>{{ imagen.nombre_producto }}</h4>
+                </div>
+                <div class="product-details">
+                  <p><strong>Tipo:</strong> {{ imagen.tipo_madera }}</p>
+                  <p><strong>Descripción:</strong> {{ imagen.descripcion }}</p>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      {% else %}
         <div class="no-cards">
           <p>No hay imágenes publicadas.</p>
         </div>
-        {% endfor %}
-      </div>
+      {% endif %}
       <div class="volver-gestion">
         <a href="{% url 'gestionar_productos' %}" class="btn-link">Volver a Gestión de Imágenes</a>
       </div>
@@ -134,44 +143,43 @@
             de desarrollo generando así calidad de vida para nuestro personal y responsabilidad social con nuestros clientes y entorno.
           </p>
         </div>
-      
-          <!-- Valores Corporativos -->
-          <div class="item">
-            <h2 class="section-title">Valores Corporativos</h2>
-            <ul>
-              <li><strong>Respeto:</strong> Lo reflejamos en cada una de las relaciones interpersonales que se desarrollan con los clientes internos y externos de la organización.</li>
-              <li><strong>Honradez:</strong> Actuamos con transparencia en cada una de las acciones que ejecutamos dentro y fuera de la organización.</li>
-              <li><strong>Iniciativa:</strong> Ejecutamos nuestras labores con entusiasmo, dedicación y dando siempre algo más de nosotros y dejando huella en nuestras acciones.</li>
-              <li><strong>Compromiso:</strong> Asumimos las acciones con esfuerzo y empeño, generando confianza en nuestras actividades.</li>
-              <li><strong>Honestidad:</strong> Actuamos y decimos siempre la verdad en nuestras actividades.</li>
-            </ul>
-          </div>
-          <!-- Política de Calidad -->
-          <div class="item">
-            <h2 class="section-title">Política de Calidad</h2>
-            <p>
-              Con el objeto de satisfacer las necesidades y expectativas de nuestros clientes, todos los que pertenecemos a Maderas Isabella AEI S.A.S. 
-              nos comprometemos a:
-            </p>
-            <ul>
-              <li>Brindar un servicio de calidad en los productos, impulsando la efectividad, el mejoramiento en los procesos y la racionalización en la utilización de los recursos.</li>
-              <li>Proteger el medio ambiente, promover el bienestar de cada colaborador y de la comunidad.</li>
-              <li>Apoyar el empleo y cumplir la ley de forma íntegra.</li>
-              <li>Capacitar el personal para la optimización de su desempeño y la importancia de un trabajo eficaz y eficiente, así como crear un sentido de pertenencia en cada colaborador.</li>
-            </ul>
-          </div>
-          <!-- Política de Seguridad y Salud en el Trabajo -->
-          <div class="item">
-            <h2 class="section-title">Política de Seguridad y Salud en el Trabajo</h2>
-            <p>
-              Identificar los peligros, evaluar y valorar los riesgos y establecer los respectivos controles:
-            </p>
-            <ul>
-              <li>Proteger la seguridad y salud de todos los trabajadores, mediante la mejora continua del SGSST.</li>
-              <li>Cumplir la normatividad nacional vigente aplicable en materia de riesgos laborales.</li>
-              <li>Establecer una cultura de prevención de riesgos laborales.</li>
-            </ul>
-          </div>
+        <!-- Valores Corporativos -->
+        <div class="item">
+          <h2 class="section-title">Valores Corporativos</h2>
+          <ul>
+            <li><strong>Respeto:</strong> Lo reflejamos en cada una de las relaciones interpersonales que se desarrollan con los clientes internos y externos de la organización.</li>
+            <li><strong>Honradez:</strong> Actuamos con transparencia en cada una de las acciones que ejecutamos dentro y fuera de la organización.</li>
+            <li><strong>Iniciativa:</strong> Ejecutamos nuestras labores con entusiasmo, dedicación y dando siempre algo más de nosotros y dejando huella en nuestras acciones.</li>
+            <li><strong>Compromiso:</strong> Asumimos las acciones con esfuerzo y empeño, generando confianza en nuestras actividades.</li>
+            <li><strong>Honestidad:</strong> Actuamos y decimos siempre la verdad en nuestras actividades.</li>
+          </ul>
+        </div>
+        <!-- Política de Calidad -->
+        <div class="item">
+          <h2 class="section-title">Política de Calidad</h2>
+          <p>
+            Con el objeto de satisfacer las necesidades y expectativas de nuestros clientes, todos los que pertenecemos a Maderas Isabella AEI S.A.S. 
+            nos comprometemos a:
+          </p>
+          <ul>
+            <li>Brindar un servicio de calidad en los productos, impulsando la efectividad, el mejoramiento en los procesos y la racionalización en la utilización de los recursos.</li>
+            <li>Proteger el medio ambiente, promover el bienestar de cada colaborador y de la comunidad.</li>
+            <li>Apoyar el empleo y cumplir la ley de forma íntegra.</li>
+            <li>Capacitar el personal para la optimización de su desempeño y la importancia de un trabajo eficaz y eficiente, así como crear un sentido de pertenencia en cada colaborador.</li>
+          </ul>
+        </div>
+        <!-- Política de Seguridad y Salud en el Trabajo -->
+        <div class="item">
+          <h2 class="section-title">Política de Seguridad y Salud en el Trabajo</h2>
+          <p>
+            Identificar los peligros, evaluar y valorar los riesgos y establecer los respectivos controles:
+          </p>
+          <ul>
+            <li>Proteger la seguridad y salud de todos los trabajadores, mediante la mejora continua del SGSST.</li>
+            <li>Cumplir la normatividad nacional vigente aplicable en materia de riesgos laborales.</li>
+            <li>Establecer una cultura de prevención de riesgos laborales.</li>
+          </ul>
+        </div>
       </div>
     
     <!-- Sección de Ubicación -->
@@ -205,42 +213,7 @@
   <a href="https://wa.me/573223280615" class="whatsapp-float" target="_blank">
     <img src="{% static 'diseños/imagenes/whst.webp' %}" alt="WhatsApp" class="whatsapp-icon">
   </a>
-
-  <script>
-    document.getElementById("back-to-top").addEventListener("click", function(e) {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Funcionalidad sencilla para el carrusel
-    (function() {
-      const carousel = document.getElementById('productosCarousel');
-      const items = carousel.querySelectorAll('.carousel-item');
-      let currentIndex = 0;
-
-      const showItem = index => {
-        items.forEach((item, i) => {
-          item.style.display = i === index ? 'block' : 'none';
-        });
-      };
-
-      carousel.querySelector('.prev').addEventListener('click', function() {
-        currentIndex = (currentIndex === 0) ? items.length - 1 : currentIndex - 1;
-        showItem(currentIndex);
-      });
-
-      carousel.querySelector('.next').addEventListener('click', function() {
-        currentIndex = (currentIndex === items.length - 1) ? 0 : currentIndex + 1;
-        showItem(currentIndex);
-      });
-
-      // Inicializa el carrusel
-      showItem(currentIndex);
-    })();
-  </script>
-
-  <script src="static/js/accessibility.js"></script>
-
-
+  <script src="{% static 'js/inicio.js' %}"></script>
+  <script src="{% static 'js/accessibility.js' %}?v={{ timestamp }}"></script>
 </body>
 </html>

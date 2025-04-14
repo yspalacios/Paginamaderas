@@ -1,36 +1,47 @@
-{% for producto in productos %}
-  <div class="producto-item">
-    <div class="producto-card">
-      {% if producto.imagen %}
-        <img src="{{ producto.imagen.url }}" class="producto-img" alt="{{ producto.nombre_producto }}">
-      {% else %}
-        <div class="producto-noimg">No hay imagen disponible</div>
-      {% endif %}
-      <div class="producto-body">
-        <h3 class="producto-title">{{ producto.nombre_producto }}</h3>
-        <div class="producto-info">
-          <p><strong>Tipo:</strong> {{ producto.tipo_madera }}</p>
-          <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
-        </div>
-        <div class="producto-buttons">
-          <button class="btn-editar" data-producto-id="{{ producto.id }}">Editar</button>
-          <button class="btn-eliminar" 
-                  data-producto-id="{{ producto.id }}" 
-                  data-producto-nombre="{{ producto.nombre_producto }}" 
-                  data-eliminar-url="{% url 'confirmar_eliminar' producto.id %}">
-            Eliminar
-          </button>
-          {% if not producto.publicado %}
-            <button class="btn-publish" onclick="cambiarEstado({{ producto.id }}, 'publicar', this)">Publicar</button>
-          {% else %}
-            <button class="btn-unpublish" onclick="cambiarEstado({{ producto.id }}, 'quitar', this)">No Publicar</button>
-          {% endif %}
-        </div>
+{% regroup productos by tipo_madera as productos_por_tipo %}
+
+{% if productos_por_tipo %}
+  {% for grupo in productos_por_tipo %}
+    <section class="seccion-tipo">
+      <h2> Madera de {{ grupo.grouper }}</h2>
+      <div class="productos-horizontal">
+        {% for producto in grupo.list %}
+          <div class="producto-item">
+            <div class="producto-card">
+              {% if producto.imagen %}
+                <img src="{{ producto.imagen.url }}" class="producto-img" alt="{{ producto.nombre_producto }}">
+              {% else %}
+                <div class="producto-noimg">No hay imagen disponible</div>
+              {% endif %}
+              <div class="producto-body">
+                <h3 class="producto-title">{{ producto.nombre_producto }}</h3>
+                <div class="producto-info">
+                  <p><strong>Tipo:</strong> {{ producto.tipo_madera }}</p>
+                  <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
+                </div>
+                <div class="producto-buttons">
+                  <button class="btn-editar" data-producto-id="{{ producto.id }}">Editar</button>
+                  <button class="btn-eliminar"
+                          data-producto-id="{{ producto.id }}"
+                          data-producto-nombre="{{ producto.nombre_producto }}"
+                          data-eliminar-url="{% url 'confirmar_eliminar' producto.id %}">
+                    Eliminar
+                  </button>
+                  {% if not producto.publicado %}
+                    <button class="btn-publish" onclick="cambiarEstado({{ producto.id }}, 'publicar', this)">Publicar</button>
+                  {% else %}
+                    <button class="btn-unpublish" onclick="cambiarEstado({{ producto.id }}, 'quitar', this)">No Publicar</button>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
       </div>
-    </div>
-  </div>
-{% empty %}
+    </section>
+  {% endfor %}
+{% else %}
   <div class="no-productos">
     <p>No hay productos disponibles.</p>
   </div>
-{% endfor %}
+{% endif %}

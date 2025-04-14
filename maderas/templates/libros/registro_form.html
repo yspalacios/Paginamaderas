@@ -1,45 +1,16 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro</title>
-    <link rel="stylesheet" href="{% static 'css/registro_login.css' %}?v={{ timestamp }}">
-</head>
-<body>
-
-    <!-- Header superior -->
-  <div class="headermenu">
-    <div class="hmenu">
-      <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo" class="img">
-      <h4>Maderas <span>Isabella</span></h4>
-    </div>
-  </div>
-
-  <!-- Contenedor principal con Sidebar y Contenido -->
-  <div class="main-content">
-    <!-- Menú vertical (Sidebar) -->
-    <div class="sidebar">
-      <h2 class="title">Menú</h2>
-      <div class="menu">
-        <a href="{% url 'index' %}">Inicio</a>
-        <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>
-        <a href="{% url 'lista_login' %}">Listado de Cuentas</a>
-        <a href="{% url 'carpeta' %}">Documentos de contratación</a>
-        <a href="{% url 'logout' %}">Cerrar Sesión</a>
-      </div>
-    </div>
-   
-    <div class="login-box">
+<!-- Modal para crear cuenta -->
+<div id="createAccountModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeCreateAccountModal()">&times;</span>
+      <div class="login-box">
         <h1 class="title">Registrarse</h1>
-
+  
         {% if messages %}
             {% for message in messages %}
                 <p style="color: red;">{{ message }}</p>
             {% endfor %}
         {% endif %}
-
+  
         <form action="{% url 'registro_login' %}" method="post" onsubmit="return validarFormulario();">
             {% csrf_token %}
             <div class="form-grid">
@@ -112,24 +83,21 @@
                     {% endif %}
                 </div>
             </div>
-
+  
             <div class="input-group full-width">
                 <input type="checkbox" name="terminos" id="terminos" required>
                 <label for="terminos">
                     He leído y acepto los <a href="https://minciencias.gov.co/ciudadano/terminosycondiciones-datospersonales" target="_blank">Términos y Condiciones</a>
                 </label>
             </div>
-
+  
             <div class="buttons">
                 <button type="submit">Registrar</button>
             </div>
         </form>
-
+  
         <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+      </div>
     </div>
-
-    
-      
-    <script src="{% static 'js/registro_login.js' %}"></script>
-</body>
-</html>
+  </div>
+  

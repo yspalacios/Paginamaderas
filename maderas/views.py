@@ -194,7 +194,7 @@ def registro_login(request):
             # Si el formulario es válido, se guarda el usuario (incluye encriptar la contraseña y validar todos los campos)
             form.save()
             messages.success(request, "Cuenta creada exitosamente")
-            return redirect('login')
+            return redirect('lista_login')
         else:
             messages.error(request, "Por favor corrija los errores en el formulario")
     else:

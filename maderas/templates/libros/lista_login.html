@@ -36,9 +36,8 @@
       <div class="action-header">
         <h1>Lista de Cuentas Registradas</h1>
         <div class="buttons">
-          <a href="{% url 'registro_login' %}">
-            <button type="button">Crear Cuenta</button>
-          </a>
+          <!-- Se reemplaza el enlace por botón que abre el modal -->
+          <button type="button" onclick="openCreateAccountModal()">Crear Cuenta</button>
           <a href="{% url 'index' %}">
             <button type="button">Regresa al inicio</button>
           </a>
@@ -70,7 +69,8 @@
               <td>{{ cuenta.security_question }}</td><th>|</th>
               <td>{{ cuenta.security_answer }}</td><th>|</th>
               <td>{{ cuenta.recovery_email }}</td><th>|</th>
-              <td>{{ cuenta.status }}
+              <td>
+                {{ cuenta.status }}
                 {% if cuenta.status == 'Activo' %}
                   <a href="{% url 'desactivar_cuenta' cuenta.id %}" title="Desactivar">🔓</a>
                 {% else %}
@@ -81,7 +81,6 @@
                 <a href="{% url 'editar_cuenta' cuenta.id %}">Editar</a>
                 <button type="button" onclick="openDeleteModal({{ cuenta.id }})">Eliminar</button>
               </td>
-              
             </tr>
             {% empty %}
             <tr>
@@ -93,36 +92,22 @@
       </div>
     </div>
   </div>
+
   <!-- Modal para confirmar eliminación -->
-<div id="deleteModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center;">
-  <div style="background:white; padding:20px; border-radius:8px; max-width:400px; text-align:center;">
-    <h3>¿Estás seguro de eliminar esta cuenta?</h3>
-    <div style="margin-top: 20px;">
-      <button onclick="confirmDelete()" style="margin-right: 10px;">Sí, eliminar</button>
-      <button onclick="closeDeleteModal()">Cancelar</button>
+  <div id="deleteModal" class="modal">
+    <div class="modal-content" style="text-align:center;">
+      <span class="close-btn" onclick="closeDeleteModal()">&times;</span>
+      <h3>¿Estás seguro de eliminar esta cuenta?</h3>
+      <div style="margin-top: 20px;">
+        <button onclick="confirmDelete()" style="margin-right: 10px;">Sí, eliminar</button>
+        <button onclick="closeDeleteModal()">Cancelar</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  let deleteAccountId = null;
+  <!-- Incluir el modal de creación de cuenta desde el archivo "registro_form.html" -->
+  {% include 'libros/registro_form.html' %}
 
-  function openDeleteModal(id) {
-    deleteAccountId = id;
-    document.getElementById('deleteModal').style.display = 'flex';
-  }
-
-  function closeDeleteModal() {
-    deleteAccountId = null;
-    document.getElementById('deleteModal').style.display = 'none';
-  }
-
-  function confirmDelete() {
-    if (deleteAccountId) {
-      window.location.href = `/libros/eliminar_cuenta/${deleteAccountId}/`; 
-    }
-  }
-</script>
-
+  <script src="{% static 'js/lista_login.js' %}?v={{ timestamp }}"></script>
 </body>
 </html>

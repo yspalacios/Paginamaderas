@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function(){
   woodFilter.addEventListener("change", performSearch);
 
 });
-
+// Función para cambiar el estado de un producto (publicar/quitar publicidad)
 function cambiarEstado(productoId, accion, btn) {
   let url = '';
   if (accion === 'publicar') {
@@ -74,6 +74,7 @@ function cambiarEstado(productoId, accion, btn) {
   })
   .catch(error => console.error('Error en la petición AJAX:', error));
 }
+
 function abrirModal(id) {
   document.getElementById(id).classList.remove('hidden');
 }
@@ -106,4 +107,70 @@ document.addEventListener("click", function (e) {
     document.getElementById("form-eliminar").action = eliminarUrl;
     abrirModal("modal-eliminar");
   }
+});
+
+
+// ────────────────────────────────────────────────────────────────
+// Código nuevo: sincronizar file input y “clear checkbox”
+// ────────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", function () {
+  const editarContainer = document.getElementById("editar-form-container");
+
+  const observer = new MutationObserver(function () {
+    const fileInput   = editarContainer.querySelector('input[type="file"]');
+    const clearCheckbox = editarContainer.querySelector('input[type="checkbox"]');
+
+    if (fileInput && clearCheckbox) {
+      // Si el usuario selecciona un archivo, desmarca clear
+      fileInput.addEventListener('change', function () {
+        if (this.files.length > 0) {
+          clearCheckbox.checked = false;
+        }
+      });
+      // Si marca clear, limpia el file input
+      clearCheckbox.addEventListener('change', function () {
+        if (this.checked) {
+          fileInput.value = '';
+        }
+      });
+    }
+  });
+
+  observer.observe(editarContainer, { childList: true, subtree: true });
+});
+
+// ────────────────────────────────────────────────────────────────
+// bloquear reenvíos del formulario de subir archivos para evitar duplicados
+// ────────────────────────────────────────────────────────────────
+
+document.addEventListener("DOMContentLoaded", function(){
+  const formSubir = document.querySelector('#modal-subir form');
+  if (!formSubir) return;
+
+  let enviado = false;
+  formSubir.addEventListener('submit', function(e){
+    if (enviado) {
+      // Ya se estaba enviando: bloqueamos reenvíos
+      e.preventDefault();
+      return;
+    }
+    enviado = true;
+    const btn = formSubir.querySelector('button[type="submit"]');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerText = 'Subiendo…';
+    }
+  });
+});
+
+// ────────────────────────────────────────────────────────────────
+// Cerrar modales al hacer clic fuera del contenido (.modal-content)
+// ────────────────────────────────────────────────────────────────
+document.querySelectorAll('.modal').forEach(modal => {
+  modal.addEventListener('click', function(e) {
+    // Si clicaste directamente sobre el fondo del modal (no en .modal-content)
+    if (e.target === modal) {
+      cerrarModal(modal.id);
+    }
+  });
 });

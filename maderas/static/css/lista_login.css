@@ -163,6 +163,32 @@ table a {
 table a:hover {
   text-decoration: underline;
 }
+/* Fondo del modal: ocupa toda la pantalla y centra el contenido */
+#editModal {
+  pointer-events: auto;
+  display: none; /* cambia a 'flex' con JS para mostrar */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* fondo oscuro semi-transparente */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Contenido del modal: la "tarjeta" blanca */
+#editModal .modal-content {
+  pointer-events: auto;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
 
  /* Estilos para los modales, puedes personalizarlos o moverlos a tu CSS */
  .modal {
@@ -193,4 +219,44 @@ table a:hover {
   top: 10px;
   font-size: 20px;
   cursor: pointer;
+}
+
+
+/* Contenedor general */
+nav[aria-label="breadcrumb"] {
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo semitransparente oscuro */
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+/* Lista de migas */
+nav[aria-label="breadcrumb"] .breadcrumb {
+  background: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+/* Separador / flecha */
+nav[aria-label="breadcrumb"] .breadcrumb-item + .breadcrumb-item::before {
+  content: "›";              /* Puedes usar “>”, “/” o cualquier símbolo */
+  margin: 0 0.5rem;
+  color: #ddd;
+}
+
+/* Enlaces */
+nav[aria-label="breadcrumb"] .breadcrumb-item a {
+  color: #fff;               /* Blanco para contraste */
+  text-decoration: none;
+  font-weight: 500;
+}
+nav[aria-label="breadcrumb"] .breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+
+/* Elemento activo (última miga) */
+nav[aria-label="breadcrumb"] .breadcrumb-item.active {
+  color: #bbb;               /* Gris claro */
+  font-weight: 600;
+  pointer-events: none;      /* No clicable */
 }

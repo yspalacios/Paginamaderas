@@ -1,0 +1,58 @@
+{# editar_cuenta_form.html #}
+<div class="edit-form-container">
+    <h2>Editar Cuenta: {{ cuenta.email }}</h2>
+  
+    {% if messages %}
+      {% for message in messages %}
+        <p class="message">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+  
+    <form id="editForm" action="{% url 'editar_cuenta' 0 %}" method="post">
+      {% csrf_token %}
+      <div>
+        <label for="email"><b>Correo:</b></label>
+        <input type="email" name="email" id="email" value="{{ cuenta.email }}" required>
+      </div>
+      <div>
+        <label for="phone"><b>Teléfono:</b></label>
+        <input type="tel" name="phone" id="phone" value="{{ cuenta.phone }}">
+      </div>
+      <div>
+        <label for="security_question"><b>Pregunta de seguridad:</b></label>
+        <select name="security_question" id="security_question" required>
+          <option value="">Selecciona una pregunta</option>
+          <option value="nombre_mascota" {% if cuenta.security_question == "nombre_mascota" %}selected{% endif %}>
+            ¿Cuál es el nombre de tu primera mascota?
+          </option>
+          <option value="ciudad_nacimiento" {% if cuenta.security_question == "ciudad_nacimiento" %}selected{% endif %}>
+            ¿En qué ciudad naciste?
+          </option>
+          <option value="color_favorito" {% if cuenta.security_question == "color_favorito" %}selected{% endif %}>
+            ¿Cuál es tu color favorito?
+          </option>
+        </select>
+      </div>
+      <div>
+        <label for="security_answer"><b>Respuesta de seguridad:</b></label>
+        <input type="text" name="security_answer" id="security_answer" value="{{ cuenta.security_answer }}" required>
+      </div>
+      <div>
+        <label for="recovery_email"><b>Correo de recuperación:</b></label>
+        <input type="email" name="recovery_email" id="recovery_email" value="{{ cuenta.recovery_email }}" required>
+      </div>
+      <div>
+        <label for="password"><b>Nueva Contraseña (dejar en blanco para no cambiar):</b></label>
+        <input type="password" name="password" id="password">
+      </div>
+      <div>
+        <label for="confirm_password"><b>Confirmar Contraseña:</b></label>
+        <input type="password" name="confirm_password" id="confirm_password">
+      </div>
+      <div class="form-buttons">
+        <button type="submit"><b>Guardar Cambios</b></button>
+        <button type="button" onclick="closeEditModal()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+  

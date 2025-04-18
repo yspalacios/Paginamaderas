@@ -1,13 +1,34 @@
 from django import forms  # Importa el módulo de formularios de Django
-from .models import Producto, Folder, datos  # Importa los modelos necesarios, incluyendo el modelo personalizado Cuenta
+from .models import Producto, Folder, datos
+from django.forms.widgets import ClearableFileInput
 import re
 
 # ====================== ProductoForm ====================
+# form de Producto
+
+class AllowBothClearableFileInput(ClearableFileInput):
+   
+#  Widget que, si hay un fichero nuevo subido, siempre lo devuelve
+#  y nunca activa el clear checkbox, evitando la validación de Django.
+    
+    def value_from_datadict(self, data, files, name):
+        # Si el usuario ha subido un fichero, lo devolvemos sin mirar el clear.
+        upload = files.get(name)
+        if upload:
+            return upload
+        # En cualquier otro caso, comportamiento normal (clear o nada)
+        return super().value_from_datadict(data, files, name)
+
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto  # Se utiliza el modelo Producto
         fields = ['tipo_madera', 'nombre_producto', 'descripcion', 'imagen']  # Campos que se incluirán en el formulario
-
+        widgets = {
+            # Asignamos el widget custom al campo imagen
+            'imagen': AllowBothClearableFileInput,
+        }
+        
+        
     def __init__(self, *args, **kwargs):
         # Constructor del formulario que llama al constructor del padre
         super().__init__(*args, **kwargs)
@@ -36,6 +57,7 @@ class ProductoForm(forms.ModelForm):
         return instance  # Se retorna la instancia guardada
 
 # ========================= FolderForm ===================
+# form de Folders
 class FolderForm(forms.ModelForm):
     class Meta:
         model = Folder  # Se utiliza el modelo Folder
@@ -83,6 +105,7 @@ class FolderForm(forms.ModelForm):
         return salario_actual  # Se retorna el valor validado
 
 # ======================= RegistroForm =====================
+# form de Registro
 class RegistroForm(forms.ModelForm):
     # Campo para la contraseña con widget de password
     password = forms.CharField(widget=forms.PasswordInput, help_text="Ingrese su contraseña.")

@@ -33,7 +33,7 @@
 
     <!-- Contenido principal -->
     <div class="container">
-      <div class="action-header">
+      <div class="action-header">  
         <h1>Lista de Cuentas Registradas</h1>
         <div class="buttons">
           <!-- Se reemplaza el enlace por botón que abre el modal -->
@@ -78,7 +78,13 @@
                 {% endif %}
               </td><th>|</th>
               <td>
-                <a href="{% url 'editar_cuenta' cuenta.id %}">Editar</a>
+                <button
+                  type="button"
+                  onclick="openEditModal(
+                    {{ cuenta.id }}, '{{ cuenta.email }}', '{{ cuenta.phone }}',
+                    '{{ cuenta.security_question }}', '{{ cuenta.security_answer }}',
+                    '{{ cuenta.recovery_email }}' )"
+                >Editar</button>
                 <button type="button" onclick="openDeleteModal({{ cuenta.id }})">Eliminar</button>
               </td>
             </tr>
@@ -104,6 +110,16 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal de edición -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeEditModal()">&times;</span>
+      <!-- Aquí cargamos el partial que creamos -->
+      {% include 'libros/editar_cuenta_form.html' %}
+    </div>
+  </div>
+
 
   <!-- Incluir el modal de creación de cuenta desde el archivo "registro_form.html" -->
   {% include 'libros/registro_form.html' %}

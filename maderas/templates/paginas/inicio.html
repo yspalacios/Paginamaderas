@@ -1,4 +1,4 @@
-{% load static %}
+{% load static breadcrumbs %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -26,6 +26,8 @@
       <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="logo">
     </a>
   </header>
+
+  {% breadcrumbs %}
 
   <main class="container">
     {% block contenido %}

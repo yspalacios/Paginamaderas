@@ -117,15 +117,24 @@ function renderFolders() {
       // Encabezado de la carpeta
       const headerDiv = document.createElement('div');
       headerDiv.classList.add('folder-header');
+      // Flecha para expandir/colapsar
+      const toggleArrow = document.createElement('span');
+      toggleArrow.classList.add('folder-toggle');
+      toggleArrow.innerHTML = '▶'; // Flecha a la derecha (cerrado)
+      toggleArrow.addEventListener('click', () => toggleFolder(folderDiv));
+      
       const title = document.createElement('div');
       title.classList.add('folder-title');
       title.textContent = folder.name;
+      // También permitimos hacer clic en el título para expandir/colapsar
+      title.addEventListener('click', () => toggleFolder(folderDiv));
 
       // Botón para editar prestaciones
       const editBenefitsBtn = document.createElement('button');
       editBenefitsBtn.textContent = "Editar Prestaciones";
       editBenefitsBtn.classList.add('btn');
-      editBenefitsBtn.addEventListener('click', () => {
+      editBenefitsBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); 
         currentFolderId = folder.id;
         document.getElementById('fecha_inicio').value = folder.fecha_inicio || "";
         document.getElementById('puesto_designado').value = folder.puesto_designado || "";
@@ -144,14 +153,21 @@ function renderFolders() {
       const showBenefitsBtn = document.createElement('button');
       showBenefitsBtn.textContent = "Mostrar Prestaciones";
       showBenefitsBtn.classList.add('btn');
-      showBenefitsBtn.addEventListener('click', () => openShowModal(folder));
+      showBenefitsBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Evitar que se propague al título/header
+        openShowModal(folder);
+      });
 
       // Botón de opciones (cambiar estado y eliminar carpeta)
       const optionsBtn = document.createElement('button');
       optionsBtn.innerHTML = "⚙️";
       optionsBtn.classList.add('btn');
-      optionsBtn.addEventListener("click", (event) => toggleOptions(event, folder.id));
+      optionsBtn.addEventListener("click", (event) => {
+        event.stopPropagation(); // Evitar que se propague al título/header
+        toggleOptions(event, folder.id);
+      });
 
+      headerDiv.appendChild(toggleArrow);
       headerDiv.appendChild(title);
       headerDiv.appendChild(editBenefitsBtn);
       headerDiv.appendChild(showBenefitsBtn);
@@ -196,6 +212,12 @@ function renderFolders() {
       statusText.classList.add('folder-status');
       statusText.textContent = `Estado: ${folder.status || "No definido"}`;
       folderDiv.appendChild(statusText);
+
+      // Contenedor para el contenido desplegable (todo lo que no es el header)
+      const contentDiv = document.createElement('div');
+      contentDiv.classList.add('folder-content');
+      // Por defecto, contenido oculto
+      contentDiv.style.display = 'none';
 
       // Sección para documentos
       const documentsDiv = document.createElement('div');
@@ -270,7 +292,12 @@ function renderFolders() {
       documentsDiv.appendChild(fileInput);
       documentsDiv.appendChild(uploadBtn);
 
-      folderDiv.appendChild(documentsDiv);
+      // Agregar documentos al contenido desplegable
+      contentDiv.appendChild(documentsDiv);
+      
+      // Añadir el contenido desplegable a la carpeta
+      folderDiv.appendChild(contentDiv);
+
       container.appendChild(folderDiv);
     });
 
@@ -278,6 +305,24 @@ function renderFolders() {
     filterFolders();
   })
   .catch(error => console.error('Error:', error));
+}
+
+// Nueva función para alternar el despliegue de una carpeta
+function toggleFolder(folderDiv) {
+  const content = folderDiv.querySelector('.folder-content');
+  const arrow = folderDiv.querySelector('.folder-toggle');
+  
+  if (content.style.display === 'none' || !content.style.display) {
+    // Expandir carpeta
+    content.style.display = 'block';
+    arrow.innerHTML = '▼'; // Flecha abajo (abierto)
+    folderDiv.classList.add('expanded');
+  } else {
+    // Colapsar carpeta
+    content.style.display = 'none';
+    arrow.innerHTML = '▶'; // Flecha a la derecha (cerrado)
+    folderDiv.classList.remove('expanded');
+  }
 }
 
 // Filtrar carpetas según búsqueda (por título y estado)
@@ -299,11 +344,27 @@ function filterFolders() {
 
 // Abrir modal de edición
 function openEditModal() {
-  document.getElementById('modal-editar').style.display = 'block';
+  const modal = document.getElementById('modal-editar');
+  console.log("Modal de edición encontrado:", !!modal);
+  if (modal) {
+    modal.style.display = 'block';
+    console.log("Modal de edición mostrado");
+  } else {
+    console.error("No se encontró el elemento con id 'modal-editar'");
+  }
 }
-document.getElementById('closeModalBtn').addEventListener('click', () => {
-  document.getElementById('modal-editar').style.display = 'none';
-});
+
+function openShowModal(folder) {
+  // Tu código actual...
+  const modal = document.getElementById('modal-mostrar');
+  console.log("Modal para mostrar prestaciones encontrado:", !!modal);
+  if (modal) {
+    modal.style.display = 'block';
+    console.log("Modal para mostrar prestaciones mostrado");
+  } else {
+    console.error("No se encontró el elemento con id 'modal-mostrar'");
+  }
+}
 
 // Guardar prestaciones
 document.getElementById('saveBenefitsBtn').addEventListener('click', () => {

@@ -131,6 +131,10 @@ def editar_producto(request, producto_id):
     if request.method == "POST":
         form = ProductoForm(request.POST, request.FILES, instance=producto)
         if form.is_valid():
+            imagen = form.cleaned_data.get('imagen')
+            clear = form.cleaned_data.get('imagen_clear', False)
+            if imagen and clear:
+                form.cleaned_data['imagen_clear'] = False
             form.save()
             return redirect('gestionar_productos')
     else:
@@ -201,7 +205,7 @@ def registro_login(request):
         # Si no es POST, se instancia un formulario vacío
         form = RegistroForm()
     # Se renderiza el template con el formulario en el contexto
-    return render(request, 'libros/registro_login.html', {'form': form})
+    return render(request, 'libros/registro_form.html', {'form': form})
 
 @login_required(login_url="/libros/login/")
 @never_cache

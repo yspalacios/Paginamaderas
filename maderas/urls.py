@@ -6,7 +6,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.inicio, name='inicio'),
-    path('libros/', views.libros, name='libros'),
     
     #===================================================================
     # Rutas para la gestión de productos

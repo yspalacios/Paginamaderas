@@ -157,6 +157,7 @@ input[type="file"] {
   margin-bottom: 20px;
   border: 1px solid #deb887;
   border-radius: 6px;
+  transition: all 0.3s ease;
 }
 
 /* Cabecera de carpeta */
@@ -164,15 +165,54 @@ input[type="file"] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  cursor: pointer;
+  padding-bottom: 10px;
   flex-wrap: wrap;
 }
-
+.folder-toggle {
+  margin-right: 10px;
+  font-size: 20px;
+  color: #5A2D0C;
+  cursor: pointer;
+  transition: transform 0.3s;
+  display: inline-block;
+  width: 18px;
+  text-align: center;
+}
+.folder.expanded {
+  box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+}
 .folder-title {
   font-size: 1.5em;
   font-weight: bold;
   color: #5A2D0C;
   flex: 1;
+  margin-right: 15px;
+}
+.folder-content {
+  padding-top: 10px;
+  border-top: 1px solid #deb887;
+  margin-top: 5px;
+}
+
+/* Modificaciones para mostrar el estado dentro del header */
+.folder-status {
+  background-color: #F5DEB3;
+  padding: 5px 10px;
+  border-radius: 3px;
+  margin: 5px 0;
+  font-size: 14px;
+  color: #5A2D0C;
+}
+/* Mejoras para los botones en el header */
+.folder-header .btn {
+  margin-left: 5px;
+  padding: 5px 10px;
+}
+
+/* Animación para la flecha */
+.folder.expanded .folder-toggle {
+  transform: rotate(90deg);
 }
 
 /* Menú de opciones */
@@ -319,4 +359,44 @@ input[type="file"] {
   width: 500px;
   max-width: 90%;
   position: relative;
+}
+
+
+/* Contenedor general */
+nav[aria-label="breadcrumb"] {
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo semitransparente oscuro */
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+/* Lista de migas */
+nav[aria-label="breadcrumb"] .breadcrumb {
+  background: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+/* Separador / flecha */
+nav[aria-label="breadcrumb"] .breadcrumb-item + .breadcrumb-item::before {
+  content: "›";              /* Puedes usar “>”, “/” o cualquier símbolo */
+  margin: 0 0.5rem;
+  color: #ddd;
+}
+
+/* Enlaces */
+nav[aria-label="breadcrumb"] .breadcrumb-item a {
+  color: #fff;               /* Blanco para contraste */
+  text-decoration: none;
+  font-weight: 500;
+}
+nav[aria-label="breadcrumb"] .breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+
+/* Elemento activo (última miga) */
+nav[aria-label="breadcrumb"] .breadcrumb-item.active {
+  color: #bbb;               /* Gris claro */
+  font-weight: 600;
+  pointer-events: none;      /* No clicable */
 }

@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, FileResponse, HttpResponseForbidden
+from django.http import JsonResponse, FileResponse, HttpResponseForbidden, HttpResponse
 from django.contrib.auth import login, logout
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import make_password
 from .models import Producto, datos, Folder, Document
 from .forms import ProductoForm, RegistroForm
@@ -10,13 +10,18 @@ from django.core.mail import send_mail
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.conf import settings
 from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from django.db.models import Q
 import os
+import subprocess
+import datetime
+import shutil 
 from django.utils._os import safe_join
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 from datetime import datetime
+
 
 
 # --------------------------
@@ -481,3 +486,123 @@ def mi_vista(request):
     return render(request, 'mi_template.html', {
         'timestamp': datetime.now().timestamp()
     })
+
+
+#---------------------------
+# Vistas para gestión de restauracion backups
+#---------------------------
+
+
+
+@login_required(login_url="/libros/login/")
+@never_cache
+def manage_backups(request):
+    backup_dir = os.path.join(settings.BASE_DIR, 'backups')
+    os.makedirs(backup_dir, exist_ok=True)
+
+    backups = []
+    for fname in os.listdir(backup_dir):
+        if fname.endswith('.sql'):
+            full = os.path.join(backup_dir, fname)
+            ts   = os.path.getmtime(full)
+            backups.append({
+                'filename': fname,
+                'timestamp': datetime.fromtimestamp(ts)
+            })
+
+    backups.sort(key=lambda b: b['timestamp'], reverse=True)
+    return render(request, 'manage_backups.html', {
+        'backups': backups,
+        'timestamp': datetime.now().timestamp()
+    })
+
+
+@login_required(login_url="/libros/login/")
+@never_cache
+def backup_database(request):
+    # 1) Localiza mysqldump (en PATH o en settings)
+    dump_cmd = shutil.which('mysqldump') or settings.MYSQLDUMP_PATH
+    if not dump_cmd or not os.path.exists(dump_cmd):
+        return HttpResponse(
+            "❌ No se encontró mysqldump. Agrega su carpeta al PATH "
+            "o define MYSQLDUMP_PATH en settings.py",
+            status=500
+        )
+
+    # 2) Nombre y ruta del backup
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    db = settings.DATABASES['default']
+    filename   = f"{db['NAME']}_{ts}.sql"
+    backup_dir = os.path.join(settings.BASE_DIR, 'backups')
+    full_path  = os.path.join(backup_dir, filename)
+
+    # 3) Ejecuta mysqldump SIN petición interactiva de password
+    cmd = [
+        dump_cmd,
+        '-u', db['USER'],
+        f"--password={db['PASSWORD']}",
+        db['NAME']
+    ]
+    with open(full_path, 'wb') as out:
+        result = subprocess.run(cmd, stdout=out, stderr=subprocess.PIPE)
+
+    if result.returncode != 0:
+        err = result.stderr.decode(errors='ignore')
+        return HttpResponse(f"❌ Error generando backup:<br><pre>{err}</pre>", status=500)
+
+    return redirect('manage_backups')
+
+
+@login_required(login_url="/libros/login/")
+@never_cache
+def restore_named(request):
+    if request.method == 'POST':
+        # 1) Localiza mysql.exe
+        mysql_cmd = shutil.which('mysql') or settings.MYSQL_PATH
+        if not mysql_cmd or not os.path.exists(mysql_cmd):
+            return HttpResponse(
+                "❌ No se encontró mysql. Agrega su carpeta al PATH "
+                "o define MYSQL_PATH en settings.py",
+                status=500
+            )
+
+        # 2) Ruta del .sql a restaurar
+        fname     = request.POST.get('filename')
+        full_path = os.path.join(settings.BASE_DIR, 'backups', fname)
+        if not os.path.exists(full_path):
+            return HttpResponse("❌ Archivo no encontrado.", status=404)
+
+        # 3) Ejecuta restore SIN petición interactiva de password
+        db = settings.DATABASES['default']
+        cmd = [
+            mysql_cmd,
+            '-u', db['USER'],
+            f"--password={db['PASSWORD']}",
+            db['NAME']
+        ]
+        with open(full_path, 'rb') as inp:
+            result = subprocess.run(cmd, stdin=inp, stderr=subprocess.PIPE)
+
+        if result.returncode != 0:
+            err = result.stderr.decode(errors='ignore')
+            return HttpResponse(f"❌ Error restaurando backup:<br><pre>{err}</pre>", status=500)
+
+    return redirect('manage_backups')
+
+
+@login_required(login_url="/libros/login/")
+@never_cache
+@csrf_exempt
+def delete_backup(request):
+    if request.method == "POST":
+        filename = request.POST.get("filename")
+        path = os.path.join(settings.BASE_DIR, 'backups', filename)
+        if os.path.exists(path):
+            try:
+                os.remove(path)
+            except PermissionError:
+                return HttpResponse(
+                    "❌ No se pudo eliminar: archivo en uso.",
+                    status=500
+                )
+    return redirect('manage_backups')

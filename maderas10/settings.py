@@ -150,3 +150,12 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'lapruebaconesta@gmail.com'
 EMAIL_HOST_PASSWORD = 'gtfgwukwqizqyxru'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# Ruta al directorio bin de tu MySQL en Laragon;
+# ajústalo a la versión que tengas instalada:
+MYSQL_BIN_DIR = r"C:\laragon\bin\mysql\mysql‑8.0.30‑winx64\bin"
+
+# Rutas absolutas a los ejecutables
+MYSQLDUMP_PATH = os.path.join(MYSQL_BIN_DIR, "mysqldump.exe")
+MYSQL_PATH     = os.path.join(MYSQL_BIN_DIR, "mysql.exe")

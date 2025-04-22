@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Copias de Seguridad</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v={{ timestamp }}">
+  <link rel="stylesheet" href="{% static 'css/manage_backups.css' %}?v={{ timestamp }}">
+</head>
+<body>
+
+  <div class="headermenu">
+    <div class="hmenu">
+      <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo" class="img">
+      <h4>Maderas <span>Isabella</span></h4>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="sidebar">
+      <h2>Menú</h2>
+      <div class="menu">
+        <a href="{% url 'index' %}">Inicio</a>
+        <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>
+        <a href="{% url 'lista_login' %}">Listado de Cuentas</a>
+        <a href="{% url 'carpeta' %}">Documentos de contratación</a>
+        <a href="{% url 'manage_backups' %}">Gestion de BD (backups)</a>
+        <a href="{% url 'logout' %}">Cerrar Sesión</a>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>🗄️ Gestión de Backups</h1>
+      <p>
+        <a href="{% url 'backup_db' %}" class="btn btn-backup">➕ Crear Nuevo Backup</a>
+      </p>
+
+      <table class="backup-table">
+        <thead>
+          <tr>
+            <th>Fecha y Hora</th>
+            <th>Archivo</th>
+            <th>Restaurar</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in backups %}
+            <tr>
+              <td>{{ b.timestamp|date:"Y-m-d H:i:s" }}</td>
+              <td>{{ b.filename }}</td>
+              <td>
+                <form method="post" action="{% url 'restore_named' %}" style="display:inline">
+                  {% csrf_token %}
+                  <input type="hidden" name="filename" value="{{ b.filename }}">
+                  <button type="submit" class="btn btn-restore">🔄</button>
+                </form>
+              </td>
+              <td>
+                <form method="post" action="{% url 'delete_backup' %}" style="display:inline"
+                      onsubmit="return confirm('¿Eliminar este backup?');">
+                  {% csrf_token %}
+                  <input type="hidden" name="filename" value="{{ b.filename }}">
+                  <button type="submit" class="btn btn-delete">❌</button>
+                </form>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="4">No hay backups disponibles.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</body>
+</html>

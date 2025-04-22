@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Restaurar Base de Datos</title>
+</head>
+<body>
+  <h1>Restaurar Backup de MySQL</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Selecciona tu archivo .sql:</label><br>
+    <input type="file" name="sql_file" accept=".sql" required><br><br>
+    <button type="submit">Restaurar</button>
+  </form>
+</body>
+</html>

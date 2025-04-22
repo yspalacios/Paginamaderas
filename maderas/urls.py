@@ -54,6 +54,15 @@ urlpatterns = [
     path('media/documentos/<path:file_path>/', vista_archivos, name='vista_archivos'),
     
     
+    #===================================================================
+    # Rutas para la gestion de backups
+    #===================================================================
+    path('manage-backups/', views.manage_backups, name='manage_backups'),
+    path('backup/',          views.backup_database, name='backup_db'),
+    path('restore-named/',   views.restore_named,   name='restore_named'),
+    path('admin-tools/delete-backup/', views.delete_backup, name='delete_backup'),
+
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

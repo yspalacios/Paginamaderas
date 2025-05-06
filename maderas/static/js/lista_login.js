@@ -30,7 +30,7 @@ function closeCreateAccountModal() {
   document.getElementById('createAccountModal').style.display = 'none';
 }
 
-// Validación del formulario de creación (mantengo tu lógica original)
+// Validación del formulario de creación 
 function validarCrearFormulario() {
   const nombres = document.getElementById('nombres').value;
   const apellidos = document.getElementById('apellidos').value;
@@ -115,7 +115,7 @@ window.addEventListener('click', function(e) {
   if (e.target === modal) closeEditModal();
 });
 
-// Validación del formulario de edición (tu script original, sin cambios)
+// Validación del formulario de edición (originsal)
 function validarEditarFormulario() {
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm_password').value;

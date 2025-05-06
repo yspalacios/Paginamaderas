@@ -61,6 +61,8 @@ urlpatterns = [
     path('backup/',          views.backup_database, name='backup_db'),
     path('restore-named/',   views.restore_named,   name='restore_named'),
     path('admin-tools/delete-backup/', views.delete_backup, name='delete_backup'),
+    
+    path('libros/profile/', views.profile_view, name='profile'),
 
     
 ]

@@ -1,6 +1,7 @@
 // Variable global para almacenar el id de la carpeta en edición
 let currentFolderId = null;
   
+let selectedDownloadFolder = null; // Variable global para almacenar la carpeta seleccionada para descargar
 // Función para obtener el token CSRF (seguridad en Django)
 function getCookie(name) {
   let cookieValue = null;
@@ -117,6 +118,8 @@ function renderFolders() {
       // Encabezado de la carpeta
       const headerDiv = document.createElement('div');
       headerDiv.classList.add('folder-header');
+
+      
       // Flecha para expandir/colapsar
       const toggleArrow = document.createElement('span');
       toggleArrow.classList.add('folder-toggle');

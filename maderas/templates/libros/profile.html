@@ -1,0 +1,294 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil de Usuario</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Cropper.js CSS -->
+  <link href="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      background: url("/static/diseños/imagenes/14.jpg");
+      background-color: rgb(246, 246, 247);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+  </style>
+</head>
+<body class="text-gray-800 m-0 p-8">
+
+  <!-- Header superior -->
+  <header class="fixed top-0 left-0 w-full h-[100px] bg-[#4A4A4A] text-white flex items-center justify-center z-[1001]">
+    <div class="flex items-center justify-center w-[90%] relative">
+      <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo" class="absolute left-[-20px] h-[100px] w-auto">
+      <h4 class="m-0 text-[35px] font-bold text-center">Maderas <span class="text-[#ff9800]">Isabella</span></h4>
+    </div>
+  </header>
+
+  <!-- Contenedor principal con Sidebar y Contenido -->
+  <div class="flex mt-[100px]">
+    <!-- Sidebar -->
+    <aside class="fixed top-[100px] left-0 h-[calc(100vh-100px)] w-[250px] bg-[#4A4A4A] p-6 text-white box-border">
+      <h2 class="text-[20px] mb-5 text-center">Menú</h2>
+      <nav class="space-y-2">
+        <a href="{% url 'index' %}" class="block px-3 py-2 rounded text-[#DBC5AD] hover:bg-green-600 hover:text-white">Inicio</a>
+        <a href="{% url 'gestionar_productos' %}" class="block px-3 py-2 rounded text-[#DBC5AD] hover:bg-green-600 hover:text-white">Galería de Publicidad</a>
+        <a href="{% url 'lista_login' %}" class="block px-3 py-2 rounded text-[#DBC5AD] hover:bg-green-600 hover:text-white">Listado de Cuentas</a>
+        <a href="{% url 'carpeta' %}" class="block px-3 py-2 rounded text-[#DBC5AD] hover:bg-green-600 hover:text-white">Documentos de contratación</a>
+        <a href="{% url 'manage_backups' %}" class="block px-3 py-2 rounded text-[#DBC5AD] hover:bg-green-600 hover:text-white">Gestion de base de datos (backups)</a>
+        <a href="{% url 'logout' %}" class="block px-3 py-2 rounded text-[#DBC5AD] hover:bg-green-600 hover:text-white">Cerrar Sesión</a>
+      </nav>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="ml-[250px] w-full px-6">
+      <!-- Perfil -->
+      <section class="max-w-sm mx-auto mt-10 bg-white rounded-2xl shadow-lg p-6">
+        <div class="flex flex-col items-center">
+          <img id="profileImage" src="{% if user.profile_image %}{{ user.profile_image.url }}{% else %}/static/images/default-avatar.png{% endif %}" alt="Perfil" class="w-32 h-32 rounded-full object-cover border-4 border-blue-500">
+          <h2 id="userName" class="mt-4 text-xl font-semibold"> {{ user.nombres }} {{ user.apellidos }} </h2>
+          <p id="userEmail" class="text-sm text-gray-500"> {{ user.email }} </p>
+          <button id="changeImageBtn" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Cambiar imagen</button>
+        </div>
+      </section>
+
+      <!-- Datos usuario -->
+      <section class="max-w-md mx-auto mt-8 bg-white rounded-2xl shadow-lg p-6">
+        <h3 class="text-lg font-medium mb-4">Datos de usuario</h3>
+        <ul class="space-y-3 text-sm">
+          <li><span class="font-semibold">Nombres:</span> <span id="displayNombres">{{ user.nombres }}</span></li>
+          <li><span class="font-semibold">Apellidos:</span> <span id="displayApellidos">{{ user.apellidos }}</span></li>
+          <li><span class="font-semibold">Teléfono:</span> <span id="displayPhone">{{ user.phone }}</span></li>
+          <li><span class="font-semibold">Pregunta de seguridad:</span> <span id="displayQuestion">{{ user.security_question }}</span></li>
+          <li><span class="font-semibold">Respuesta seguridad:</span> <span id="displayAnswer">{{ user.security_answer }}</span></li>
+          <li><span class="font-semibold">Correo de recuperación:</span> <span id="displayRecovery">{{ user.recovery_email }}</span></li>
+          <li><span class="font-semibold">Estado:</span> <span id="displayStatus">{{ user.status }}</span></li>
+        </ul>
+        <div class="text-center mt-6">
+          <button id="editDataBtn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Editar datos</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal imagen -->
+  <div id="modalBackdrop" class="fixed inset-0 bg-black bg-opacity-50 hidden"></div>
+  <div id="cropModal" class="fixed inset-0 flex items-center justify-center hidden">
+    <div class="bg-white rounded-2xl shadow-2xl w-11/12 max-w-lg p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-medium">Editar imagen de perfil</h3>
+        <button id="closeModal" class="text-gray-500 hover:text-gray-700">&#10005;</button>
+      </div>
+      <div class="overflow-hidden rounded-lg mb-4">
+        <img id="imageToCrop" class="w-full object-contain" alt="Origen para recorte" />
+      </div>
+      <div class="flex justify-between mb-4">
+        <button id="rotateLeft" class="px-3 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">&#8634; Rotar</button>
+        <button id="rotateRight" class="px-3 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">&#8635; Rotar</button>
+      </div>
+      <div class="text-right">
+        <button id="cropConfirm" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal datos -->
+  <div id="dataBackdrop" class="fixed inset-0 bg-black bg-opacity-50 hidden"></div>
+  <div id="dataModal" class="fixed inset-0 flex items-center justify-center hidden">
+    <div class="bg-white rounded-2xl shadow-2xl w-11/12 max-w-md p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-medium">Editar datos de la cuenta</h3>
+        <button id="closeDataModal" class="text-gray-500 hover:text-gray-700">&#10005;</button>
+      </div>
+      <form id="dataForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium">Nombres</label>
+          <input id="inputNombres" name="nombres" type="text" value="{{ user.nombres }}" class="mt-1 w-full border rounded-lg px-3 py-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Apellidos</label>
+          <input id="inputApellidos" name="apellidos" type="text" value="{{ user.apellidos }}" class="mt-1 w-full border rounded-lg px-3 py-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Teléfono</label>
+          <input id="inputPhone" name="phone" type="text" value="{{ user.phone }}" class="mt-1 w-full border rounded-lg px-3 py-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Pregunta de seguridad</label>
+          <input id="inputQuestion" name="security_question" type="text" value="{{ user.security_question }}" class="mt-1 w-full border rounded-lg px-3 py-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Respuesta seguridad</label>
+          <input id="inputAnswer" name="security_answer" type="text" value="{{ user.security_answer }}" class="mt-1 w-full border rounded-lg px-3 py-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Email recuperación</label>
+          <input id="inputRecovery" name="recovery_email" type="email" value="{{ user.recovery_email }}" class="mt-1 w-full border rounded-lg px-3 py-2" />
+        </div>
+        <div class="text-right">
+          <button id="saveDataBtn" type="button" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" accept="image/*" class="hidden">
+  <script src="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.js"></script>
+  <script>
+    // CSRF helper
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        document.cookie.split(';').forEach(c => {
+          const cookie = c.trim();
+          if (cookie.startsWith(name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          }
+        });
+      }
+      return cookieValue;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const fileInput = document.getElementById('fileInput');
+      const changeBtn = document.getElementById('changeImageBtn');
+      const imageToCrop = document.getElementById('imageToCrop');
+      const profileImage = document.getElementById('profileImage');
+      const modal = document.getElementById('cropModal');
+      const backdrop = document.getElementById('modalBackdrop');
+      const closeModal = document.getElementById('closeModal');
+      const rotateLeft = document.getElementById('rotateLeft');
+      const rotateRight = document.getElementById('rotateRight');
+      const cropConfirm = document.getElementById('cropConfirm');
+      let cropper;
+
+      function showModal() {
+        modal.classList.remove('hidden');
+        backdrop.classList.remove('hidden');
+      }
+      function hideModal() {
+        modal.classList.add('hidden');
+        backdrop.classList.add('hidden');
+        if (cropper) cropper.destroy();
+      }
+
+      changeBtn.addEventListener('click', () => fileInput.click());
+      closeModal.addEventListener('click', hideModal);
+      backdrop.addEventListener('click', hideModal);
+
+      fileInput.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        imageToCrop.src = URL.createObjectURL(file);
+        if (cropper) cropper.destroy();
+        showModal();
+        cropper = new Cropper(imageToCrop, {
+          aspectRatio: 1,
+          viewMode: 1,
+          movable: true,
+          zoomable: true,
+          rotatable: true,
+          scalable: true
+        });
+      });
+
+      rotateLeft.addEventListener('click', () => cropper.rotate(-90));
+      rotateRight.addEventListener('click', () => cropper.rotate(90));
+
+      cropConfirm.addEventListener('click', () => {
+        cropper.getCroppedCanvas({ width: 300, height: 300 }).toBlob(blob => {
+          const formData = new FormData();
+          formData.append('profile_image', blob, 'avatar.png');
+          fetch('/libros/profile/', {
+            method: 'POST',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            body: formData
+          })
+          .then(r => r.json())
+          .then(json => {
+            if (json.status === 'success') {
+              profileImage.src = json.image_url;
+              hideModal();
+            } else {
+              alert('Error: ' + JSON.stringify(json.errors || json));
+            }
+          })
+          .catch(err => alert('Error de red: ' + err));
+        });
+      });
+
+        
+      // datos
+      const editDataBtn    = document.getElementById('editDataBtn');
+      const dataModal      = document.getElementById('dataModal');
+      const dataBackdrop   = document.getElementById('dataBackdrop');
+      const closeDataModal = document.getElementById('closeDataModal');
+      const saveDataBtn    = document.getElementById('saveDataBtn');
+      const displayFields  = {
+        nombres:  document.getElementById('displayNombres'),
+        apellidos:document.getElementById('displayApellidos'),
+        phone:    document.getElementById('displayPhone'),
+        question: document.getElementById('displayQuestion'),
+        answer:   document.getElementById('displayAnswer'),
+        recovery: document.getElementById('displayRecovery'),
+        status:   document.getElementById('displayStatus')
+      };
+      const inputs = {
+        nombres:  document.getElementById('inputNombres'),
+        apellidos:document.getElementById('inputApellidos'),
+        phone:    document.getElementById('inputPhone'),
+        question: document.getElementById('inputQuestion'),
+        answer:   document.getElementById('inputAnswer'),
+        recovery: document.getElementById('inputRecovery')
+      };
+
+      
+      function showDataModal() {
+        // precarga inputs con los valores actuales
+        inputs.nombres.value   = displayFields.nombres.textContent;
+        inputs.apellidos.value = displayFields.apellidos.textContent;
+        inputs.phone.value     = displayFields.phone.textContent;
+        inputs.question.value  = displayFields.question.textContent;
+        inputs.answer.value    = displayFields.answer.textContent;
+        inputs.recovery.value  = displayFields.recovery.textContent;
+        dataModal.classList.remove('hidden');
+        dataBackdrop.classList.remove('hidden');
+      }
+      function hideDataModal() {
+        dataModal.classList.add('hidden');
+        dataBackdrop.classList.add('hidden');
+      }
+
+      editDataBtn.addEventListener('click', showDataModal);
+      closeDataModal.addEventListener('click', hideDataModal);
+      dataBackdrop.addEventListener('click', hideDataModal);
+
+      saveDataBtn.addEventListener('click', () => {
+        const fd = new FormData();
+        Object.keys(inputs).forEach(k => fd.append(k, inputs[k].value));
+        fetch('/libros/profile/', {
+          method:'POST', headers:{ 'X-CSRFToken': getCookie('csrftoken') }, body:fd
+        })
+        .then(r=>r.json()).then(j=>{
+          if(j.status==='success'){
+            // actualizar la sección de datos
+            displayFields.nombres.textContent   = inputs.nombres.value;
+            displayFields.apellidos.textContent = inputs.apellidos.value;
+            displayFields.phone.textContent     = inputs.phone.value;
+            displayFields.question.textContent  = inputs.question.value;
+            displayFields.answer.textContent    = inputs.answer.value;
+            displayFields.recovery.textContent  = inputs.recovery.value;
+            hideDataModal();
+          } else {
+            alert('Error guardando datos: '+ JSON.stringify(j.errors||j));
+          }
+        }).catch(e=>alert('Red: '+e));
+      });
+
+
+    });
+  </script>
+</body>
+</html>

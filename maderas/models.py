@@ -9,6 +9,7 @@ class Producto(models.Model):
     descripcion = models.TextField()  # Descripción detallada del producto
     imagen = models.ImageField(upload_to='productos/', null=True, blank=True)  # Imagen del producto 
     publicado = models.BooleanField(default=False)  # Indica si el producto está publicado
+    precio = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Precio del producto (máximo 10 dígitos, 2 decimales)
 
     def __str__(self):
         return self.nombre_producto  # Representación en cadena del objeto Producto
@@ -76,6 +77,7 @@ class datos(AbstractBaseUser, PermissionsMixin):
     security_question = models.CharField(max_length=255, blank=True, null=True)  # Pregunta de seguridad (opcional)
     security_answer = models.CharField(max_length=255, blank=True, null=True)    # Respuesta a la pregunta de seguridad (opcional)
     recovery_email = models.EmailField(blank=True, null=True)  # Correo de recuperación (opcional)
+    profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)  # nuevo campo para la imagen de perfil (opcional)
     status = models.CharField(max_length=20, default="No Activo")  # Estado de la cuenta
     is_active = models.BooleanField(default=True)   # Indica si la cuenta está activa
     is_staff = models.BooleanField(default=False)     # Indica si el usuario tiene permisos de staff

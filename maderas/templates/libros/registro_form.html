@@ -1,103 +1,163 @@
 <!-- Modal para crear cuenta -->
-<div id="createAccountModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeCreateAccountModal()">&times;</span>
-      <div class="login-box">
-        <h1 class="title">Registrarse</h1>
+<div id="createAccountModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-4 p-6 relative">
+      <!-- botón cerrar -->
+      <span
+        class="absolute top-4 right-4 text-2xl cursor-pointer hover:text-gray-600"
+        onclick="closeCreateAccountModal()"
+      >&times;</span>
   
-        {% if messages %}
-            {% for message in messages %}
-                <p style="color: red;">{{ message }}</p>
-            {% endfor %}
-        {% endif %}
+      <!-- contenido -->
+      <h1 class="text-2xl font-bold text-center mb-6">Registrarse</h1>
   
-        <form action="{% url 'registro_login' %}" method="post" onsubmit="return validarFormulario();">
-            {% csrf_token %}
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="nombres">Nombres:</label>
-                    <input type="text" name="nombres" id="nombres" required pattern="[A-Za-zÀ-ÿ\s]+">
-                    {% if form.nombres.errors %}
-                        <span style="color: red;">{{ form.nombres.errors }}</span>
-                    {% endif %}
-                </div>
-                <div class="input-group">
-                    <label for="apellidos">Apellidos:</label>
-                    <input type="text" name="apellidos" id="apellidos" required pattern="[A-Za-zÀ-ÿ\s]+">
-                    {% if form.apellidos.errors %}
-                        <span style="color: red;">{{ form.apellidos.errors }}</span>
-                    {% endif %}
-                </div>
-                <div class="input-group">
-                    <label for="email">Correo:</label>
-                    <input type="email" name="email" id="email" required>
-                    {% if form.email.errors %}
-                        <span style="color: red;">{{ form.email.errors }}</span>
-                    {% endif %}
-                </div>
-                <div class="input-group">
-                    <label for="password">Contraseña:</label>
-                    <input type="password" name="password" id="password" required>
-                    {% if form.password.errors %}
-                        <span style="color: red;">{{ form.password.errors }}</span>
-                    {% endif %}
-                </div>
-                <div class="input-group">
-                    <label for="confirm_password">Confirmar Contraseña:</label>
-                    <input type="password" name="confirm_password" id="confirm_password" required>
-                    {% if form.confirm_password.errors %}
-                        <span style="color: red;">{{ form.confirm_password.errors }}</span>
-                    {% endif %}
-                </div>
-                <div class="input-group">
-                    <label for="phone">Teléfono:</label>
-                    <input type="tel" name="phone" id="phone" maxlength="10" pattern="\d{0,10}" required>
-                    {% if form.phone.errors %}
-                        <span style="color: red;">{{ form.phone.errors }}</span>
-                    {% endif %}
-                </div>
-                <div class="input-group">
-                    <label for="security_question">Pregunta de seguridad:</label>
-                    <select name="security_question" id="security_question" required>
-                        <option value="">Selecciona una pregunta</option>
-                        <option value="nombre_mascota">¿Cuál es el nombre de tu primera mascota?</option>
-                        <option value="ciudad_nacimiento">¿En qué ciudad naciste?</option>
-                        <option value="color_favorito">¿Cuál es tu color favorito?</option>
-                    </select>
-                    {% if form.security_question.errors %}
-                        <span style="color: red;">{{ form.security_question.errors }}</span>
-                    {% endif %}
-                </div>
-                <div class="input-group">
-                    <label for="security_answer">Respuesta a la pregunta de seguridad:</label>
-                    <input type="text" name="security_answer" id="security_answer" required>
-                    {% if form.security_answer.errors %}
-                        <span style="color: red;">{{ form.security_answer.errors }}</span>
-                    {% endif %}
-                </div>
-                <div class="input-group">
-                    <label for="recovery_email">Correo de recuperación:</label>
-                    <input type="email" name="recovery_email" id="recovery_email" required>
-                    {% if form.recovery_email.errors %}
-                        <span style="color: red;">{{ form.recovery_email.errors }}</span>
-                    {% endif %}
-                </div>
-            </div>
+      {% if messages %}
+        <div class="mb-4 space-y-1">
+          {% for message in messages %}
+            <p class="text-sm text-red-600">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
   
-            <div class="input-group full-width">
-                <input type="checkbox" name="terminos" id="terminos" required>
-                <label for="terminos">
-                    He leído y acepto los <a href="https://minciencias.gov.co/ciudadano/terminosycondiciones-datospersonales" target="_blank">Términos y Condiciones</a>
-                </label>
-            </div>
+      <form
+        action="{% url 'registro_login' %}"
+        method="post"
+        onsubmit="return validarFormulario();"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
+        {% csrf_token %}
   
-            <div class="buttons">
-                <button type="submit">Registrar</button>
-            </div>
-        </form>
+        <div class="flex flex-col">
+          <label for="nombres" class="mb-1 font-medium">Nombres:</label>
+          <input
+            type="text" name="nombres" id="nombres" required pattern="[A-Za-zÀ-ÿ\s]+"
+            class="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+          {% if form.nombres.errors %}
+            <span class="text-sm text-red-600">{{ form.nombres.errors }}</span>
+          {% endif %}
+        </div>
   
-        <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
-      </div>
+        <div class="flex flex-col">
+          <label for="apellidos" class="mb-1 font-medium">Apellidos:</label>
+          <input
+            type="text" name="apellidos" id="apellidos" required pattern="[A-Za-zÀ-ÿ\s]+"
+            class="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+          {% if form.apellidos.errors %}
+            <span class="text-sm text-red-600">{{ form.apellidos.errors }}</span>
+          {% endif %}
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="email" class="mb-1 font-medium">Correo:</label>
+          <input
+            type="email" name="email" id="email" required
+            class="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+          {% if form.email.errors %}
+            <span class="text-sm text-red-600">{{ form.email.errors }}</span>
+          {% endif %}
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="password" class="mb-1 font-medium">Contraseña:</label>
+          <input
+            type="password" name="password" id="password" required
+            class="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+          {% if form.password.errors %}
+            <span class="text-sm text-red-600">{{ form.password.errors }}</span>
+          {% endif %}
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="confirm_password" class="mb-1 font-medium">Confirmar Contraseña:</label>
+          <input
+            type="password" name="confirm_password" id="confirm_password" required
+            class="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+          {% if form.confirm_password.errors %}
+            <span class="text-sm text-red-600">{{ form.confirm_password.errors }}</span>
+          {% endif %}
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="phone" class="mb-1 font-medium">Teléfono:</label>
+          <input
+            type="tel" name="phone" id="phone" maxlength="10" pattern="\d{0,10}" required
+            class="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+          {% if form.phone.errors %}
+            <span class="text-sm text-red-600">{{ form.phone.errors }}</span>
+          {% endif %}
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="security_question" class="mb-1 font-medium">Pregunta de seguridad:</label>
+          <select
+            name="security_question" id="security_question" required
+            class="border rounded-md px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            <option value="">Selecciona una pregunta</option>
+            <option value="nombre_mascota">¿Cuál es el nombre de tu primera mascota?</option>
+            <option value="ciudad_nacimiento">¿En qué ciudad naciste?</option>
+            <option value="color_favorito">¿Cuál es tu color favorito?</option>
+          </select>
+          {% if form.security_question.errors %}
+            <span class="text-sm text-red-600">{{ form.security_question.errors }}</span>
+          {% endif %}
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="security_answer" class="mb-1 font-medium">Respuesta de seguridad:</label>
+          <input
+            type="text" name="security_answer" id="security_answer" required
+            class="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+          {% if form.security_answer.errors %}
+            <span class="text-sm text-red-600">{{ form.security_answer.errors }}</span>
+          {% endif %}
+        </div>
+  
+        <div class="flex flex-col md:col-span-2">
+          <label for="recovery_email" class="mb-1 font-medium">Correo de recuperación:</label>
+          <input
+            type="email" name="recovery_email" id="recovery_email" required
+            class="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+          {% if form.recovery_email.errors %}
+            <span class="text-sm text-red-600">{{ form.recovery_email.errors }}</span>
+          {% endif %}
+        </div>
+  
+        <div class="flex items-center md:col-span-2">
+          <input type="checkbox" name="terminos" id="terminos" required class="mr-2" />
+          <label for="terminos" class="text-sm">
+            He leído y acepto los
+            <a href="https://minciencias.gov.co/ciudadano/terminosycondiciones-datospersonales"
+               target="_blank"
+               class="text-indigo-600 hover:underline"
+            >Términos y Condiciones</a>
+          </label>
+        </div>
+  
+        <div class="flex justify-end space-x-2 pt-4 md:col-span-2">
+          <button
+            type="submit"
+            class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition"
+          >Registrar</button>
+          <button
+            type="button"
+            onclick="closeCreateAccountModal()"
+            class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400 transition"
+          >Cancelar</button>
+        </div>
+      </form>
+  
+      <p class="mt-4 text-center text-sm">
+        ¿Ya tienes una cuenta?
+        <a href="{% url 'login' %}" class="text-indigo-600 hover:underline">Inicia sesión</a>
+      </p>
     </div>
   </div>
   

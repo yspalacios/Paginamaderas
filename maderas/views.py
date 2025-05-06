@@ -34,6 +34,50 @@ def inicio(request):
 def libros(request):
     return render(request, 'libros/index.html')
 
+
+@login_required(login_url="/libros/login/")
+@never_cache
+def profile_view(request):
+    user = request.user
+
+    if request.method == 'POST':
+        # 1) Subida de imagen de perfil
+        if request.FILES.get('profile_image'):
+            user.profile_image = request.FILES['profile_image']
+            user.save()
+            return JsonResponse({
+                'status': 'success',
+                'image_url': user.profile_image.url
+            })
+
+        # 2) Edición de datos vía AJAX
+        editable_fields = [
+            'nombres', 'apellidos', 'phone',
+            'security_question', 'security_answer',
+            'recovery_email'
+        ]
+        data = request.POST
+        changed = False
+
+        for f in editable_fields:
+            if f in data:
+                setattr(user, f, data[f])
+                changed = True
+
+        if changed:
+            user.save()
+            return JsonResponse({'status': 'success'})
+
+        return JsonResponse({
+            'status': 'error',
+            'errors': 'No se enviaron campos válidos'
+        }, status=400)
+
+    # GET — renderiza la plantilla
+    return render(request, 'libros/profile.html')
+
+            
+        
 #---------------------------
 # Vistas para login y redirección
 # --------------------------

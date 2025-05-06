@@ -23,7 +23,7 @@
         <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>
         <a href="{% url 'lista_login' %}">Listado de Cuentas</a>
         <a href="{% url 'carpeta' %}">Documentos de contratación</a>
-        <a href="{% url 'manage_backups' %}">Gestion de base de datos (backups)</a>
+        <a href="{% url 'manage_backups' %}">Gestion de BD (backups)</a>
         <a href="{% url 'logout' %}">Cerrar Sesión</a>
       </div>
     </div>
@@ -31,12 +31,15 @@
     <div class="container">
       <!-- Título principal -->
       <h1>Gestión de Carpetas y Documentos</h1>
-      <!-- Sección de botones para crear carpeta y volver al inicio -->
+
+      <!-- Botones superiores: ahora sólo "Crear Nuevo Trabajador" y Volver -->
       <div class="form-group top-buttons">
-        <input type="text" id="folderName" placeholder="Nombre de la carpeta">
-        {% csrf_token %}
-        <button id="createFolderBtn" class="btn">Crear Carpeta</button>
+        <button id="openNewFolderModalBtn" class="btn">Crear Nuevo Trabajador</button>
         <a href="{% url 'index' %}" class="btn">Volver al Inicio</a>
+        <div class="form-group download-buttons">
+          <button id="downloadPdfBtn" class="btn" disabled>Descargar Prestaciones en PDF</button>
+          <button id="downloadExcelBtn" class="btn" disabled>Descargar Prestaciones en Excel</button>
+        </div>
       </div>
 
       <!-- Barra de búsqueda de carpetas -->
@@ -48,51 +51,25 @@
       <div id="foldersContainer"></div>
     </div>
 
+    <!-- Modal para crear carpeta (input + botón) -->
+    <div id="modal-nueva-carpeta" class="hidden">
+      <div id="modal-content-nueva-carpeta">
+        <h2>Crear Carpeta</h2>
+        <span class="close-btn" onclick="closeNewFolderModal()">&times;</span>
+        <div class="form-group">
+          <input type="text" id="folderName" placeholder="Nombre de la carpeta">
+          {% csrf_token %}
+          <button id="createFolderBtn" class="btn">Crear Carpeta</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal para editar prestaciones -->
     <div id="modal-editar" style="display:none;">
       <div id="modal-content-editar">
         <h2>Editar Prestaciones de Servicio</h2>
         <div id="benefitsForm" class="barra">
-          <div>
-            <label>Fecha de inicio:</label>
-            <input type="text" id="fecha_inicio" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Puesto designado:</label>
-            <input type="text" id="puesto_designado" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Salario actual:</label>
-            <input type="text" id="salario_actual" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Horas de trabajo:</label>
-            <input type="text" id="horas_trabajo" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Tiempo de contrato:</label>
-            <input type="text" id="tiempo_contrato" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Número de identidad:</label>
-            <input type="text" id="numero_identidad" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Número de seguro social:</label>
-            <input type="text" id="numero_seguro_social" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>EPS:</label>
-            <input type="text" id="eps" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Fondo de pensiones (AFP):</label>
-            <input type="text" id="fondo_pensiones" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>ARL:</label>
-            <input type="text" id="arl" placeholder="Ingrese el dato">
-          </div>
+          <!-- ... campos existentes ... -->
         </div>
         <div style="text-align: right; margin-top: 10px;">
           <button id="saveBenefitsBtn" class="btn">Guardar Prestaciones</button>
@@ -125,6 +102,18 @@
       </div>
     </div>
   </div>
+
+  <script>
+    // Abrir modal de nueva carpeta
+    document.getElementById('openNewFolderModalBtn').addEventListener('click', openNewFolderModal);
+    function openNewFolderModal() {
+      document.getElementById('modal-nueva-carpeta').style.display = 'block';
+    }
+    // Cerrar modal de nueva carpeta
+    function closeNewFolderModal() {
+      document.getElementById('modal-nueva-carpeta').style.display = 'none';
+    }
+  </script>
   <script src="{% static 'js/carpeta.js' %}"></script>
 </body>
 </html>

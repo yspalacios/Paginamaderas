@@ -8,8 +8,7 @@ import re
 
 class AllowBothClearableFileInput(ClearableFileInput):
    
-#  Widget que, si hay un fichero nuevo subido, siempre lo devuelve
-#  y nunca activa el clear checkbox, evitando la validación de Django.
+
     
     def value_from_datadict(self, data, files, name):
         # Si el usuario ha subido un fichero, lo devolvemos sin mirar el clear.
@@ -22,7 +21,7 @@ class AllowBothClearableFileInput(ClearableFileInput):
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto  # Se utiliza el modelo Producto
-        fields = ['tipo_madera', 'nombre_producto', 'descripcion', 'imagen']  # Campos que se incluirán en el formulario
+        fields = ['tipo_madera', 'nombre_producto', 'descripcion', 'imagen', 'precio']  # Campos que se incluirán en el formulario
         widgets = {
             # Asignamos el widget custom al campo imagen
             'imagen': AllowBothClearableFileInput,
@@ -107,14 +106,14 @@ class FolderForm(forms.ModelForm):
 # ======================= RegistroForm =====================
 # form de Registro
 class RegistroForm(forms.ModelForm):
-    # Campo para la contraseña con widget de password
+
     password = forms.CharField(widget=forms.PasswordInput, help_text="Ingrese su contraseña.")
-    # Campo para la confirmación de la contraseña
     confirm_password = forms.CharField(widget=forms.PasswordInput, help_text="Confirme su contraseña.")
 
     class Meta:
         model = datos  # Se utiliza el modelo personalizado de Cuenta
         fields = [
+            'profile_image',     # Campo para la imagen de perfil
             'nombres',           # Campo para los nombres
             'apellidos',         # Campo para los apellidos
             'email',             # Campo para el correo electrónico

@@ -27,7 +27,7 @@
         <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>
         <a href="{% url 'lista_login' %}">Listado de Cuentas</a>
         <a href="{% url 'carpeta' %}">Documentos de contratación</a>
-        <a href="{% url 'manage_backups' %}">Gestion de base de datos (backups)</a>
+        <a href="{% url 'manage_backups' %}">Gestion de BD (backups)</a>
         <a href="{% url 'logout' %}">Cerrar Sesión</a>
       </div>
     </div>
@@ -121,6 +121,10 @@
         <div class="input-group">
           <label for="imagen">Imagen:</label>
           <input type="file" name="imagen" required>
+        </div>
+        <div class="input-group">
+          <label for="precio">Precio:</label>
+          <input type="text" name="precio" required>
         </div>
         <button type="submit" class="btn-success">Subir Imagen</button>
       </form>

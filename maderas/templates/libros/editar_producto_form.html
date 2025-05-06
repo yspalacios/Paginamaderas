@@ -42,6 +42,14 @@
     {% endif %}
   </div>
 
+  <div class="input-group">
+    <label for="{{ form.nombre_producto.id_for_label }}">Nombre del Producto:</label>
+    {{ form.precio }}
+    {% if form.nombre_producto.errors %}
+      <span style="color: red;">{{ form.nombre_producto.errors }}</span>
+    {% endif %}
+  </div>
+
   <button type="submit" class="btn btn-primary">Guardar Cambios</button>
 </form>
 

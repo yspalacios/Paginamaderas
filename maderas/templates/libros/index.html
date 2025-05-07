@@ -4,8 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Galería de Publicidad</title>
-  <link rel="stylesheet" href="{% static 'css/index.css' %}?v={{ timestamp }}">
-  
+  <link rel="stylesheet" href="{% static 'css/123.css' %}?v={{ timestamp }}">
 </head>
 <body>
   <!-- Header -->
@@ -17,7 +16,7 @@
     
     <!-- Menú circular desplegable -->
     <div class="user-menu">
-      <div class="user-circle">YC</div>
+      <div class="user-circle" style="background-image: url('{{ user.profile_image.url }}'); background-size: cover; background-position: center;"></div>
       <div class="dropdown-content">
         <a href="{% url 'profile' %}">Perfil</a>
         <a href="#">Calificaciones</a>
@@ -40,7 +39,7 @@
         <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>
         <a href="{% url 'lista_login' %}">Listado de Cuentas</a>
         <a href="{% url 'carpeta' %}">Documentos de contratación</a>
-        <a href="{% url 'manage_backups' %}">Gestion de base de datos (backups)</a>
+        <a href="{% url 'manage_backups' %}">Gestion de BD (backups)</a>
         <a href="{% url 'logout' %}">Cerrar Sesión</a>
       </div>
     </div>

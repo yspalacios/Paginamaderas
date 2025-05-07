@@ -1,0 +1,235 @@
+/* Estilos Globales */
+body {
+    background: url("/static/diseños/imagenes/15.jpg");
+    background-color: rgb(246, 246, 247);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 30px;
+}
+
+/* Header: Barra superior */
+.headermenu {
+    background-color: #4A4A4A;
+    color: #fff;
+    height: 100px;
+    /* Valor fijo para evitar problemas con porcentajes */
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    /* Centra verticalmente */
+    justify-content: center;
+    /* Modificado para dejar espacio para el menú usuario */
+
+    /* Añadido para dar espacio en los laterales */
+}
+
+/* Contenedor del logo y el texto */
+.hmenu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    position: relative;
+}
+
+/* Texto del header */
+.hmenu h4 {
+    margin: 0;
+    font-size: 35px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Imagen del logo */
+.hmenu .img {
+    position: absolute;
+    left: -20px;
+    /* Alineada con la palabra "Menú" del sidebar */
+    height: 100px;
+    /* Centrado verticalmente en el header */
+    width: auto;
+}
+
+.headermenu span {
+    color: #ff9800;
+}
+
+
+/* Estilos para el menú circular desplegable */
+.user-menu {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    /* Espacio a la derecha */
+}
+
+.user-circle {
+    width: 90px;
+    height: 90px;
+    background-color: rgb(255, 179, 0);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid #000000;
+    /* Adaptado al color de acento de tu sitio */
+    color: #1b1b1b;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 60px;
+    /* Asegura que aparezca debajo del círculo */
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1002;
+    border-radius: 4px;
+    padding: 0;
+    /* Elimina padding adicional */
+    margin: 0;
+    /* Elimina márgenes no deseados */
+}
+
+.dropdown-content a {
+    color: #4A4A4A;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.user-menu:hover .dropdown-content {
+    display: block;
+}
+
+/* Sidebar (menú vertical izquierdo) */
+.sidebar {
+    background-color: #4A4A4A;
+    width: 250px;
+    padding: 25px;
+    color: #fff;
+    position: fixed;
+    top: 100px;
+    left: 0;
+    height: calc(100vh - 100px);
+    box-sizing: border-box;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.sidebar .menu a {
+    display: block;
+    padding: 12px;
+    margin-bottom: 10px;
+    color: #DBC5AD;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sidebar .menu a:hover {
+    background-color: #45a049;
+    color: #fff;
+}
+
+/* Área principal: contenedor para el contenido (separa del header y sidebar) */
+.main-content {
+    display: flex;
+    margin-top: 100px;
+    margin-left: 250px;
+    ;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Contenedor principal dentro de la zona de contenido */
+.container {
+    flex: 1;
+    max-width: 1500px;
+    background: rgba(255, 255, 255, 0.77);
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow:
+        0 5px 15px rgb(250, 146, 76),
+        0 0 15px 5px rgba(247, 144, 75, 0.89);
+}
+
+
+/* Contenedor general */
+nav[aria-label="breadcrumb"] {
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Fondo semitransparente oscuro */
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.btn {
+    padding: .5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-backup {
+    background: #28a745;
+    color: white;
+}
+
+.btn-restore {
+    background: #dc3545;
+    color: white;
+}
+
+.backup-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.backup-table th,
+.backup-table td {
+    padding: .75rem;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+}
+
+.backup-table th {
+    background: #333;
+    color: white;
+}
+
+.btn-delete {
+    background: #d9534f;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-delete:hover {
+    background: #c9302c;
+}

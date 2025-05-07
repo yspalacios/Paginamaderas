@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <title>Gestión de Copias de Seguridad</title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}?v={{ timestamp }}">
-  <link rel="stylesheet" href="{% static 'css/manage_backups.css' %}?v={{ timestamp }}">
+  <link rel="stylesheet" href="{% static 'css/manage_backups1.css' %}?v={{ timestamp }}">
 </head>
 <body>
 
@@ -15,6 +15,25 @@
       <h4>Maderas <span>Isabella</span></h4>
     </div>
   </div>
+
+  <!-- Menú circular desplegable -->
+  <div class="user-menu">
+    <div class="user-circle">YC</div>
+    <div class="dropdown-content">
+      <a href="{% url 'profile' %}">Perfil</a>
+      <a href="#">Calificaciones</a>
+      <a href="#">Calendario</a>
+      <a href="#">Archivos privados</a>
+      <a href="#">Informes</a>
+      <a href="#">Preferencias</a>
+      <a href="{% url 'logout' %}">Cerrar sesión</a>
+    </div>
+  </div>
+</div>
+
+
+
+
 
   <div class="main-content">
     <div class="sidebar">

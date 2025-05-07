@@ -1,0 +1,540 @@
+/* Estilos Globales */
+body {
+    background: url("/static/diseños/imagenes/15.jpg");
+    background-color: rgb(246, 246, 247);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 30px;
+}
+
+/* Header: Barra superior */
+.headermenu {
+    background-color: #4A4A4A;
+    color: #fff;
+    height: 100px;
+    /* Valor fijo para evitar problemas con porcentajes */
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    /* Centra verticalmente */
+    justify-content: center;
+    /* Centra horizontalmente el contenido */
+}
+
+/* Contenedor del logo y el texto */
+.hmenu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 95%;
+    /* Ajusta según el espacio disponible */
+    position: relative;
+}
+
+/* Texto del header */
+.hmenu h4 {
+    margin: 0;
+    font-size: 35px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Imagen del logo */
+.hmenu .img {
+    position: absolute;
+    left: 72px;
+    /* Alineada con la palabra "Menú" del sidebar */
+    height: 100px;
+    /* Centrado verticalmente en el header */
+    width: auto;
+}
+
+.headermenu span {
+    color: #ff9800;
+}
+
+/* Estilos para el menú circular desplegable */
+.user-menu {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    /* Espacio a la derecha */
+}
+
+.user-circle {
+    width: 80px;
+    height: 80px;
+    background-color: rgb(255, 179, 0);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid #000000;
+    /* Adaptado al color de acento de tu sitio */
+    color: #1b1b1b;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 60px;
+    /* Asegura que aparezca debajo del círculo */
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1002;
+    border-radius: 4px;
+    padding: 0;
+    /* Elimina padding adicional */
+    margin: 0;
+    /* Elimina márgenes no deseados */
+}
+
+.dropdown-content a {
+    color: #4A4A4A;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.user-menu:hover .dropdown-content {
+    display: block;
+}
+
+/* Sidebar (menú vertical izquierdo) */
+.sidebar {
+    background-color: #4A4A4A;
+    width: 250px;
+    padding: 25px;
+    color: #fff;
+    position: fixed;
+    top: 100px;
+    left: 0;
+    height: calc(100vh - 100px);
+    box-sizing: border-box;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.sidebar .menu a {
+    display: block;
+    padding: 12px;
+    margin-bottom: 10px;
+    color: #DBC5AD;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sidebar .menu a:hover {
+    background-color: #45a049;
+    color: #fff;
+}
+
+/* Área principal: contenedor para el contenido (separa del header y sidebar) */
+.main-content {
+    display: flex;
+    margin-top: 100px;
+    margin-left: 250px;
+    ;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Contenedor principal dentro de la zona de contenido */
+.container {
+    flex: 1;
+    max-width: 1500px;
+    background: rgba(255, 255, 255, 0.77);
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow:
+        0 5px 15px rgb(250, 146, 76),
+        0 0 15px 5px rgba(247, 144, 75, 0.89);
+}
+
+
+
+/* Encabezado */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #000000;
+}
+
+/* Grupos de formulario e inputs */
+.form-group {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+input[type="text"],
+input[type="file"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 80%;
+    max-width: 400px;
+    margin: 5px auto;
+    display: block;
+}
+
+/* Botones con estilo de madera */
+.btn {
+    padding: 10px 20px;
+    background: #cf9d67;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background: #45a049;
+}
+
+/* Estilo para carpetas */
+.folder {
+    background-color: #FFF8DC;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #deb887;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+/* Cabecera de carpeta */
+.folder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.folder-toggle {
+    margin-right: 10px;
+    font-size: 20px;
+    color: #5A2D0C;
+    cursor: pointer;
+    transition: transform 0.3s;
+    display: inline-block;
+    width: 18px;
+    text-align: center;
+}
+
+.folder.expanded {
+    box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+}
+
+.folder-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #5A2D0C;
+    flex: 1;
+    margin-right: 15px;
+}
+
+.folder-content {
+    padding-top: 10px;
+    border-top: 1px solid #deb887;
+    margin-top: 5px;
+}
+
+/* Modificaciones para mostrar el estado dentro del header */
+.folder-status {
+    background-color: #F5DEB3;
+    padding: 5px 10px;
+    border-radius: 3px;
+    margin: 5px 0;
+    font-size: 14px;
+    color: #5A2D0C;
+}
+
+/* Mejoras para los botones en el header */
+.folder-header .btn {
+    margin-left: 5px;
+    padding: 5px 10px;
+}
+
+/* Animación para la flecha */
+.folder.expanded .folder-toggle {
+    transform: rotate(90deg);
+}
+
+/* Menú de opciones */
+.options-menu {
+    display: none;
+    margin-top: 10px;
+    background-color: #F5DEB3;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #deb887;
+}
+
+/* Sección de documentos */
+.documents {
+    margin-top: 10px;
+}
+
+/* Estilos para cada contenedor de documento */
+.doc-container {
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.doc-name {
+    flex: 1;
+}
+
+.doc-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.doc-buttons button {
+    flex: 1;
+    font-size: 0.8em;
+    padding: 5px 10px;
+    margin: 0 5px;
+}
+
+.separator {
+    color: #555;
+}
+
+/* Estilos para los modales */
+#modal-editar,
+#modal-mostrar,
+#modal-ver {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+#modal-content-editar,
+#modal-content-mostrar {
+    background: #ff0000;
+    padding: 20px;
+    margin: 50px auto;
+    width: 70%;
+    border-radius: 4px;
+    position: relative;
+    overflow-y: auto;
+}
+
+#modal-content-editar-input,
+#modal-content-mostrar-input {
+    border: #1caf28;
+}
+
+/* Estilos para el modal de ver archivo */
+#modal-content-ver {
+    position: relative;
+    width: 90%;
+    height: 90%;
+    margin: 5% auto;
+    background: #fdfdfd;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 2px solid #8B4513;
+}
+
+#modal-content-ver h2 {
+    color: #5A2D0C;
+}
+
+#modal-content-ver iframe {
+    width: 100%;
+    height: calc(100% - 60px);
+    border: none;
+}
+
+/* Botones superiores */
+.top-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+
+    #modal-nueva-carpeta,
+    #modal-content-editar,
+    #modal-content-mostrar,
+    #modal-content-ver {
+        width: 90%;
+    }
+}
+
+/* Estilos para modales */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px;
+    max-width: 90%;
+    position: relative;
+}
+
+#modal-content-editar,
+#modal-content-mostrar {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 500px;
+    max-width: 90%;
+    position: relative;
+}
+
+
+/* Contenedor general */
+nav[aria-label="breadcrumb"] {
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Fondo semitransparente oscuro */
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+/* Lista de migas */
+nav[aria-label="breadcrumb"] .breadcrumb {
+    background: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+/* Separador / flecha */
+nav[aria-label="breadcrumb"] .breadcrumb-item+.breadcrumb-item::before {
+    content: "›";
+    /* Puedes usar “>”, “/” o cualquier símbolo */
+    margin: 0 0.5rem;
+    color: #ddd;
+}
+
+/* Enlaces */
+nav[aria-label="breadcrumb"] .breadcrumb-item a {
+    color: #fff;
+    /* Blanco para contraste */
+    text-decoration: none;
+    font-weight: 500;
+}
+
+nav[aria-label="breadcrumb"] .breadcrumb-item a:hover {
+    text-decoration: underline;
+}
+
+/* Elemento activo (última miga) */
+nav[aria-label="breadcrumb"] .breadcrumb-item.active {
+    color: #bbb;
+    /* Gris claro */
+    font-weight: 600;
+    pointer-events: none;
+    /* No clicable */
+}
+
+/* Modal de nueva carpeta */
+#modal-nueva-carpeta {
+    display: none;
+    /* Se activa con JavaScript */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+#modal-content-nueva-carpeta {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 90%;
+    margin: 100px auto;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+#modal-content-nueva-carpeta h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+#modal-content-nueva-carpeta input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    margin: 15px auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block;
+}
+
+/* Botón para cerrar el modal (X) */
+#modal-content-nueva-carpeta .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+}
+
+#modal-content-nueva-carpeta .close-btn:hover {
+    color: #000;
+}

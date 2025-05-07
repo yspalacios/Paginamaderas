@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Imagen</title>
   <!-- Tu CSS personalizado -->
-  <link rel="stylesheet" href="{% static 'css/gestionar_productos.css' %}?v={{ timestamp }}">
+  <link rel="stylesheet" href="{% static 'css/gestionar_productos1.css' %}?v={{ timestamp }}">
 </head>
 <body>
   <!-- Header superior -->
@@ -17,6 +17,21 @@
     </div>
   </div>
   
+ <!-- Menú circular desplegable -->
+ <div class="user-menu">
+  <div class="user-circle" style="background-image: url('{{ user.profile_image.url }}'); background-size: cover; background-position: center;"></div>
+  <div class="dropdown-content">
+    <a href="{% url 'profile' %}">Perfil</a>
+    <a href="#">Calificaciones</a>
+    <a href="#">Calendario</a>
+    <a href="#">Archivos privados</a>
+    <a href="#">Informes</a>
+    <a href="#">Preferencias</a>
+    <a href="{% url 'logout' %}">Cerrar sesión</a>
+  </div>
+</div>
+</div>
+
   <!-- Contenedor principal con Sidebar y Contenido -->
   <div class="main-content">
     <!-- Menú vertical (Sidebar) -->

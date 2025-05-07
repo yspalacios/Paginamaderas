@@ -1,6 +1,6 @@
 // Variable global para almacenar el id de la carpeta en edición
 let currentFolderId = null;
-  
+
 let selectedDownloadFolder = null; // Variable global para almacenar la carpeta seleccionada para descargar
 // Función para obtener el token CSRF (seguridad en Django)
 function getCookie(name) {
@@ -28,22 +28,22 @@ function updateFolderStatus(folderId, newStatus) {
     },
     body: `status=${encodeURIComponent(newStatus)}`
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.message === 'Estado actualizado exitosamente') {
-      const folderDiv = document.querySelector(`.folder[data-id="${folderId}"]`);
-      if (folderDiv) {
-        const statusText = folderDiv.querySelector('.folder-status');
-        if (statusText) {
-          statusText.textContent = `Estado: ${newStatus}`;
+    .then(response => response.json())
+    .then(data => {
+      if (data.message === 'Estado actualizado exitosamente') {
+        const folderDiv = document.querySelector(`.folder[data-id="${folderId}"]`);
+        if (folderDiv) {
+          const statusText = folderDiv.querySelector('.folder-status');
+          if (statusText) {
+            statusText.textContent = `Estado: ${newStatus}`;
+          }
         }
+        renderFolders();
+      } else {
+        alert(data.message);
       }
-      renderFolders();
-    } else {
-      alert(data.message);
-    }
-  })
-  .catch(error => console.error('Error al actualizar estado:', error));
+    })
+    .catch(error => console.error('Error al actualizar estado:', error));
 }
 
 // Subir documentos a una carpeta
@@ -64,16 +64,16 @@ function uploadDocuments(folderId) {
     },
     body: formData
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.message === 'Documentos subidos exitosamente') {
-      alert("Documentos subidos exitosamente");
-      renderFolders();
-    } else {
-      alert(data.message);
-    }
-  })
-  .catch(error => console.error('Error al subir documentos:', error));
+    .then(response => response.json())
+    .then(data => {
+      if (data.message === 'Documentos subidos exitosamente') {
+        alert("Documentos subidos exitosamente");
+        renderFolders();
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch(error => console.error('Error al subir documentos:', error));
 }
 
 // Crear carpeta
@@ -91,230 +91,230 @@ document.getElementById('createFolderBtn').addEventListener('click', () => {
     },
     body: `folderName=${encodeURIComponent(folderName)}`
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.message === 'Carpeta creada exitosamente') {
-      renderFolders();
-    } else {
-      alert(data.message);
-    }
-  })
-  .catch(error => console.error('Error:', error));
+    .then(response => response.json())
+    .then(data => {
+      if (data.message === 'Carpeta creada exitosamente') {
+        renderFolders();
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch(error => console.error('Error:', error));
 });
 
 // Renderizar las carpetas y sus documentos
 function renderFolders() {
   fetch('/get-folders/')
-  .then(response => response.json())
-  .then(folders => {
-    const container = document.getElementById('foldersContainer');
-    container.innerHTML = "";
-    folders.forEach(folder => {
-      // Contenedor principal de la carpeta
-      const folderDiv = document.createElement('div');
-      folderDiv.classList.add('folder');
-      folderDiv.setAttribute('data-id', folder.id);
+    .then(response => response.json())
+    .then(folders => {
+      const container = document.getElementById('foldersContainer');
+      container.innerHTML = "";
+      folders.forEach(folder => {
+        // Contenedor principal de la carpeta
+        const folderDiv = document.createElement('div');
+        folderDiv.classList.add('folder');
+        folderDiv.setAttribute('data-id', folder.id);
 
-      // Encabezado de la carpeta
-      const headerDiv = document.createElement('div');
-      headerDiv.classList.add('folder-header');
+        // Encabezado de la carpeta
+        const headerDiv = document.createElement('div');
+        headerDiv.classList.add('folder-header');
 
-      
-      // Flecha para expandir/colapsar
-      const toggleArrow = document.createElement('span');
-      toggleArrow.classList.add('folder-toggle');
-      toggleArrow.innerHTML = '▶'; // Flecha a la derecha (cerrado)
-      toggleArrow.addEventListener('click', () => toggleFolder(folderDiv));
-      
-      const title = document.createElement('div');
-      title.classList.add('folder-title');
-      title.textContent = folder.name;
-      // También permitimos hacer clic en el título para expandir/colapsar
-      title.addEventListener('click', () => toggleFolder(folderDiv));
 
-      // Botón para editar prestaciones
-      const editBenefitsBtn = document.createElement('button');
-      editBenefitsBtn.textContent = "Editar Prestaciones";
-      editBenefitsBtn.classList.add('btn');
-      editBenefitsBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); 
-        currentFolderId = folder.id;
-        document.getElementById('fecha_inicio').value = folder.fecha_inicio || "";
-        document.getElementById('puesto_designado').value = folder.puesto_designado || "";
-        document.getElementById('salario_actual').value = folder.salario_actual || "";
-        document.getElementById('horas_trabajo').value = folder.horas_trabajo || "";
-        document.getElementById('tiempo_contrato').value = folder.tiempo_contrato || "";
-        document.getElementById('numero_identidad').value = folder.numero_identidad || "";
-        document.getElementById('numero_seguro_social').value = folder.numero_seguro_social || "";
-        document.getElementById('eps').value = folder.eps || "";
-        document.getElementById('fondo_pensiones').value = folder.fondo_pensiones || "";
-        document.getElementById('arl').value = folder.arl || "";
-        openEditModal();
-      });
+        // Flecha para expandir/colapsar
+        const toggleArrow = document.createElement('span');
+        toggleArrow.classList.add('folder-toggle');
+        toggleArrow.innerHTML = '▶'; // Flecha a la derecha (cerrado)
+        toggleArrow.addEventListener('click', () => toggleFolder(folderDiv));
 
-      // Botón para mostrar prestaciones guardadas
-      const showBenefitsBtn = document.createElement('button');
-      showBenefitsBtn.textContent = "Mostrar Prestaciones";
-      showBenefitsBtn.classList.add('btn');
-      showBenefitsBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // Evitar que se propague al título/header
-        openShowModal(folder);
-      });
+        const title = document.createElement('div');
+        title.classList.add('folder-title');
+        title.textContent = folder.name;
+        // También permitimos hacer clic en el título para expandir/colapsar
+        title.addEventListener('click', () => toggleFolder(folderDiv));
 
-      // Botón de opciones (cambiar estado y eliminar carpeta)
-      const optionsBtn = document.createElement('button');
-      optionsBtn.innerHTML = "⚙️";
-      optionsBtn.classList.add('btn');
-      optionsBtn.addEventListener("click", (event) => {
-        event.stopPropagation(); // Evitar que se propague al título/header
-        toggleOptions(event, folder.id);
-      });
-
-      headerDiv.appendChild(toggleArrow);
-      headerDiv.appendChild(title);
-      headerDiv.appendChild(editBenefitsBtn);
-      headerDiv.appendChild(showBenefitsBtn);
-      headerDiv.appendChild(optionsBtn);
-      folderDiv.appendChild(headerDiv);
-
-      // Menú de opciones para estado y eliminar carpeta
-      const optionsMenu = document.createElement("div");
-      optionsMenu.classList.add("options-menu");
-      const statusLabel = document.createElement("label");
-      statusLabel.textContent = "Estado:";
-      const statusSelect = document.createElement("select");
-      const statuses = ["Contratado", "No contratado", "Incapacitado", "En revisión", "No admitido", "Despedido"];
-      statuses.forEach(status => {
-        const option = document.createElement("option");
-        option.value = status;
-        option.textContent = status;
-        if (folder.status === status) { 
-          option.selected = true; 
-        }
-        statusSelect.appendChild(option);
-      });
-      statusSelect.addEventListener("change", () => {
-        updateFolderStatus(folder.id, statusSelect.value);
-      });
-      optionsMenu.appendChild(statusLabel);
-      optionsMenu.appendChild(statusSelect);
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "Eliminar Carpeta";
-      deleteBtn.classList.add("btn");
-      deleteBtn.style.background = "red";
-      deleteBtn.style.color = "white";
-      deleteBtn.style.marginTop = "10px";
-      deleteBtn.addEventListener("click", () => confirmDelete(folder.id));
-      optionsMenu.appendChild(deleteBtn);
-
-      folderDiv.appendChild(optionsMenu);
-
-      // Mostrar estado actual
-      const statusText = document.createElement('p');
-      statusText.classList.add('folder-status');
-      statusText.textContent = `Estado: ${folder.status || "No definido"}`;
-      folderDiv.appendChild(statusText);
-
-      // Contenedor para el contenido desplegable (todo lo que no es el header)
-      const contentDiv = document.createElement('div');
-      contentDiv.classList.add('folder-content');
-      // Por defecto, contenido oculto
-      contentDiv.style.display = 'none';
-
-      // Sección para documentos
-      const documentsDiv = document.createElement('div');
-      documentsDiv.classList.add('documents');
-      if (folder.documents && folder.documents.length > 0) {
-        const docsTitle = document.createElement('p');
-        docsTitle.textContent = "Documentos:";
-        documentsDiv.appendChild(docsTitle);
-
-        // Iteramos cada documento
-        folder.documents.forEach(doc => {
-          // Contenedor para el documento
-          const docContainer = document.createElement('div');
-          docContainer.classList.add('doc-container');
-          
-          // Contenedor para el nombre (a la izquierda)
-          const nameDiv = document.createElement('div');
-          nameDiv.classList.add('doc-name');
-          const docLink = document.createElement('a');
-          docLink.href = doc.url;     // Enlace de descarga
-          docLink.textContent = doc.name;
-          docLink.setAttribute('download', '');
-          nameDiv.appendChild(docLink);
-          
-          // Contenedor para los botones (a la derecha)
-          const buttonsDiv = document.createElement('div');
-          buttonsDiv.classList.add('doc-buttons');
-          
-          // Botón para ver archivo en el modal
-          const viewFileBtn = document.createElement('button');
-          viewFileBtn.innerHTML = "👁️";
-          viewFileBtn.title = "Ver Archivo";
-          viewFileBtn.classList.add('icon-btn', 'view-btn');
-          viewFileBtn.addEventListener('click', () => {
-            console.log("Botón Ver Archivo presionado, URL:", doc.url);
-            openFileModal(doc.url);
-          });
-          
-          const separator = document.createElement('span');
-          separator.classList.add('separator');
-          separator.textContent = " | ";
-          
-          // Botón para eliminar documento (equis)
-          const deleteDocBtn = document.createElement('button');
-          deleteDocBtn.innerHTML = "❌";
-          deleteDocBtn.title = "Eliminar Documento";
-          deleteDocBtn.classList.add('icon-btn', 'delete-btn');
-          deleteDocBtn.addEventListener('click', () => deleteDocument(doc.id));
-          
-          buttonsDiv.appendChild(viewFileBtn);
-          buttonsDiv.appendChild(deleteDocBtn);
-          
-          // Agregar contenedores al docContainer
-          docContainer.appendChild(nameDiv);
-          docContainer.appendChild(buttonsDiv);
-          
-          documentsDiv.appendChild(docContainer);
+        // Botón para editar prestaciones
+        const editBenefitsBtn = document.createElement('button');
+        editBenefitsBtn.textContent = "Editar Prestaciones";
+        editBenefitsBtn.classList.add('btn');
+        editBenefitsBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          currentFolderId = folder.id;
+          document.getElementById('fecha_inicio').value = folder.fecha_inicio || "";
+          document.getElementById('puesto_designado').value = folder.puesto_designado || "";
+          document.getElementById('salario_actual').value = folder.salario_actual || "";
+          document.getElementById('horas_trabajo').value = folder.horas_trabajo || "";
+          document.getElementById('tiempo_contrato').value = folder.tiempo_contrato || "";
+          document.getElementById('numero_identidad').value = folder.numero_identidad || "";
+          document.getElementById('numero_seguro_social').value = folder.numero_seguro_social || "";
+          document.getElementById('eps').value = folder.eps || "";
+          document.getElementById('fondo_pensiones').value = folder.fondo_pensiones || "";
+          document.getElementById('arl').value = folder.arl || "";
+          openEditModal();
         });
-      }
 
-      // Input para subir nuevos documentos
-      const fileInput = document.createElement('input');
-      fileInput.type = "file";
-      fileInput.multiple = true;
-      // Para limitar a PDF, descomenta la siguiente línea:
-      // fileInput.accept = "application/pdf";
-      fileInput.id = `uploadInput-${folder.id}`;
-      const uploadBtn = document.createElement('button');
-      uploadBtn.textContent = "Subir Documentos";
-      uploadBtn.classList.add('btn');
-      uploadBtn.addEventListener('click', () => uploadDocuments(folder.id));
-      documentsDiv.appendChild(fileInput);
-      documentsDiv.appendChild(uploadBtn);
+        // Botón para mostrar prestaciones guardadas
+        const showBenefitsBtn = document.createElement('button');
+        showBenefitsBtn.textContent = "Mostrar Prestaciones";
+        showBenefitsBtn.classList.add('btn');
+        showBenefitsBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); // Evitar que se propague al título/header
+          openShowModal(folder);
+        });
 
-      // Agregar documentos al contenido desplegable
-      contentDiv.appendChild(documentsDiv);
-      
-      // Añadir el contenido desplegable a la carpeta
-      folderDiv.appendChild(contentDiv);
+        // Botón de opciones (cambiar estado y eliminar carpeta)
+        const optionsBtn = document.createElement('button');
+        optionsBtn.innerHTML = "⚙️";
+        optionsBtn.classList.add('btn');
+        optionsBtn.addEventListener("click", (event) => {
+          event.stopPropagation(); // Evitar que se propague al título/header
+          toggleOptions(event, folder.id);
+        });
 
-      container.appendChild(folderDiv);
-    });
+        headerDiv.appendChild(toggleArrow);
+        headerDiv.appendChild(title);
+        headerDiv.appendChild(editBenefitsBtn);
+        headerDiv.appendChild(showBenefitsBtn);
+        headerDiv.appendChild(optionsBtn);
+        folderDiv.appendChild(headerDiv);
 
-    // Cada vez que renderizamos, volvemos a aplicar el filtro de búsqueda
-    filterFolders();
-  })
-  .catch(error => console.error('Error:', error));
+        // Menú de opciones para estado y eliminar carpeta
+        const optionsMenu = document.createElement("div");
+        optionsMenu.classList.add("options-menu");
+        const statusLabel = document.createElement("label");
+        statusLabel.textContent = "Estado:";
+        const statusSelect = document.createElement("select");
+        const statuses = ["Contratado", "No contratado", "Incapacitado", "En revisión", "No admitido", "Despedido"];
+        statuses.forEach(status => {
+          const option = document.createElement("option");
+          option.value = status;
+          option.textContent = status;
+          if (folder.status === status) {
+            option.selected = true;
+          }
+          statusSelect.appendChild(option);
+        });
+        statusSelect.addEventListener("change", () => {
+          updateFolderStatus(folder.id, statusSelect.value);
+        });
+        optionsMenu.appendChild(statusLabel);
+        optionsMenu.appendChild(statusSelect);
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Eliminar Carpeta";
+        deleteBtn.classList.add("btn");
+        deleteBtn.style.background = "red";
+        deleteBtn.style.color = "white";
+        deleteBtn.style.marginTop = "10px";
+        deleteBtn.addEventListener("click", () => confirmDelete(folder.id));
+        optionsMenu.appendChild(deleteBtn);
+
+        folderDiv.appendChild(optionsMenu);
+
+        // Mostrar estado actual
+        const statusText = document.createElement('p');
+        statusText.classList.add('folder-status');
+        statusText.textContent = `Estado: ${folder.status || "No definido"}`;
+        folderDiv.appendChild(statusText);
+
+        // Contenedor para el contenido desplegable (todo lo que no es el header)
+        const contentDiv = document.createElement('div');
+        contentDiv.classList.add('folder-content');
+        // Por defecto, contenido oculto
+        contentDiv.style.display = 'none';
+
+        // Sección para documentos
+        const documentsDiv = document.createElement('div');
+        documentsDiv.classList.add('documents');
+        if (folder.documents && folder.documents.length > 0) {
+          const docsTitle = document.createElement('p');
+          docsTitle.textContent = "Documentos:";
+          documentsDiv.appendChild(docsTitle);
+
+          // Iteramos cada documento
+          folder.documents.forEach(doc => {
+            // Contenedor para el documento
+            const docContainer = document.createElement('div');
+            docContainer.classList.add('doc-container');
+
+            // Contenedor para el nombre (a la izquierda)
+            const nameDiv = document.createElement('div');
+            nameDiv.classList.add('doc-name');
+            const docLink = document.createElement('a');
+            docLink.href = doc.url;     // Enlace de descarga
+            docLink.textContent = doc.name;
+            docLink.setAttribute('download', '');
+            nameDiv.appendChild(docLink);
+
+            // Contenedor para los botones (a la derecha)
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.classList.add('doc-buttons');
+
+            // Botón para ver archivo en el modal
+            const viewFileBtn = document.createElement('button');
+            viewFileBtn.innerHTML = "👁️";
+            viewFileBtn.title = "Ver Archivo";
+            viewFileBtn.classList.add('icon-btn', 'view-btn');
+            viewFileBtn.addEventListener('click', () => {
+              console.log("Botón Ver Archivo presionado, URL:", doc.url);
+              openFileModal(doc.url);
+            });
+
+            const separator = document.createElement('span');
+            separator.classList.add('separator');
+            separator.textContent = " | ";
+
+            // Botón para eliminar documento (equis)
+            const deleteDocBtn = document.createElement('button');
+            deleteDocBtn.innerHTML = "❌";
+            deleteDocBtn.title = "Eliminar Documento";
+            deleteDocBtn.classList.add('icon-btn', 'delete-btn');
+            deleteDocBtn.addEventListener('click', () => deleteDocument(doc.id));
+
+            buttonsDiv.appendChild(viewFileBtn);
+            buttonsDiv.appendChild(deleteDocBtn);
+
+            // Agregar contenedores al docContainer
+            docContainer.appendChild(nameDiv);
+            docContainer.appendChild(buttonsDiv);
+
+            documentsDiv.appendChild(docContainer);
+          });
+        }
+
+        // Input para subir nuevos documentos
+        const fileInput = document.createElement('input');
+        fileInput.type = "file";
+        fileInput.multiple = true;
+        // Para limitar a PDF, descomenta la siguiente línea:
+        // fileInput.accept = "application/pdf";
+        fileInput.id = `uploadInput-${folder.id}`;
+        const uploadBtn = document.createElement('button');
+        uploadBtn.textContent = "Subir Documentos";
+        uploadBtn.classList.add('btn');
+        uploadBtn.addEventListener('click', () => uploadDocuments(folder.id));
+        documentsDiv.appendChild(fileInput);
+        documentsDiv.appendChild(uploadBtn);
+
+        // Agregar documentos al contenido desplegable
+        contentDiv.appendChild(documentsDiv);
+
+        // Añadir el contenido desplegable a la carpeta
+        folderDiv.appendChild(contentDiv);
+
+        container.appendChild(folderDiv);
+      });
+
+      // Cada vez que renderizamos, volvemos a aplicar el filtro de búsqueda
+      filterFolders();
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 // Nueva función para alternar el despliegue de una carpeta
 function toggleFolder(folderDiv) {
   const content = folderDiv.querySelector('.folder-content');
   const arrow = folderDiv.querySelector('.folder-toggle');
-  
+
   if (content.style.display === 'none' || !content.style.display) {
     // Expandir carpeta
     content.style.display = 'block';
@@ -347,7 +347,7 @@ function filterFolders() {
 
 // Abrir modal de edición
 function openEditModal() {
-  const modal = document.getElementById('modal-editar');
+  const modal = document.getElementById('modal-nueva-carpeta');
   console.log("Modal de edición encontrado:", !!modal);
   if (modal) {
     modal.style.display = 'block';
@@ -394,17 +394,17 @@ document.getElementById('saveBenefitsBtn').addEventListener('click', () => {
     },
     body: formBody
   })
-  .then(response => response.json())
-  .then(resp => {
-    if (resp.message === 'Prestaciones de servicio actualizadas exitosamente') {
-      alert('Prestaciones guardadas correctamente');
-      document.getElementById('modal-editar').style.display = 'none';
-      renderFolders();
-    } else {
-      alert(resp.message);
-    }
-  })
-  .catch(error => console.error('Error:', error));
+    .then(response => response.json())
+    .then(resp => {
+      if (resp.message === 'Prestaciones de servicio actualizadas exitosamente') {
+        alert('Prestaciones guardadas correctamente');
+        document.getElementById('modal-editar').style.display = 'none';
+        renderFolders();
+      } else {
+        alert(resp.message);
+      }
+    })
+    .catch(error => console.error('Error:', error));
 });
 
 // Abrir modal para mostrar prestaciones
@@ -428,7 +428,7 @@ function openShowModal(folder) {
   document.getElementById('benefitsDisplayContent').innerHTML = content;
   document.getElementById('modal-mostrar').style.display = 'block';
 }
-document.getElementById('closeShowBenefitsBtn').addEventListener('click', () => {
+document.getElementById('closeModalBtn').addEventListener('click', () => {
   document.getElementById('modal-mostrar').style.display = 'none';
 });
 
@@ -477,15 +477,15 @@ function deleteDocument(docId) {
       },
       body: `docId=${docId}`
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.message === 'Documento eliminado exitosamente') {
-        renderFolders();
-      } else {
-        alert(data.message);
-      }
-    })
-    .catch(error => console.error('Error al eliminar documento:', error));
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Documento eliminado exitosamente') {
+          renderFolders();
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => console.error('Error al eliminar documento:', error));
   }
 }
 
@@ -500,15 +500,15 @@ function confirmDelete(folderId) {
       },
       body: `folderId=${folderId}`
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.message === 'Carpeta eliminada exitosamente') {
-        renderFolders();
-      } else {
-        alert(data.message);
-      }
-    })
-    .catch(error => console.error('Error al eliminar carpeta:', error));
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Carpeta eliminada exitosamente') {
+          renderFolders();
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => console.error('Error al eliminar carpeta:', error));
   }
 }
 

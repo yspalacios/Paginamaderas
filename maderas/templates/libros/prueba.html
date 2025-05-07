@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Carpetas y Documentos</title>
+  <link rel="stylesheet" href="{% static 'css/carpeta.css' %}?v={{ timestamp }}">
+</head>
+
+<body>
+    <!-- Header -->
+  <div class="headermenu">
+    <div class="hmenu">
+      <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo" class="img">
+      <h4>Maderas <span>Isabella</span></h4>
+    </div>
+  </div>
+    
+    <!-- Menú circular desplegable -->
+    <div class="user-menu">
+      <div class="user-circle">YC</div>
+      <div class="dropdown-content">
+        <a href="{% url 'profile' %}">Perfil</a>
+        <a href="#">Calificaciones</a>
+        <a href="#">Calendario</a>
+        <a href="#">Archivos privados</a>
+        <a href="#">Informes</a>
+        <a href="#">Preferencias</a>
+        <a href="{% url 'logout' %}">Cerrar sesión</a>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    // Abrir modal de nueva carpeta
+    document.getElementById('openNewFolderModalBtn').addEventListener('click', openNewFolderModal);
+    function openNewFolderModal() {
+      document.getElementById('modal-nueva-carpeta').style.display = 'block';
+    }
+    // Cerrar modal de nueva carpeta
+    function closeNewFolderModal() {
+      document.getElementById('modal-nueva-carpeta').style.display = 'none';
+    }
+  </script>
+  <script src="{% static 'js/carpeta.js' %}"></script>
+</body>
+</html>

@@ -40,7 +40,7 @@ urlpatterns = [
    
     
     #===================================================================
-    # Rutas para la gestión de carpetas y documentos
+    # Rutas para la gestión de carpetas y documentos                    
     #===================================================================
     path('libros/carpeta', views.carpeta, name='carpeta'),
     path('get-folders/', views.get_folders, name='get_folders'),

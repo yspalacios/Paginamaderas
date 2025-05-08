@@ -18,7 +18,7 @@
     
     <!-- Menú circular desplegable -->
     <div class="user-menu">
-      <div class="user-circle" style="background-image: url('{{ user.profile_image.url }}'); background-size: cover; background-position: center;"></div>
+      <div class="user-circle" style="background-image: url('{% if user.profile_image %}{{ user.profile_image.url }}{% else %}{% static "diseños/imagenes/default-profile.png" %}{% endif %}'); background-size: cover; background-position: center;"></div>
       <div class="dropdown-content">
         <a href="{% url 'profile' %}">Perfil</a>
         <a href="#">Calificaciones</a>
@@ -131,7 +131,7 @@
         </div>
         <div style="text-align: right; margin-top: 10px;">
           <button id="saveBenefitsBtn" class="btn">Guardar Prestaciones</button>
-          <button id="closeModalBtn" class="btn" style="background: #6c757d;">Cerrar</button>
+          <button id="closeModalBtn" class="btn" onclick="closeModaleditar()">Cerrar</button>
         </div>
       </div>
     </div>
@@ -142,7 +142,7 @@
         <h2>Prestaciones de Servicio</h2>
         <div id="benefitsDisplayContent"></div>
         <div style="text-align: right; margin-top: 10px;">
-          <button id="closeShowBenefitsBtn" class="btn" style="background: #6c757d;">Cerrar</button>
+          <button id="closeShowBenefitsBtn" class="btn" onclick="closeModalmostrar()">Cerrar</button>
         </div>
       </div>
     </div>
@@ -170,6 +170,12 @@
     // Cerrar modal de nueva carpeta
     function closeNewFolderModal() {
       document.getElementById('modal-nueva-carpeta').style.display = 'none';
+    }
+    function closeModaleditar() {
+      document.getElementById('modal-editar').style.display = 'none';
+    }
+    function closeModalmostrar() {
+      document.getElementById('modal-mostrar').style.display = 'none';
     }
   </script>
   <script src="{% static 'js/carpeta.js' %}"></script>

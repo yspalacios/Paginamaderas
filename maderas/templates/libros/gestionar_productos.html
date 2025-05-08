@@ -7,6 +7,41 @@
   <title>Gestión de Imagen</title>
   <!-- Tu CSS personalizado -->
   <link rel="stylesheet" href="{% static 'css/gestionar_productos1.css' %}?v={{ timestamp }}">
+
+  <style>
+    .modal {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    .modal.hidden {
+      display: none;
+    }
+    .modal-content {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    .modal-content .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  </style>
+
 </head>
 <body>
   <!-- Header superior -->
@@ -19,7 +54,8 @@
   
  <!-- Menú circular desplegable -->
  <div class="user-menu">
-  <div class="user-circle" style="background-image: url('{{ user.profile_image.url }}'); background-size: cover; background-position: center;"></div>
+  <div class="user-circle" style="background-image: url('{% if user.profile_image %}{{ user.profile_image.url }}{% else %}{% static "diseños/imagenes/default-profile.png" %}{% endif %}'); background-size: cover; background-position: center;"></div>
+  
   <div class="dropdown-content">
     <a href="{% url 'profile' %}">Perfil</a>
     <a href="#">Calificaciones</a>
@@ -51,22 +87,15 @@
     <div class="content">
       <h2>Gestión de Imagen</h2>
       
+      <!-- Busqueda -->
       <div class="search-container">
-        <input 
-          type="text" 
-          name="query" 
-          id="search-input" 
-          class="form-control" 
-          placeholder="Buscar imágenes..." 
-          value="{{ request.GET.query }}"
-        >
+        <input type="text" id="search-input" placeholder="Buscar imágenes...">
         <!-- Nuevo select para filtrar por tipo de madera -->
-        <select name="wood_filter" id="wood-filter">
+        <select id="wood-filter">
           <option value="">Todos los tipos</option>
-          <option value="pino">PINO</option>
-          <option value="roble">ROBLE</option>
-          <option value="cedro">CEDRO</option>
-          <option value="nogal">NOGAL</option>
+          {% for tipo in tipos_madera %}
+            <option value="{{ tipo.id }}">{{ tipo.nombre|upper }}</option>
+          {% endfor %}
         </select>
       </div>
       
@@ -113,40 +142,110 @@
     <span class="close" onclick="cerrarModal('modal-subir')">&times;</span>
     <div class="container">
       <h2>Subir Nueva Imagen</h2>
-      <form method="POST" action="{% url 'subir_imagen' %}" enctype="multipart/form-data">
+      <form id="form-producto" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="input-group">
-          <label for="tipo_madera">Tipo de madera:</label>
-          <select name="tipo_madera" id="tipo_madera" required>
-            <option value="">Selecciona un tipo de madera</option>
-            <option value="pino">PINO</option>
-            <option value="roble">ROBLE</option>
-            <option value="cedro">CEDRO</option>
-            <option value="nogal">NOGAL</option>
-          </select>
-        </div>
-        <div class="input-group">
+        <!--campos del formulario de registro de nuevo producto-->
+        
+        <label for="tipo_madera">Tipo de madera:</label>
+        <select id="tipo_madera" name="tipo_madera" required>
+          <option value="">Selecciona un tipo de madera</option>
+          {% for tipo in tipos_madera %}
+            <option value="{{ tipo.id }}">{{ tipo.nombre|upper }}</option>
+          {% endfor %}
+        </select>
+
+        <div>
           <label for="nombre_producto">Nombre del producto:</label>
-          <input type="text" name="nombre_producto" required>
-        </div>
-        <div class="input-group">
+          <input type="text" id="nombre_producto" name="nombre_producto" required>
+        </div>  
+        <div>
           <label for="descripcion">Descripción:</label>
-          <textarea name="descripcion" required></textarea>
+          <textarea id="descripcion" name="descripcion" required></textarea>
         </div>
-        <div class="input-group">
-          <label for="imagen">Imagen:</label>
-          <input type="file" name="imagen" required>
-        </div>
-        <div class="input-group">
+        <div>
           <label for="precio">Precio:</label>
-          <input type="text" name="precio" required>
+          <input type="number" id="precio" name="precio" step="0.00" required>
         </div>
-        <button type="submit" class="btn-success">Subir Imagen</button>
+        <div>
+          <label for="imagen">Imagen:</label>
+          <input type="file" id="imagen" name="imagen" required>
+        </div>
+        
+          <button type="submit" class="btn-success">Subir Imagen</button>
       </form>
+
+        <div class="input-group">
+          
+          </select>
+          <button type="button" id="btn-nuevo-tipo" class="btn"> Nuevo Tipo </button>
+        </div>
+        
+
+              <!-- Modal nuevo tipo madera (fuera del form-producto) -->
+          <div id="modal-tipo" class="modal hidden">
+            <div class="modal-content">
+              <span class="close" id="btn-cancelar-tipo">&times;</span>
+              <h3>Crear Nuevo Tipo de Madera</h3>
+              <form id="form-tipo-madera" novalidate>
+                {% csrf_token %}
+                {{ tipo_form.as_p }}
+                <button type="submit" class="btn-success">Crear</button>
+                <button type="button" class="btn-secondary" id="btn-close-tipo">Cancelar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      
     </div>
   </div>
 </div>
 
+<script>
+  // Referencias
+  const modalTipo = document.getElementById('modal-tipo');
+  const btnNuevoTipo = document.getElementById('btn-nuevo-tipo');
+  const btnCloseTipo = document.getElementById('btn-close-tipo');
+  const formTipo = document.getElementById('form-tipo-madera');
+  const selectTipo = document.getElementById('id_tipo_madera');
+
+  // Abrir modal
+  btnNuevoTipo.addEventListener('click', () => {
+    modalTipo.classList.remove('hidden');
+  });
+  // Cerrar modal
+  btnCloseTipo.addEventListener('click', () => {
+    modalTipo.classList.add('hidden');
+    formTipo.reset();
+  });
+
+  // Enviar nuevo tipo via AJAX
+  formTipo.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = new FormData(formTipo);
+    fetch("{% url 'crear_tipo_madera_ajax' %}", {
+      method: 'POST',
+      headers: { 'X-CSRFToken': data.get('csrfmiddlewaretoken') },
+      body: data
+    })
+    .then(res => res.json())
+    .then(json => {
+      if (json.id) {
+        // Agregar nueva opción al select
+        const option = document.createElement('option');
+        option.value = json.id;
+        option.textContent = json.nombre.toUpperCase();
+        selectTipo.appendChild(option);
+        selectTipo.value = json.id;
+        // Cerrar
+        modalTipo.classList.add('hidden');
+        formTipo.reset();
+      } else {
+        console.error(json.errors);
+        alert('Error creando tipo de madera');
+      }
+    });
+  });
+</script>
 
   <script src="{% static 'js/gestionar_productos.js' %}"></script>
 </body>

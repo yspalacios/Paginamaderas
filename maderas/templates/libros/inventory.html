@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Listado de Inventario</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/forms"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs" defer></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6" x-data="inventory()">
+
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-3xl font-bold">Inventario</h1>
+      <button @click="openModal = true" class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow">Agregar Producto</button>
+    </div>
+
+    <!-- Product List -->
+    <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for product in products %}
+      <div id="product-{{ product.id }}" class="bg-white p-4 rounded-lg shadow">
+        <h2 class="text-xl font-semibold">{{ product.name }}</h2>
+        <p class="text-gray-600">{{ product.description }}</p>
+        <p class="mt-2 font-medium">Precio: ${{ product.price }}</p>
+        <p class="">Stock: {{ product.stock }}</p>
+        <div class="mt-4 flex space-x-2">
+          <button class="px-3 py-1 bg-green-500 text-white rounded">Editar</button>
+          <button class="px-3 py-1 bg-red-500 text-white rounded">Eliminar</button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div x-show="openModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div @click.away="resetForm()" class="bg-white p-6 rounded-lg w-full max-w-md">
+      <h2 class="text-2xl font-bold mb-4">Agregar Producto</h2>
+      <form id="product-form" @submit.prevent="submitForm">
+        {% csrf_token %}
+        <div class="mb-4">
+          <label class="block text-gray-700">Nombre</label>
+          <input type="text" name="name" x-model="form.name" required class="mt-1 block w-full border-gray-300 rounded" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700">Descripción</label>
+          <textarea name="description" x-model="form.description" class="mt-1 block w-full border-gray-300 rounded" rows="3"></textarea>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700">Precio</label>
+          <input type="number" name="price" x-model="form.price" step="0.01" required class="mt-1 block w-full border-gray-300 rounded" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700">Stock</label>
+          <input type="number" name="stock" x-model="form.stock" required class="mt-1 block w-full border-gray-300 rounded" />
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" @click="openModal = false" class="px-4 py-2 bg-gray-300 rounded">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Alpine.js Component -->
+  <script>
+  function inventory() {
+    return {
+      openModal: false,
+      form: { name: '', description: '', price: '', stock: '' },
+      submitForm() {
+        const csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
+        fetch('{% url "inventory_list" %}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify(this.form)
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            this.addProductCard(data.product);
+            this.resetForm();
+            this.openModal = false;
+          } else {
+            alert('Error: ' + JSON.stringify(data.errors));
+          }
+        });
+      },
+      addProductCard(prod) {
+        const list = document.getElementById('product-list');
+        const card = document.createElement('div');
+        card.id = `product-${prod.id}`;
+        card.className = 'bg-white p-4 rounded-lg shadow';
+        card.innerHTML = `
+          <h2 class="text-xl font-semibold">${prod.name}</h2>
+          <p class="text-gray-600">${prod.description}</p>
+          <p class="mt-2 font-medium">Precio: $${prod.price}</p>
+          <p>Stock: ${prod.stock}</p>
+          <div class="mt-4 flex space-x-2">
+            <button class="px-3 py-1 bg-green-500 text-white rounded">Editar</button>
+            <button class="px-3 py-1 bg-red-500 text-white rounded">Eliminar</button>
+          </div>`;
+        list.prepend(card);
+      },
+      resetForm() {
+        this.form.name = '';
+        this.form.description = '';
+        this.form.price = '';
+        this.form.stock = '';
+      }
+    }
+  }
+  </script>
+</body>
+</html>

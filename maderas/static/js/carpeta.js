@@ -347,7 +347,7 @@ function filterFolders() {
 
 // Abrir modal de edición
 function openEditModal() {
-  const modal = document.getElementById('modal-nueva-carpeta');
+  const modal = document.getElementById('modal-editar');
   console.log("Modal de edición encontrado:", !!modal);
   if (modal) {
     modal.style.display = 'block';

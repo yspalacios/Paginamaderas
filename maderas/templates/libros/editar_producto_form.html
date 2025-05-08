@@ -4,18 +4,19 @@
 
   <div class="input-group">
     <label for="tipo_madera_select">Cambiar Tipo de Madera:</label>
-    <select id="tipo_madera_select" name="tipo_madera">
-      <option value="">Selecciona un tipo de madera</option>
-      <option value="pino" {% if form.tipo_madera.value == "pino" %}selected{% endif %}>Pino</option>
-      <option value="roble" {% if form.tipo_madera.value == "roble" %}selected{% endif %}>Roble</option>
-      <option value="cedro" {% if form.tipo_madera.value == "cedro" %}selected{% endif %}>Cedro</option>
-      <option value="nogal" {% if form.tipo_madera.value == "nogal" %}selected{% endif %}>Nogal</option>
+    <select id="tipo_madera" name="tipo_madera" required>
+      <option value="">Selecciona un tipo de madera </option>
+      {% for tipo in tipos_madera %}
+      <option value="{{ tipo.id }}" {% if tipo.id == producto.tipo_madera.id %}selected{% endif %}>
+        {{ tipo.nombre|upper }}
+      </option>
+      {% endfor %}
     </select>
   </div>
 
   <div class="input-group">
     <label for="tipo_madera_display">Tipo de Madera Actual:</label>
-    <input type="text" id="tipo_madera_display" value="{{ form.tipo_madera.value }}" disabled>
+    <input type="text" id="tipo_madera_display" value="{{ producto.tipo_madera.nombre }}" disabled>
   </div>
 
   <div class="input-group">

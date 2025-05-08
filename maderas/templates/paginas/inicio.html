@@ -102,7 +102,7 @@
       {% if imagenes_por_tipo %}
         {% for grupo in imagenes_por_tipo %}
           <div class="bg-madera-primary text-white p-4 rounded-lg text-center my-8">
-            <h3 class="text-xl font-bold">MADERA DE {{ grupo.grouper }}</h3>
+            <h3 class="text-xl font-bold">Madera de {{ grupo.grouper }}</h3>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-8">
             {% for imagen in grupo.list %}
@@ -120,6 +120,7 @@
                 <div class="p-4">
                   <p class="mb-2"><span class="font-bold">Tipo:</span> {{ imagen.tipo_madera }}</p>
                   <p><span class="font-bold">Descripción:</span> {{ imagen.descripcion }}</p>
+                  <p><span class="font-bold">Precio:</span> {{ imagen.precio }}</p>
                 </div>
               </div>
             {% endfor %}

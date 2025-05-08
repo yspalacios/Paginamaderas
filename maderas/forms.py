@@ -1,5 +1,5 @@
-from django import forms  # Importa el módulo de formularios de Django
-from .models import Producto, Folder, datos
+from django import forms 
+from .models import Producto, TipoMadera, Folder, datos
 from django.forms.widgets import ClearableFileInput
 import re
 
@@ -7,48 +7,49 @@ import re
 # form de Producto
 
 class AllowBothClearableFileInput(ClearableFileInput):
-   
-
-    
     def value_from_datadict(self, data, files, name):
         # Si el usuario ha subido un fichero, lo devolvemos sin mirar el clear.
         upload = files.get(name)
         if upload:
             return upload
-        # En cualquier otro caso, comportamiento normal (clear o nada)
         return super().value_from_datadict(data, files, name)
+    
+    
+    # ==================== TipoMaderaForm ====================
+class TipoMaderaForm(forms.ModelForm):
+    class Meta:
+        model = TipoMadera
+        fields = ['nombre']
+
 
 class ProductoForm(forms.ModelForm):
+    tipo_madera = forms.ModelChoiceField(
+        queryset=TipoMadera.objects.all(),
+        empty_label="Selecciona un tipo de madera",
+        required=True
+    )
+    
     class Meta:
-        model = Producto  # Se utiliza el modelo Producto
+        model = Producto 
         fields = ['tipo_madera', 'nombre_producto', 'descripcion', 'imagen', 'precio']  # Campos que se incluirán en el formulario
-        widgets = {
-            # Asignamos el widget custom al campo imagen
-            'imagen': AllowBothClearableFileInput,
-        }
+        widgets = { 'imagen': AllowBothClearableFileInput, }
         
         
     def __init__(self, *args, **kwargs):
-        # Constructor del formulario que llama al constructor del padre
         super().__init__(*args, **kwargs)
-        # Si la instancia ya existe (se está editando), se marca el campo 'imagen' como no obligatorio
         if self.instance and self.instance.pk:
             self.fields['imagen'].required = False
 
     def clean_imagen(self):
-        # Método para validar el campo 'imagen'
         imagen = self.cleaned_data.get('imagen')  # Se obtiene el valor del campo 'imagen'
         if imagen is False:
             return None  # Si el valor es False, se retorna None
-        # Si no se sube una imagen y la instancia actual no tiene imagen, se genera un error de validación
         if not imagen and not self.instance.imagen:
             raise forms.ValidationError("Debes subir una imagen.")
         return imagen  # Se retorna la imagen validada
 
     def save(self, commit=True):
-        # Método para guardar la instancia del modelo
         instance = super().save(commit=False)  # Se guarda sin confirmar en la base de datos
-        # Si en los datos limpiados la imagen es None, se asigna None a la imagen de la instancia
         if self.cleaned_data.get('imagen') is None:
             instance.imagen = None
         if commit:
@@ -156,3 +157,26 @@ class RegistroForm(forms.ModelForm):
         if commit:
             user.save()  # Guarda la instancia en la base de datos
         return user
+    
+    
+    
+    
+    
+    
+    
+    #=========================  Registro de inventario ================================
+    
+    
+    from django import forms
+from .models import Product
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'description', 'price', 'stock']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'mt-1 block w-full'}),
+            'description': forms.Textarea(attrs={'class': 'mt-1 block w-full', 'rows': 3}),
+            'price': forms.NumberInput(attrs={'class': 'mt-1 block w-full', 'step': '0.01'}),
+            'stock': forms.NumberInput(attrs={'class': 'mt-1 block w-full'}),
+        }

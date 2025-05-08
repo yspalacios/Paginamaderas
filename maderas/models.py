@@ -2,9 +2,21 @@ from django.db import models  # Importa el módulo de modelos de Django
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin  # Importa clases para crear usuarios personalizados
 from django.core.validators import RegexValidator  # Importa el validador para expresiones regulares
 
+
+class TipoMadera(models.Model):
+    nombre = models.CharField(max_length=200, unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+
 # Modelo para el producto
 class Producto(models.Model):
-    tipo_madera = models.CharField(max_length=200)  # Tipo de madera del producto
+    tipo_madera = models.ForeignKey(
+        TipoMadera,
+        on_delete=models.PROTECT,
+        related_name='productos'
+    )  # ahora FK    
     nombre_producto = models.CharField(max_length=200)  # Nombre del producto
     descripcion = models.TextField()  # Descripción detallada del producto
     imagen = models.ImageField(upload_to='productos/', null=True, blank=True)  # Imagen del producto 
@@ -119,3 +131,19 @@ class Document(models.Model):
 
     def __str__(self):
         return self.file.name if self.file else ""  # Representación en cadena del objeto Document
+
+#--------------------------------------------------
+# Modelo para la lista de inventario
+#--------------------------------------------------
+
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+    

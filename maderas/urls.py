@@ -63,6 +63,20 @@ urlpatterns = [
     path('admin-tools/delete-backup/', views.delete_backup, name='delete_backup'),
     
     path('libros/profile/', views.profile_view, name='profile'),
+    
+    #===================================================================
+    # Rutas para la gestión de tipos de madera
+    #===================================================================
+    path('ajax/crear-tipo-madera/', views.crear_tipo_madera_ajax, name='crear_tipo_madera_ajax'),
+    
+    #==================================================================
+    # Rutas para gestion de inventario
+    #==================================================================
+    
+    path('libros/inventory/', views.inventory_list, name='inventory_list'),
+
+
+
 
     
 ]

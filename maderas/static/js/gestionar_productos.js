@@ -174,3 +174,42 @@ document.querySelectorAll('.modal').forEach(modal => {
     }
   });
 });
+
+
+
+// Abrir modal
+document.getElementById('btn-nuevo-tipo').addEventListener('click', function() {
+  document.getElementById('modal-tipo').style.display = 'block';
+});
+
+// Cancelar y cerrar modal
+document.getElementById('btn-cancelar-tipo').addEventListener('click', function() {
+  document.getElementById('modal-tipo').style.display = 'none';
+});
+
+// Envío AJAX para crear tipo madera
+document.getElementById('form-tipo-madera').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const formData = new FormData(form);
+  fetch("{% url 'crear_tipo_madera_ajax' %}", {
+    method: 'POST',
+    body: formData,
+    headers: {'X-CSRFToken': form.csrfmiddlewaretoken.value}
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.id) {
+      const select = document.getElementById('tipo_madera');
+      const option = document.createElement('option');
+      option.value = data.id;
+      option.text = data.nombre.toUpperCase();
+      select.appendChild(option);
+      select.value = data.id;
+      document.getElementById('modal-tipo').style.display = 'none';
+      form.reset();
+    } else {
+      alert("Error: " + JSON.stringify(data.errors));
+    }
+  });
+});

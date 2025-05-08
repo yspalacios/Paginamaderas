@@ -4,8 +4,8 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import make_password
-from .models import Producto, datos, Folder, Document
-from .forms import ProductoForm, RegistroForm
+from .models import Producto, datos, Folder, Document, TipoMadera, Product
+from .forms import ProductoForm, RegistroForm, TipoMaderaForm, ProductForm
 from django.core.mail import send_mail
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.conf import settings
@@ -28,7 +28,7 @@ from datetime import datetime
 # Vistas para páginas estáticas
 # --------------------------
 def inicio(request):
-    imagenes_publicadas = Producto.objects.filter(publicado=True).order_by('tipo_madera','id')
+    imagenes_publicadas = Producto.objects.filter(publicado=True).order_by('tipo_madera__nombre','id')
     return render(request, 'paginas/inicio.html', {'imagenes_publicadas': imagenes_publicadas})
 
 def libros(request):
@@ -122,20 +122,17 @@ def gestionar_productos_ajax(request):
     wood_filter = request.GET.get('wood_filter', '').strip()
 
     # Empieza obteniendo todos los productos
-    productos = Producto.objects.all().order_by('tipo_madera','id')
+    productos = Producto.objects.select_related('tipo_madera')
 
     # Si se ha seleccionado un tipo de madera, filtra por ese campo
     if wood_filter:
-        productos = productos.filter(tipo_madera=wood_filter)
+        productos = productos.filter(tipo_madera_id=wood_filter)
 
     # Si se ingresó un término de búsqueda, se filtran por nombre o descripción
     if query:
-        productos = productos.filter(
-            Q(nombre_producto__icontains=query)
-        )
+        productos = productos.filter(nombre_producto__icontains=query)
         
-    productos = productos.order_by('tipo_madera','id')
-
+    productos = productos.order_by('tipo_madera__nombre','id')
     html = render_to_string('libros/productos_partial.html', {'productos': productos})
     return JsonResponse({'html': html})
 
@@ -156,20 +153,23 @@ def gestionar_productos(request):
         form = ProductoForm()
     
     # Obtener todos los productos
-    productos = Producto.objects.all().order_by('tipo_madera','id')
+    productos = Producto.objects.select_related('tipo_madera').order_by('tipo_madera__nombre','id')
+    tipos = TipoMadera.objects.all()
     
     # Agrupar productos por tipo de madera
     productos_por_tipo = {}
     for producto in productos:
-        tipo_madera = producto.tipo_madera
-        if tipo_madera not in productos_por_tipo:
-            productos_por_tipo[tipo_madera] = []
-        productos_por_tipo[tipo_madera].append(producto)
+        tm = producto.tipo_madera.nombre
+        productos_por_tipo.setdefault(tm, []).append(producto)
+        
+    tipo_form = TipoMaderaForm()
     
     return render(request, 'libros/gestionar_productos.html', {
         'form': form, 
-        'productos': productos,  # Mantenemos esta variable por compatibilidad
-        'productos_por_tipo': productos_por_tipo
+        'productos': productos,
+        'productos_por_tipo': productos_por_tipo,
+        'tipos_madera' : tipos,
+        'tipo_form': tipo_form,
     })
     
     
@@ -177,6 +177,7 @@ def gestionar_productos(request):
 @never_cache
 def editar_producto(request, producto_id):
     producto = get_object_or_404(Producto, pk=producto_id)
+    tipos_madera = TipoMadera.objects.all()
     if request.method == "POST":
         form = ProductoForm(request.POST, request.FILES, instance=producto)
         if form.is_valid():
@@ -189,7 +190,10 @@ def editar_producto(request, producto_id):
     else:
         form = ProductoForm(instance=producto)
 
-    return render(request, 'libros/editar_producto_form.html', {'form': form, 'producto': producto})
+    return render(request, 'libros/editar_producto_form.html', {
+        'form': form, 
+        'producto': producto, 
+        'tipos_madera': tipos_madera })
 
 
 @login_required(login_url="/libros/login/")
@@ -233,6 +237,19 @@ def quitar_publicidad(request, productoId):
         return JsonResponse({'success': True})
     return JsonResponse({'success': False})
 
+
+@login_required
+def crear_tipo_madera_ajax(request):
+    if request.method == 'POST':
+        form = TipoMaderaForm(request.POST)
+        if form.is_valid():
+            tipo = form.save()
+            return JsonResponse({
+                'id': tipo.id,
+                'nombre': tipo.nombre
+            })
+        return JsonResponse({'errors': form.errors}, status=400)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 # --------------------------
 # Vistas para Registro y Gestión de Cuentas
@@ -650,3 +667,34 @@ def delete_backup(request):
                     status=500
                 )
     return redirect('manage_backups')
+
+
+
+#-----------------------------------------
+#Vistas para la gestion de lista de inventario
+#-----------------------------------------
+
+def inventory_list(request):
+    # Handle AJAX POST from modal
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save()
+            data = {
+                'id': product.id,
+                'name': product.name,
+                'description': product.description,
+                'price': str(product.price),
+                'stock': product.stock,
+            }
+            return JsonResponse({'success': True, 'product': data})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+
+    # Regular GET
+    products = Product.objects.all().order_by('-created_at')
+    form = ProductForm()
+    return render(request, 'libros/inventory.html', {'products': products, 'form': form})
+
+
+

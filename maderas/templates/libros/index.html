@@ -16,14 +16,12 @@
     
     <!-- Menú circular desplegable -->
     <div class="user-menu">
-      <div class="user-circle" style="background-image: url('{{ user.profile_image.url }}'); background-size: cover; background-position: center;"></div>
+      <div class="user-circle" style="background-image: url('{% if user.profile_image %}{{ user.profile_image.url }}{% else %}{% static "diseños/imagenes/default-profile.png" %}{% endif %}'); background-size: cover; background-position: center;"></div>
+      
       <div class="dropdown-content">
         <a href="{% url 'profile' %}">Perfil</a>
-        <a href="#">Calificaciones</a>
         <a href="#">Calendario</a>
         <a href="#">Archivos privados</a>
-        <a href="#">Informes</a>
-        <a href="#">Preferencias</a>
         <a href="{% url 'logout' %}">Cerrar sesión</a>
       </div>
     </div>
@@ -41,6 +39,7 @@
         <a href="{% url 'carpeta' %}">Documentos de contratación</a>
         <a href="{% url 'manage_backups' %}">Gestion de BD (backups)</a>
         <a href="{% url 'logout' %}">Cerrar Sesión</a>
+        <a href="{% url 'inventory_list' %}">Lista de inventario</a>
       </div>
     </div>
   </div>

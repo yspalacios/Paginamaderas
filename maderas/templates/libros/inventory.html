@@ -1,122 +1,578 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" x-data="inventory()">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Listado de Inventario</title>
+  <title>Inventario</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Forms plugin (opcional) -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/forms"></script>
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs" defer></script>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>[x-cloak] { display: none !important; }</style>
 </head>
-<body class="bg-gray-100 p-6" x-data="inventory()">
+<body
+class="font-sans text-[#333333] bg-[rgb(246,246,247)] bg-[url('/static/diseños/imagenes/14.jpg')] bg-cover m-0 p-[30px]">
 
-  <div class="max-w-7xl mx-auto">
-    <!-- Header -->
-    <div class="flex items-center justify-between mb-6">
-      <h1 class="text-3xl font-bold">Inventario</h1>
-      <button @click="openModal = true" class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow">Agregar Producto</button>
-    </div>
-
-    <!-- Product List -->
-    <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {% for product in products %}
-      <div id="product-{{ product.id }}" class="bg-white p-4 rounded-lg shadow">
-        <h2 class="text-xl font-semibold">{{ product.name }}</h2>
-        <p class="text-gray-600">{{ product.description }}</p>
-        <p class="mt-2 font-medium">Precio: ${{ product.price }}</p>
-        <p class="">Stock: {{ product.stock }}</p>
-        <div class="mt-4 flex space-x-2">
-          <button class="px-3 py-1 bg-green-500 text-white rounded">Editar</button>
-          <button class="px-3 py-1 bg-red-500 text-white rounded">Eliminar</button>
-        </div>
+<!-- Header superior -->
+<div
+  class="fixed top-0 left-0 w-full h-[100px] bg-[#4A4A4A] text-white z-[1001] flex items-center justify-center">
+  <div class="relative flex items-center justify-center w-[90%]">
+    <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo"
+      class="absolute left-[-20px] h-[100px] w-auto" />
+    <h4 class="m-0 text-[35px] font-bold text-center">
+      Maderas <span class="text-[#ff9800]">Isabella</span>
+    </h4> 
+    <!-- User menu -->
+    <div class="group relative inline-block ml-auto mr-5">
+      <div class="w-[80px] h-[80px] bg-[url('{{ user.profile_image.url }}')] bg-cover bg-center rounded-full border-2 border-black cursor-pointer"></div>
+      <div class="hidden group-hover:block absolute right-0 top-[60px] bg-white min-w-[200px] shadow-lg rounded divide-y divide-gray-200 z-50">
+        <a href="{% url 'profile' %}" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Perfil</a>
+        <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Calificaciones</a>
+        <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Calendario</a>
+        <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Archivos privados</a>
+        <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Informes</a>
+        <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Preferencias</a>
+        <a href="{% url 'logout' %}" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Cerrar sesión</a>
       </div>
-      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Contenedor principal con Sidebar y Contenido -->
+<div class="flex mt-[100px] ml-[250px] p-[20px] box-border">
+
+  <!-- Menú vertical (Sidebar) -->
+  <div
+    class="fixed top-[100px] left-0 w-[250px] h-[calc(100vh-100px)] bg-[#4A4A4A] text-white p-[25px] box-border">
+    <h2 class="text-[20px] mb-[20px] text-center">Menú</h2>
+    <div class="flex flex-col">
+      <a href="{% url 'index' %}"
+         class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+        Inicio
+      </a>
+      <a href="{% url 'gestionar_productos' %}"
+         class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+        Galería de Publicidad
+      </a>
+      <a href="{% url 'lista_login' %}"
+         class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+        Listado de Cuentas
+      </a>
+      <a href="{% url 'carpeta' %}"
+         class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+        Documentos de contratación
+      </a>
+      <a href="{% url 'manage_backups' %}"
+         class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+        Gestión de BD (backups)
+      </a>
+      <a href="{% url 'logout' %}"
+         class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+        Cerrar Sesión
+      </a>
     </div>
   </div>
 
-  <!-- Modal -->
-  <div x-show="openModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div @click.away="resetForm()" class="bg-white p-6 rounded-lg w-full max-w-md">
-      <h2 class="text-2xl font-bold mb-4">Agregar Producto</h2>
-      <form id="product-form" @submit.prevent="submitForm">
+  <div class="flex-1 max-w-[1500px] bg-[rgba(255,255,255,0.77)] mx-auto p-[20px] rounded-[8px] shadow-[0_5px_15px_rgb(250,146,76),0_0_15px_5px_rgba(247,144,75,0.89)] box-border">
+    
+    <div class="max-w-5xl mx-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold">Inventario</h1>
+        <button @click="openAdd = true" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Agregar Producto</button>
+      </div>
+
+      <!-- Lista de productos existentes -->
+      <div id="product-list" class="space-y-4">
+        {% for p in products %}
+        <div id="prod-{{p.id}}" class="bg-white p-4 rounded-lg shadow flex justify-between items-center">
+          <div>
+            <h2 class="font-semibold">{{ p.name }}</h2>
+            <p class="text-sm text-gray-600">Madera: {{ p.wood_type }}</p>
+            <p class="text-sm">Stock: <span x-text="stocks[{{p.id}}] ?? {{p.stock}}"></span></p>
+            <p class="text-sm">Precio: ${{ p.price }}</p>
+          </div>
+          <!-- botón "⋮" -->
+          <div class="relative" x-data="{ open: false }">
+            <button @click="open = !open" class="p-2">⋮</button>
+            <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-32 bg-white border rounded shadow">
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Editar</a>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Eliminar</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Nueva sección: Productos Agregados Recientemente -->
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4">Productos Agregados Recientemente</h2>
+        <div id="recent-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Los productos agregados recientemente se mostrarán aquí -->
+          <template x-for="product in recentProducts" :key="product.id">
+            <div class="bg-green-50 p-4 rounded-lg shadow border border-green-200 transition-all duration-300 hover:shadow-lg">
+              <div class="flex justify-between">
+                <h3 class="font-semibold" x-text="product.name"></h3>
+                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Nuevo</span>
+              </div>
+              <p class="text-sm text-gray-600" x-text="'Madera: ' + product.wood_type"></p>
+              <p class="text-sm" x-text="'Stock: ' + product.stock"></p>
+              <p class="text-sm" x-text="'Precio: $' + product.price"></p>
+              <div class="mt-2 flex justify-end">
+                <button @click="removeFromRecent(product.id)" class="text-xs text-gray-500 hover:text-red-500">
+                  Quitar de recientes
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Estadísticas de Inventario -->
+      <div class="mt-12 bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-bold mb-4">Estadísticas de Inventario</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+            <p class="text-sm text-gray-600">Total Productos</p>
+            <p class="text-2xl font-bold" x-text="totalProducts"></p>
+          </div>
+          <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
+            <p class="text-sm text-gray-600">Stock Total</p>
+            <p class="text-2xl font-bold" x-text="totalStock"></p>
+          </div>
+          <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+            <p class="text-sm text-gray-600">Valor del Inventario</p>
+            <p class="text-2xl font-bold" x-text="'$' + totalValue.toFixed(2)"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Agregar -->
+    <div x-show="openAdd" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div @click.away="closeAdd()" class="bg-white p-6 rounded-lg w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-4">Agregar Producto</h2>
+        <form @submit.prevent="submitAdd">
+          {% csrf_token %}
+          <div class="mb-4">
+            <label class="block">Nombre</label>
+            <input type="text" x-model="form.name" class="mt-1 block w-full rounded border-gray-300" required>
+            <p x-text="errors.name" class="text-red-500 text-sm" x-show="errors.name"></p>
+          </div>
+          <div class="mb-4">
+            <label class="block">Tipo de madera</label>
+            <input type="text" x-model="form.wood_type" class="mt-1 block w-full rounded border-gray-300">
+            <p x-text="errors.wood_type" class="text-red-500 text-sm" x-show="errors.wood_type"></p>
+          </div>
+          <div class="mb-4">
+            <label class="block">Precio</label>
+            <input type="number" step="0.01" x-model="form.price" class="mt-1 block w-full rounded border-gray-300" required>
+            <p x-text="errors.price" class="text-red-500 text-sm" x-show="errors.price"></p>
+          </div>
+          <div class="mb-4">
+            <label class="block">Stock</label>
+            <input type="number" x-model="form.stock" class="mt-1 block w-full rounded border-gray-300" required>
+            <p x-text="errors.stock" class="text-red-500 text-sm" x-show="errors.stock"></p>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button type="button" @click="closeAdd()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- Modal Editar -->
+<div x-show="openEdit" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div @click.away="closeEdit()" class="bg-white p-6 rounded-lg w-full max-w-md">
+      <h2 class="text-2xl font-bold mb-4">Editar Producto</h2>
+      <form @submit.prevent="submitEdit">
         {% csrf_token %}
+        <input type="hidden" x-model="editForm.id">
         <div class="mb-4">
-          <label class="block text-gray-700">Nombre</label>
-          <input type="text" name="name" x-model="form.name" required class="mt-1 block w-full border-gray-300 rounded" />
+          <label class="block">Nombre</label>
+          <input type="text" x-model="editForm.name" class="mt-1 block w-full rounded border-gray-300" required>
+          <p x-text="errors.name" class="text-red-500 text-sm" x-show="errors.name"></p>
         </div>
         <div class="mb-4">
-          <label class="block text-gray-700">Descripción</label>
-          <textarea name="description" x-model="form.description" class="mt-1 block w-full border-gray-300 rounded" rows="3"></textarea>
+          <label class="block">Tipo de madera</label>
+          <input type="text" x-model="editForm.wood_type" class="mt-1 block w-full rounded border-gray-300">
+          <p x-text="errors.wood_type" class="text-red-500 text-sm" x-show="errors.wood_type"></p>
         </div>
         <div class="mb-4">
-          <label class="block text-gray-700">Precio</label>
-          <input type="number" name="price" x-model="form.price" step="0.01" required class="mt-1 block w-full border-gray-300 rounded" />
+          <label class="block">Precio</label>
+          <input type="number" step="0.01" x-model="editForm.price" class="mt-1 block w-full rounded border-gray-300" required>
+          <p x-text="errors.price" class="text-red-500 text-sm" x-show="errors.price"></p>
         </div>
         <div class="mb-4">
-          <label class="block text-gray-700">Stock</label>
-          <input type="number" name="stock" x-model="form.stock" required class="mt-1 block w-full border-gray-300 rounded" />
+          <label class="block">Stock</label>
+          <input type="number" x-model="editForm.stock" class="mt-1 block w-full rounded border-gray-300" required>
+          <p x-text="errors.stock" class="text-red-500 text-sm" x-show="errors.stock"></p>
         </div>
-        <div class="flex justify-end space-x-2">
-          <button type="button" @click="openModal = false" class="px-4 py-2 bg-gray-300 rounded">Cancelar</button>
-          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Guardar</button>
+        <div class="flex justify-between">
+          <button type="button" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700" @click="confirmDelete()">
+            Eliminar
+          </button>
+          <div class="space-x-2">
+            <button type="button" @click="closeEdit()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Guardar Cambios</button>
+          </div>
         </div>
       </form>
     </div>
   </div>
+  
+  <!-- Modal de Confirmación para Eliminar -->
+  <div x-show="openDelete" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div @click.away="openDelete = false" class="bg-white p-6 rounded-lg w-full max-w-md">
+      <h2 class="text-2xl font-bold mb-4">Confirmar Eliminación</h2>
+      <p class="mb-6">¿Estás seguro de que deseas eliminar <span class="font-bold" x-text="editForm.name"></span>? Esta acción no se puede deshacer.</p>
+      <div class="flex justify-end space-x-2">
+        <button @click="openDelete = false" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
+        <button @click="deleteProduct()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Eliminar</button>
+      </div>
+    </div>
+  </div>
 
-  <!-- Alpine.js Component -->
-  <script>
-  function inventory() {
-    return {
-      openModal: false,
-      form: { name: '', description: '', price: '', stock: '' },
-      submitForm() {
-        const csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
-        fetch('{% url "inventory_list" %}', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken,
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          body: JSON.stringify(this.form)
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            this.addProductCard(data.product);
-            this.resetForm();
-            this.openModal = false;
-          } else {
-            alert('Error: ' + JSON.stringify(data.errors));
+
+
+
+    <script>
+
+        function inventory() {
+            return {
+              openAdd: false,
+              openEdit: false,
+              openDelete: false,
+              form: { name: '', wood_type: '', price: '', stock: '' },
+              editForm: { id: '', name: '', wood_type: '', price: '', stock: '' },
+              errors: {},
+              stocks: {},
+              recentProducts: [],
+              
+              // Propiedades calculadas para estadísticas
+              get totalProducts() {
+                return document.querySelectorAll('#product-list > div').length + this.recentProducts.length;
+              },
+              
+              get totalStock() {
+                let stock = 0;
+                // Sumar stock de productos existentes
+                document.querySelectorAll('#product-list > div').forEach(el => {
+                  const stockSpan = el.querySelector('p:nth-child(3) span');
+                  if (stockSpan) {
+                    stock += parseInt(stockSpan.innerText || '0');
+                  }
+                });
+                
+                // Sumar stock de productos recientes
+                this.recentProducts.forEach(p => {
+                  stock += parseInt(p.stock || '0');
+                });
+                
+                return stock;
+              },
+              
+              get totalValue() {
+                let value = 0;
+                
+                // Valor de productos existentes
+                document.querySelectorAll('#product-list > div').forEach(el => {
+                  const priceText = el.querySelector('p:nth-child(4)').innerText;
+                  const price = parseFloat(priceText.replace('Precio: $', '')) || 0;
+                  const stockSpan = el.querySelector('p:nth-child(3) span');
+                  const stock = parseInt(stockSpan.innerText || '0');
+                  value += price * stock;
+                });
+                
+                // Valor de productos recientes
+                this.recentProducts.forEach(p => {
+                  value += parseFloat(p.price || '0') * parseInt(p.stock || '0');
+                });
+                
+                return value;
+              },
+          
+              closeAdd() {
+                this.openAdd = false;
+                this.form = { name: '', wood_type: '', price: '', stock: '' };
+                this.errors = {};
+              },
+              
+              // Métodos para el modal de edición
+              openEditModal(id, name, wood_type, stock, price) {
+                this.editForm = {
+                  id: id,
+                  name: name,
+                  wood_type: wood_type,
+                  stock: stock,
+                  price: price
+                };
+                this.openEdit = true;
+                this.errors = {};
+              },
+              
+              closeEdit() {
+                this.openEdit = false;
+                this.editForm = { id: '', name: '', wood_type: '', price: '', stock: '' };
+                this.errors = {};
+              },
+              
+              submitEdit() {
+                this.errors = {};
+                
+                // Validación básica del lado del cliente
+                if (!this.editForm.name.trim()) {
+                  this.errors.name = "El nombre es requerido";
+                  return;
+                }
+                
+                if (isNaN(parseFloat(this.editForm.price)) || parseFloat(this.editForm.price) <= 0) {
+                  this.errors.price = "El precio debe ser un número positivo";
+                  return;
+                }
+                
+                if (isNaN(parseInt(this.editForm.stock)) || parseInt(this.editForm.stock) < 0) {
+                  this.errors.stock = "El stock debe ser un número no negativo";
+                  return;
+                }
+                
+                fetch(`/inventory/update/${this.editForm.id}/`, {
+                  method: 'PUT',  // o 'PATCH' según tu API
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value,
+                    'X-Requested-With': 'XMLHttpRequest'
+                  },
+                  body: JSON.stringify(this.editForm)
+                })
+                .then(r => r.json().then(data => ({ status: r.status, body: data })))
+                .then(({ status, body }) => {
+                  if (status === 200 && body.success) {
+                    const p = body.product;
+                    
+                    // Actualizar en la lista principal
+                    const productElement = document.getElementById(`prod-${p.id}`);
+                    if (productElement) {
+                      productElement.querySelector('h2').textContent = p.name;
+                      productElement.querySelector('p:nth-child(2)').textContent = `Madera: ${p.wood_type}`;
+                      productElement.querySelector('p:nth-child(3) span').textContent = p.stock;
+                      productElement.querySelector('p:nth-child(4)').textContent = `Precio: $${p.price}`;
+                    }
+                    
+                    // Actualizar en productos recientes si existe
+                    const recentIndex = this.recentProducts.findIndex(item => item.id === p.id);
+                    if (recentIndex >= 0) {
+                      this.recentProducts[recentIndex] = {
+                        id: p.id,
+                        name: p.name,
+                        wood_type: p.wood_type,
+                        stock: p.stock,
+                        price: p.price
+                      };
+                    }
+                    
+                    // Actualizar stocks
+                    this.stocks[p.id] = p.stock;
+                    
+                    // Mostrar notificación de éxito
+                    this.showNotification('Producto actualizado con éxito', 'success');
+                    
+                    this.closeEdit();
+                  } else {
+                    this.errors = body.errors || { general: "Error al actualizar el producto" };
+                  }
+                })
+                .catch(error => {
+                  console.error("Error:", error);
+                  this.errors = { general: "Ocurrió un error al procesar tu solicitud" };
+                });
+              },
+              
+              confirmDelete() {
+                this.openDelete = true;
+              },
+              
+              deleteProduct() {
+                fetch(`/inventory/delete/${this.editForm.id}/`, {
+                  method: 'DELETE',
+                  headers: {
+                    'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value,
+                    'X-Requested-With': 'XMLHttpRequest'
+                  }
+                })
+                .then(r => r.json().then(data => ({ status: r.status, body: data })))
+                .then(({ status, body }) => {
+                  if (status === 200 && body.success) {
+                    // Eliminar del DOM
+                    const productElement = document.getElementById(`prod-${this.editForm.id}`);
+                    if (productElement) {
+                      productElement.remove();
+                    }
+                    
+                    // Eliminar de productos recientes
+                    this.recentProducts = this.recentProducts.filter(p => p.id !== this.editForm.id);
+                    
+                    // Eliminar de stocks
+                    delete this.stocks[this.editForm.id];
+                    
+                    // Mostrar notificación
+                    this.showNotification('Producto eliminado con éxito', 'success');
+                    
+                    this.openDelete = false;
+                    this.closeEdit();
+                  } else {
+                    this.showNotification('Error al eliminar el producto', 'error');
+                  }
+                })
+                .catch(error => {
+                  console.error("Error:", error);
+                  this.showNotification('Error al procesar la solicitud', 'error');
+                });
+              },
+              
+              // Sistema de notificaciones
+              showNotification(message, type = 'info') {
+                const notificationContainer = document.getElementById('notification-container');
+                if (!notificationContainer) {
+                  // Crear el contenedor si no existe
+                  const container = document.createElement('div');
+                  container.id = 'notification-container';
+                  container.className = 'fixed bottom-4 right-4 z-50 flex flex-col space-y-2';
+                  document.body.appendChild(container);
+                }
+                
+                const notification = document.createElement('div');
+                notification.className = `px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 flex items-center justify-between ${
+                  type === 'success' ? 'bg-green-100 text-green-800 border-l-4 border-green-500' :
+                  type === 'error' ? 'bg-red-100 text-red-800 border-l-4 border-red-500' :
+                  'bg-blue-100 text-blue-800 border-l-4 border-blue-500'
+                }`;
+                
+                notification.innerHTML = `
+                  <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                      ${type === 'success' 
+                        ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>'
+                        : type === 'error'
+                          ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>'
+                          : '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v4a1 1 0 102 0V7zm0 8a1 1 0 10-2 0 1 1 0 002 0z" clip-rule="evenodd"></path>'
+                      }
+                    </svg>
+                    <span>${message}</span>
+                  </div>
+                  <button class="ml-4 focus:outline-none" onclick="this.parentElement.remove()">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                  </button>
+                `;
+                
+                document.getElementById('notification-container').appendChild(notification);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                  if (notification.parentElement) {
+                    notification.classList.add('opacity-0', 'translate-x-full');
+                    setTimeout(() => notification.remove(), 300);
+                  }
+                }, 5000);
+              },
+              
+              submitAdd() {
+                this.errors = {};
+                
+                // Validación básica del lado del cliente
+                if (!this.form.name.trim()) {
+                  this.errors.name = "El nombre es requerido";
+                  return;
+                }
+                
+                if (isNaN(parseFloat(this.form.price)) || parseFloat(this.form.price) <= 0) {
+                  this.errors.price = "El precio debe ser un número positivo";
+                  return;
+                }
+                
+                if (isNaN(parseInt(this.form.stock)) || parseInt(this.form.stock) < 0) {
+                  this.errors.stock = "El stock debe ser un número no negativo";
+                  return;
+                }
+                
+                fetch("{% url 'inventory_list' %}", {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value,
+                    'X-Requested-With': 'XMLHttpRequest'
+                  },
+                  body: JSON.stringify(this.form)
+                })
+                .then(r => r.json().then(data => ({ status: r.status, body: data })))
+                .then(({ status, body }) => {
+                  if (status === 200 && body.success) {
+                    // Actualizar lista y stocks
+                    this.stocks[body.product.id] = body.product.stock;
+                    const p = body.product;
+                    
+                    // Agregar a la lista principal
+                    const html = `
+                      <div id="prod-${p.id}" class="bg-white p-4 rounded-lg shadow flex justify-between items-center">
+                        <div>
+                          <h2 class="font-semibold">${p.name}</h2>
+                          <p class="text-sm text-gray-600">Madera: ${p.wood_type}</p>
+                          <p class="text-sm">Stock: <span>${p.stock}</span></p>
+                          <p class="text-sm">Precio: $${p.price}</p>
+                        </div>
+                        <div class="relative" x-data="{ open: false }">
+                          <button @click="open = !open" class="p-2">⋮</button>
+                          <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-32 bg-white border rounded shadow">
+                            <a href="#" @click.prevent="$parent.openEditModal(${p.id}, '${p.name}', '${p.wood_type}', ${p.stock}, ${p.price})" class="block px-4 py-2 hover:bg-gray-100">Editar</a>
+                            <a href="#" @click.prevent="$parent.openEditModal(${p.id}, '${p.name}', '${p.wood_type}', ${p.stock}, ${p.price}); $parent.confirmDelete()" class="block px-4 py-2 hover:bg-gray-100">Eliminar</a>
+                          </div>
+                        </div>
+                      </div>`;
+                    document.getElementById('product-list').insertAdjacentHTML('afterbegin', html);
+                    
+                    // Agregar a productos recientes
+                    this.recentProducts.unshift({
+                      id: p.id,
+                      name: p.name,
+                      wood_type: p.wood_type,
+                      stock: p.stock,
+                      price: p.price
+                    });
+                    
+                    // Limitar a 6 productos recientes
+                    if (this.recentProducts.length > 6) {
+                      this.recentProducts.pop();
+                    }
+                    
+                    // Mostrar notificación
+                    this.showNotification('Producto agregado con éxito', 'success');
+                    
+                    this.closeAdd();
+                  } else {
+                    this.errors = body.errors || {};
+                  }
+                })
+                .catch(error => {
+                  console.error("Error:", error);
+                  this.errors = { general: "Ocurrió un error al procesar tu solicitud" };
+                });
+              },
+              
+              removeFromRecent(id) {
+                this.recentProducts = this.recentProducts.filter(p => p.id !== id);
+              }
+            }
           }
-        });
-      },
-      addProductCard(prod) {
-        const list = document.getElementById('product-list');
-        const card = document.createElement('div');
-        card.id = `product-${prod.id}`;
-        card.className = 'bg-white p-4 rounded-lg shadow';
-        card.innerHTML = `
-          <h2 class="text-xl font-semibold">${prod.name}</h2>
-          <p class="text-gray-600">${prod.description}</p>
-          <p class="mt-2 font-medium">Precio: $${prod.price}</p>
-          <p>Stock: ${prod.stock}</p>
-          <div class="mt-4 flex space-x-2">
-            <button class="px-3 py-1 bg-green-500 text-white rounded">Editar</button>
-            <button class="px-3 py-1 bg-red-500 text-white rounded">Eliminar</button>
-          </div>`;
-        list.prepend(card);
-      },
-      resetForm() {
-        this.form.name = '';
-        this.form.description = '';
-        this.form.price = '';
-        this.form.stock = '';
-      }
-    }
-  }
-  </script>
+
+    
+    </script>
+  </div>
+</div>
 </body>
 </html>

@@ -11,12 +11,10 @@ from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.conf import settings
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST, require_http_methods
 from django.template.loader import render_to_string
 from django.db.models import Q
-import os
-import subprocess
-import datetime
-import shutil 
+import os, subprocess, datetime, shutil, json
 from django.utils._os import safe_join
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
@@ -675,26 +673,87 @@ def delete_backup(request):
 #-----------------------------------------
 
 def inventory_list(request):
-    # Handle AJAX POST from modal
-    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        form = ProductForm(request.POST)
+    # AJAX POST para crear producto
+    if request.method=='POST' and request.headers.get('x-requested-with')=='XMLHttpRequest':
+        data = json.loads(request.body)
+        form = ProductForm(data)
         if form.is_valid():
-            product = form.save()
-            data = {
-                'id': product.id,
-                'name': product.name,
-                'description': product.description,
-                'price': str(product.price),
-                'stock': product.stock,
-            }
-            return JsonResponse({'success': True, 'product': data})
+            p = form.save()
+            return JsonResponse({
+                'success': True,
+                'product': {
+                    'id':        p.id,
+                    'name':      p.name,
+                    'wood_type': p.wood_type,
+                    'price':     str(p.price),
+                    'stock':     p.stock,
+                }
+            })
+        else:
+            return JsonResponse({'success':False,'errors':form.errors}, status=400)
+
+    # GET normal
+    products = Product.objects.all().order_by('-created_at')
+    return render(request,'libros/inventory.html',{'products':products})
+
+
+@require_POST
+def update_stock(request):
+    # AJAX POST para actualizar stock
+    data = json.loads(request.body)
+    pid = data.get('id')
+    new_stock = data.get('stock')
+    try:
+        prod = Product.objects.get(id=pid)
+        prod.stock = new_stock
+        prod.save()
+        return JsonResponse({'success': True, 'stock': prod.stock})
+    except Product.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Producto no encontrado'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+    
+    
+    
+
+@require_http_methods(["PUT"])
+def update_product(request, product_id):
+    """Vista para actualizar un producto existente mediante AJAX"""
+    try:
+        product = Product.objects.get(id=product_id)
+        data = json.loads(request.body)
+        
+        form = ProductForm(data, instance=product)
+        if form.is_valid():
+            p = form.save()
+            return JsonResponse({
+                'success': True,
+                'product': {
+                    'id': p.id,
+                    'name': p.name,
+                    'wood_type': p.wood_type,
+                    'price': str(p.price),
+                    'stock': p.stock,
+                }
+            })
         else:
             return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+    except Product.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Producto no encontrado'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
-    # Regular GET
-    products = Product.objects.all().order_by('-created_at')
-    form = ProductForm()
-    return render(request, 'libros/inventory.html', {'products': products, 'form': form})
 
+@require_http_methods(["DELETE"])
+def delete_product(request, product_id):
+    """Vista para eliminar un producto mediante AJAX"""
+    try:
+        product = Product.objects.get(id=product_id)
+        product.delete()
+        return JsonResponse({'success': True})
+    except Product.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Producto no encontrado'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 

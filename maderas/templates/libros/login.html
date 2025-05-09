@@ -7,24 +7,7 @@
     <link rel="stylesheet" href="{% static 'css/login.css' %}?v={{ timestamp }}">
 </head>
 <body>
-    <header>
-        <nav class="nav-main">
-            <ul>
-                <li><a href="{% url 'inicio' %}">🔰 Inicio</a></li>
-                <li><a href="{% url 'inicio' %}">👀 aprende lo que hacemos</a></li>
-                <li><a href="#imagenespublicadas">🛒 Ver imagenes Publicadas</a></li>
-                <li><a href="#nosotros">🧑‍💻 Nosotros</a></li>
-                <li><a href="#ubicanos">🗺️ Direccion</a></li>
-                <li><a href="#contacto">📱 Contacto</a></li>
-                <li><a href="{% url 'login' %}">Inicia sesión</a></li>
-            </ul>
-        </nav>
-        <a href="{% url 'inicio' %}">
-            <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="logo">
-        </a>
-    </header>
-
-
+ 
     <div class="login-box">
         <h1 class="title">Iniciar Sesión</h1>
 
@@ -55,21 +38,6 @@
         <p>¿No tienes una cuenta? <a href="{% url 'registro_login' %}">Regístrate</a></p>
         <p><a href="{% url 'recu_contra' %}">¿Olvidaste tu contraseña?</a></p>
     </div>
-
-    <footer id="contacto">
-        <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" width="150">
-        <p>Somos un proveedor de maderas finas dedicada a la compra de bosques, tala y venta de madera y transformación de la misma</p>
-        <h2>CONTACTO</h2>
-        <p>Puede contactarnos a través de:</p>
-        <address>
-            <a href="https://web.facebook.com/people/Maderas-Isabella-AEI-SAS/100085008207707/" class="footer-link">
-                Página de Facebook
-            </a><br>
-            📱 Teléfono: +57 3223280615 - +57 3103178649<br>
-            🧭 Dirección: Carrera 1 #No. 3-88, Socha, Boyacá, Colombia
-        </address>
-        <p>&copy; 2024 Maderas Isabella. Todos los derechos reservados.</p>
-    </footer>
 
     <script src="{% static 'js/login.js' %}"></script>
 </body>

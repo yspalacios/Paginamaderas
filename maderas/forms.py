@@ -1,5 +1,5 @@
 from django import forms 
-from .models import Producto, TipoMadera, Folder, datos
+from .models import Producto, TipoMadera, Folder, datos, Product
 from django.forms.widgets import ClearableFileInput
 import re
 
@@ -159,24 +159,15 @@ class RegistroForm(forms.ModelForm):
         return user
     
     
-    
-    
-    
-    
-    
-    #=========================  Registro de inventario ================================
-    
-    
-    from django import forms
-from .models import Product
+#=========================  Registro de inventario ================================
 
 class ProductForm(forms.ModelForm):
     class Meta:
-        model = Product
-        fields = ['name', 'description', 'price', 'stock']
+        model  = Product
+        fields = ['name','wood_type','price','stock']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'mt-1 block w-full'}),
-            'description': forms.Textarea(attrs={'class': 'mt-1 block w-full', 'rows': 3}),
-            'price': forms.NumberInput(attrs={'class': 'mt-1 block w-full', 'step': '0.01'}),
-            'stock': forms.NumberInput(attrs={'class': 'mt-1 block w-full'}),
+            'name':      forms.TextInput(attrs={'class':'mt-1 block w-full'}),
+            'wood_type': forms.TextInput(attrs={'class':'mt-1 block w-full'}),
+            'price':     forms.NumberInput(attrs={'class':'mt-1 block w-full','step':'0.01'}),
+            'stock':     forms.NumberInput(attrs={'class':'mt-1 block w-full'}),
         }

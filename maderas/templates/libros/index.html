@@ -4,44 +4,91 @@
 <head>
   <meta charset="UTF-8">
   <title>Galería de Publicidad</title>
-  <link rel="stylesheet" href="{% static 'css/123.css' %}?v={{ timestamp }}">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Pseudo-element para breadcrumb -->
+  <style>
+    nav[aria-label="breadcrumb"] .breadcrumb-item + .breadcrumb-item::before {
+      content: "›";
+      margin: 0 0.5rem;
+      color: #ddd;
+    }
+  </style>
 </head>
-<body>
-  <!-- Header -->
-  <div class="headermenu">
-    <div class="hmenu">
-      <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo" class="img">
-      <h4>Maderas <span>Isabella</span></h4>
-    </div>
-    
-    <!-- Menú circular desplegable -->
-    <div class="user-menu">
-      <div class="user-circle" style="background-image: url('{% if user.profile_image %}{{ user.profile_image.url }}{% else %}{% static "diseños/imagenes/default-profile.png" %}{% endif %}'); background-size: cover; background-position: center;"></div>
-      
-      <div class="dropdown-content">
-        <a href="{% url 'profile' %}">Perfil</a>
-        <a href="#">Calendario</a>
-        <a href="#">Archivos privados</a>
-        <a href="{% url 'logout' %}">Cerrar sesión</a>
+<body
+  class="font-sans text-[#333333] bg-[rgb(246,246,247)] bg-[url('/static/diseños/imagenes/14.jpg')] bg-cover m-0 p-[30px]">
+
+  <!-- Header superior -->
+  <div
+    class="fixed top-0 left-0 w-full h-[100px] bg-[#4A4A4A] text-white z-[1001] flex items-center justify-center">
+    <div class="relative flex items-center justify-center w-[90%]">
+      <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo"
+        class="absolute left-[-20px] h-[100px] w-auto" />
+      <h4 class="m-0 text-[35px] font-bold text-center">
+        Maderas <span class="text-[#ff9800]">Isabella</span>
+      </h4> 
+      <!-- User menu -->
+      <div class="group relative inline-block ml-auto mr-5">
+        <div class="w-[80px] h-[80px] bg-[url('{{ user.profile_image.url }}')] bg-cover bg-center rounded-full border-2 border-black cursor-pointer"></div>
+        <div class="hidden group-hover:block absolute right-0 top-[60px] bg-white min-w-[200px] shadow-lg rounded divide-y divide-gray-200 z-50">
+          <a href="{% url 'profile' %}" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Perfil</a>
+          <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Calificaciones</a>
+          <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Calendario</a>
+          <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Archivos privados</a>
+          <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Informes</a>
+          <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Preferencias</a>
+          <a href="{% url 'logout' %}" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Cerrar sesión</a>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Contenido principal -->
-  <div class="main-content">
-    <!-- Menú lateral -->
-    <div class="sidebar">
-      <h2>Menú</h2>
-      <div class="menu">
-        <a href="{% url 'index' %}">Inicio</a>
-        <a href="{% url 'gestionar_productos' %}">Galería de Publicidad</a>
-        <a href="{% url 'lista_login' %}">Listado de Cuentas</a>
-        <a href="{% url 'carpeta' %}">Documentos de contratación</a>
-        <a href="{% url 'manage_backups' %}">Gestion de BD (backups)</a>
-        <a href="{% url 'logout' %}">Cerrar Sesión</a>
-        <a href="{% url 'inventory_list' %}">Lista de inventario</a>
+  <!-- Contenedor principal con Sidebar y Contenido -->
+  <div class="flex mt-[100px] ml-[250px] p-[20px] box-border">
+
+    <!-- Menú vertical (Sidebar) -->
+    <div
+      class="fixed top-[100px] left-0 w-[250px] h-[calc(100vh-100px)] bg-[#4A4A4A] text-white p-[25px] box-border">
+      <h2 class="text-[20px] mb-[20px] text-center">Menú</h2>
+      <div class="flex flex-col">
+        <a href="{% url 'index' %}"
+           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+          Inicio
+        </a>
+        <a href="{% url 'gestionar_productos' %}"
+           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+          Galería de Publicidad
+        </a>
+        <a href="{% url 'inventory_list' %}"
+           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+          Lista de inventario
+        </a>
+        <a href="{% url 'lista_login' %}"
+           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+          Listado de Cuentas
+        </a>
+        <a href="{% url 'carpeta' %}"
+           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+          Documentos de contratación
+        </a>
+        <a href="{% url 'manage_backups' %}"
+           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+          Gestión de BD (backups)
+        </a>
+        <a href="{% url 'logout' %}"
+           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
+          Cerrar Sesión
+        </a>
       </div>
     </div>
+
+
+    <div class="flex-1 max-w-[1500px] bg-[rgba(255,255,255,0.77)] mx-auto p-[20px] rounded-[8px] shadow-[0_5px_15px_rgb(250,146,76),0_0_15px_5px_rgba(247,144,75,0.89)] box-border">
+    
+    </div>
+    
+
+
   </div>
 </body>
 </html>

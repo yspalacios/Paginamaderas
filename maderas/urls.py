@@ -74,7 +74,7 @@ urlpatterns = [
     #==================================================================
     
     path('libros/inventory/', views.inventory_list, name='inventory_list'),
-
+    path('inventory/update-stock/', views.update_stock, name='update_stock'),
 
 
 

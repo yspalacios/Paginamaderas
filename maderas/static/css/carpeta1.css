@@ -31,7 +31,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 90%;
+    width: 80%;
     /* Ajusta según el espacio disponible */
     position: relative;
 }
@@ -47,7 +47,7 @@ body {
 /* Imagen del logo */
 .hmenu .img {
     position: absolute;
-    left: -20px;
+    left: 25px;
     /* Alineada con la palabra "Menú" del sidebar */
     height: 100px;
     /* Centrado verticalmente en el header */
@@ -114,6 +114,17 @@ body {
 
 .user-menu:hover .dropdown-content {
     display: block;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+}
+
+.user-name {
+    color: white;
+    font-weight: bold;
 }
 
 /* Sidebar (menú vertical izquierdo) */

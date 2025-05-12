@@ -2,247 +2,465 @@
 <!DOCTYPE html>
 <html lang="es" x-data="inventory()">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inventario</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maderas Isabella - Inventario</title>
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Forms plugin (opcional) -->
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/forms"></script>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <style>[x-cloak] { display: none !important; }</style>
-</head>
-<body
-class="font-sans text-[#333333] bg-[rgb(246,246,247)] bg-[url('/static/diseños/imagenes/14.jpg')] bg-cover m-0 p-[30px]">
-
-<!-- Header superior -->
-<div
-  class="fixed top-0 left-0 w-full h-[100px] bg-[#4A4A4A] text-white z-[1001] flex items-center justify-center">
-  <div class="relative flex items-center justify-center w-[90%]">
-    <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo"
-      class="absolute left-[-20px] h-[100px] w-auto" />
-    <h4 class="m-0 text-[35px] font-bold text-center">
-      Maderas <span class="text-[#ff9800]">Isabella</span>
-    </h4> 
-    <!-- User menu -->
-    <div class="group relative inline-block ml-auto mr-5">
-      <div class="w-[80px] h-[80px] bg-[url('{{ user.profile_image.url }}')] bg-cover bg-center rounded-full border-2 border-black cursor-pointer"></div>
-      <div class="hidden group-hover:block absolute right-0 top-[60px] bg-white min-w-[200px] shadow-lg rounded divide-y divide-gray-200 z-50">
-        <a href="{% url 'profile' %}" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Perfil</a>
-        <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Calificaciones</a>
-        <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Calendario</a>
-        <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Archivos privados</a>
-        <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Informes</a>
-        <a href="#" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Preferencias</a>
-        <a href="{% url 'logout' %}" class="block px-4 py-3 text-[#4A4A4A] text-sm hover:bg-gray-100">Cerrar sesión</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Contenedor principal con Sidebar y Contenido -->
-<div class="flex mt-[100px] ml-[250px] p-[20px] box-border">
-
-  <!-- Menú vertical (Sidebar) -->
-  <div
-    class="fixed top-[100px] left-0 w-[250px] h-[calc(100vh-100px)] bg-[#4A4A4A] text-white p-[25px] box-border">
-    <h2 class="text-[20px] mb-[20px] text-center">Menú</h2>
-    <div class="flex flex-col">
-      <a href="{% url 'index' %}"
-         class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
-        Inicio
-      </a>
-      <a href="{% url 'gestionar_productos' %}"
-         class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
-        Galería de Publicidad
-      </a>
-      <a href="{% url 'lista_login' %}"
-         class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
-        Listado de Cuentas
-      </a>
-      <a href="{% url 'carpeta' %}"
-         class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
-        Documentos de contratación
-      </a>
-      <a href="{% url 'manage_backups' %}"
-         class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
-        Gestión de BD (backups)
-      </a>
-      <a href="{% url 'logout' %}"
-         class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
-        Cerrar Sesión
-      </a>
-    </div>
-  </div>
-
-  <div class="flex-1 max-w-[1500px] bg-[rgba(255,255,255,0.77)] mx-auto p-[20px] rounded-[8px] shadow-[0_5px_15px_rgb(250,146,76),0_0_15px_5px_rgba(247,144,75,0.89)] box-border">
+  <script defer src="{% static 'js/inventory.js' %}"></script>
+  
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
     
-    <div class="max-w-5xl mx-auto">
-      <div class="flex items-center justify-between mb-6">
-        <h1 class="text-3xl font-bold">Inventario</h1>
-        <button @click="openAdd = true" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Agregar Producto</button>
-      </div>
+    .sidebar-link.active {
+      background-color: rgba(69, 160, 73, 0.9);
+      color: white;
+    }
+    
+    /* Animaciones para tarjetas */
+    .dashboard-card {
+      transition: all 0.3s ease;
+    }
+    
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    /* Personalización de scroll */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #ff9800;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #e88c00;
+    }
+    
+    /* Efecto de gradiente para fondo de tarjetas */
+    .card-gradient {
+      background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+    }
+    
+    /* Animación para menú desplegable */
+    .dropdown-animation {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
 
-      <!-- Lista de productos existentes -->
-      <div id="product-list" class="space-y-4">
-        {% for p in products %}
-        <div id="prod-{{p.id}}" class="bg-white p-4 rounded-lg shadow flex justify-between items-center">
-          <div>
-            <h2 class="font-semibold">{{ p.name }}</h2>
-            <p class="text-sm text-gray-600">Madera: {{ p.wood_type }}</p>
-            <p class="text-sm">Stock: <span x-text="stocks[{{p.id}}] ?? {{p.stock}}"></span></p>
-            <p class="text-sm">Precio: ${{ p.price }}</p>
-          </div>
-          <!-- botón "⋮" -->
-          <div class="relative" x-data="{ open: false }">
-            <button @click="open = !open" class="p-2">⋮</button>
-            <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-32 bg-white border rounded shadow">
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Editar</a>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Eliminar</a>
-            </div>
-          </div>
+<body class="bg-[rgb(246,246,247)] m-0 overflow-x-hidden">
+  <!-- Fondo con overlay -->
+  <div class="fixed inset-0 bg-[url('{% static 'diseños/imagenes/14.jpg' %}')] bg-cover opacity-50 z-0"></div>
+  
+  <!-- Header Superior -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-[#383838] to-[#4A4A4A] shadow-lg">
+    <div class="flex items-center justify-between h-20 px-6 max-w-[1800px] mx-auto">
+      <!-- Logo y nombre -->
+      <div class="flex items-center space-x-4">
+        <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo" class="h-16 w-auto object-contain" />
+        <h1 class="text-2xl md:text-3xl font-bold text-white">
+          Maderas <span class="text-[#ff9800]">Isabella</span>
+        </h1>
+      </div>
+      
+      <!-- Buscador (opcional) -->
+      <div class="hidden md:flex items-center flex-1 max-w-md mx-6">
+        <div class="relative w-full">
+          <input type="text" placeholder="Buscar..." class="w-full px-4 py-2 rounded-full bg-[#5a5a5a] text-white border-none focus:outline-none focus:ring-2 focus:ring-[#ff9800]">
+          <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#ff9800]">
+            <i class="fas fa-search"></i>
+          </button>
         </div>
-        {% endfor %}
       </div>
-
-      <!-- Nueva sección: Productos Agregados Recientemente -->
-      <div class="mt-12">
-        <h2 class="text-2xl font-bold mb-4">Productos Agregados Recientemente</h2>
-        <div id="recent-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- Los productos agregados recientemente se mostrarán aquí -->
-          <template x-for="product in recentProducts" :key="product.id">
-            <div class="bg-green-50 p-4 rounded-lg shadow border border-green-200 transition-all duration-300 hover:shadow-lg">
-              <div class="flex justify-between">
-                <h3 class="font-semibold" x-text="product.name"></h3>
-                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Nuevo</span>
-              </div>
-              <p class="text-sm text-gray-600" x-text="'Madera: ' + product.wood_type"></p>
-              <p class="text-sm" x-text="'Stock: ' + product.stock"></p>
-              <p class="text-sm" x-text="'Precio: $' + product.price"></p>
-              <div class="mt-2 flex justify-end">
-                <button @click="removeFromRecent(product.id)" class="text-xs text-gray-500 hover:text-red-500">
-                  Quitar de recientes
-                </button>
-              </div>
-            </div>
-          </template>
+      
+      <!-- User menu -->
+      <div class="group relative inline-flex items-center cursor-pointer">
+      <div class="w-12 h-12 rounded-full border-2 border-[#ff9800] shadow-md"
+        style=" background-image: url('{% if user.profile_image %}{{ user.profile_image.url }}{% else %}{% static 'diseños/imagenes/default-profile.png' %}{% endif %}');
+          background-size: cover; background-position: center; "> </div>        <div class="ml-3 hidden md:block">
+          <p class="text-white font-medium text-sm leading-tight">{{ user.nombres }} {{ user.apellidos }}</p>
+          <p class="text-gray-300 text-xs">Administrador</p>
         </div>
-      </div>
-
-      <!-- Estadísticas de Inventario -->
-      <div class="mt-12 bg-white p-6 rounded-lg shadow">
-        <h2 class="text-2xl font-bold mb-4">Estadísticas de Inventario</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-            <p class="text-sm text-gray-600">Total Productos</p>
-            <p class="text-2xl font-bold" x-text="totalProducts"></p>
+        <i class="fas fa-chevron-down text-white ml-2 text-xs"></i>
+        
+        <!-- Dropdown menu -->
+        <div class="hidden group-hover:block dropdown-animation absolute right-0 top-full mt-2 bg-white min-w-[220px] shadow-xl rounded-lg overflow-hidden divide-y divide-gray-100 z-50">
+          <div class="px-4 py-3 bg-gray-50">
+            <p class="text-sm font-semibold text-gray-700">{{ user.nombres }} {{ user.apellidos }}</p>
+            <p class="text-xs text-gray-500">{{ user.email }}</p>
           </div>
-          <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
-            <p class="text-sm text-gray-600">Stock Total</p>
-            <p class="text-2xl font-bold" x-text="totalStock"></p>
+          <div class="py-1">
+            <a href="{% url 'profile' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              <i class="fas fa-user mr-2 text-[#ff9800]"></i> Perfil
+            </a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              <i class="fas fa-star mr-2 text-[#ff9800]"></i> Calificaciones
+            </a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              <i class="fas fa-calendar mr-2 text-[#ff9800]"></i> Calendario
+            </a>
           </div>
-          <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
-            <p class="text-sm text-gray-600">Valor del Inventario</p>
-            <p class="text-2xl font-bold" x-text="'$' + totalValue.toFixed(2)"></p>
+          <div class="py-1">
+            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              <i class="fas fa-file-alt mr-2 text-[#ff9800]"></i> Archivos privados
+            </a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              <i class="fas fa-chart-bar mr-2 text-[#ff9800]"></i> Informes
+            </a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              <i class="fas fa-cog mr-2 text-[#ff9800]"></i> Preferencias
+            </a>
+          </div>
+          <div class="py-1">
+            <a href="{% url 'logout' %}" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+              <i class="fas fa-sign-out-alt mr-2"></i> Cerrar sesión
+            </a>
           </div>
         </div>
       </div>
     </div>
+  </header>
 
-    <!-- Modal Agregar -->
-    <div x-show="openAdd" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div @click.away="closeAdd()" class="bg-white p-6 rounded-lg w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-4">Agregar Producto</h2>
-        <form @submit.prevent="submitAdd">
-          {% csrf_token %}
-          <div class="mb-4">
-            <label class="block">Nombre</label>
-            <input type="text" x-model="form.name" class="mt-1 block w-full rounded border-gray-300" required>
-            <p x-text="errors.name" class="text-red-500 text-sm" x-show="errors.name"></p>
-          </div>
-          <div class="mb-4">
-            <label class="block">Tipo de madera</label>
-            <input type="text" x-model="form.wood_type" class="mt-1 block w-full rounded border-gray-300">
-            <p x-text="errors.wood_type" class="text-red-500 text-sm" x-show="errors.wood_type"></p>
-          </div>
-          <div class="mb-4">
-            <label class="block">Precio</label>
-            <input type="number" step="0.01" x-model="form.price" class="mt-1 block w-full rounded border-gray-300" required>
-            <p x-text="errors.price" class="text-red-500 text-sm" x-show="errors.price"></p>
-          </div>
-          <div class="mb-4">
-            <label class="block">Stock</label>
-            <input type="number" x-model="form.stock" class="mt-1 block w-full rounded border-gray-300" required>
-            <p x-text="errors.stock" class="text-red-500 text-sm" x-show="errors.stock"></p>
-          </div>
-          <div class="flex justify-end space-x-2">
-            <button type="button" @click="closeAdd()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Guardar</button>
-          </div>
-        </form>
+  <!-- Sidebar -->
+  <aside class="fixed top-20 left-0 w-64 h-[calc(100vh-5rem)] bg-gradient-to-b from-[#4A4A4A] to-[#353535] text-white overflow-y-auto z-40 shadow-lg transition-transform duration-300 transform-gpu">
+    <div class="p-5">
+      <h2 class="text-lg font-semibold text-center mb-6 text-[#ff9800] border-b border-gray-600 pb-2">Panel de Control</h2>
+      
+      <nav class="space-y-1">
+        <a href="{% url 'index' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
+          <i class="fas fa-home mr-3 text-[#ff9800] w-5"></i>
+          <span>Inicio</span>
+        </a>
+        
+        <a href="{% url 'gestionar_productos' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
+          <i class="fas fa-images mr-3 text-[#ff9800] w-5"></i>
+          <span>Galería de Publicidad</span>
+        </a>
+        
+        <a href="{% url 'inventory_list' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
+          <i class="fas fa-boxes mr-3 text-[#ff9800] w-5"></i>
+          <span>Lista de inventario</span>
+        </a>
+        
+        <a href="{% url 'lista_login' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
+          <i class="fas fa-users mr-3 text-[#ff9800] w-5"></i>
+          <span>Listado de Cuentas</span>
+        </a>
+        
+        <a href="{% url 'carpeta' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
+          <i class="fas fa-folder-open mr-3 text-[#ff9800] w-5"></i>
+          <span>Documentos de contratación</span>
+        </a>
+        
+        <a href="{% url 'manage_backups' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
+          <i class="fas fa-database mr-3 text-[#ff9800] w-5"></i>
+          <span>Gestión de BD (backups)</span>
+        </a>
+      </nav>
+      
+      <div class="pt-6 mt-6 border-t border-gray-600">
+        <a href="{% url 'logout' %}" class="flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-red-600 hover:text-white transition-all">
+          <i class="fas fa-sign-out-alt mr-3 w-5"></i>
+          <span>Cerrar Sesión</span>
+        </a>
       </div>
     </div>
+  </aside>
 
+  <!-- Main Content -->
+  <main class="pt-24 pb-8 px-6 ml-64 min-h-screen relative z-10">
+    <div class="max-w-[1500px] mx-auto">
+      <!-- Breadcrumb -->
+      <nav class="flex mb-6 text-sm" aria-label="breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+          <li class="flex items-center">
+            <a href="{% url 'index' %}" class="text-gray-700 hover:text-[#ff9800]">
+              <i class="fas fa-home"></i>
+            </a>
+          </li>
+          <li class="flex items-center">
+            <span class="mx-2 text-gray-500">/</span>
+            <span class="text-gray-500">Inventario</span>
+          </li>
+        </ol>
+      </nav>
 
-    <!-- Modal Editar -->
-<div x-show="openEdit" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div @click.away="closeEdit()" class="bg-white p-6 rounded-lg w-full max-w-md">
-      <h2 class="text-2xl font-bold mb-4">Editar Producto</h2>
+      <!-- Contenido principal del inventario -->
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <div class="flex items-center justify-between mb-6">
+          <h1 class="text-2xl md:text-3xl font-bold text-[#4A4A4A]">Inventario</h1>
+          <button @click="openAdd = true" class="px-4 py-2 bg-[#ff9800] text-white rounded-lg hover:bg-[#e88c00] transition-colors duration-300 flex items-center">
+            <i class="fas fa-plus mr-2"></i> Agregar Producto
+          </button>
+        </div>
+
+        <!-- Lista de productos existentes -->
+        <div id="product-list" class="space-y-4 mb-8">
+          {% for p in products %}
+          <div id="prod-{{p.id}}" class="bg-gray-50 p-4 rounded-lg shadow-md border border-gray-100 flex justify-between items-center hover:shadow-lg transition-all duration-300">
+            <div>
+              <h2 class="font-semibold text-[#4A4A4A]">{{ p.name }}</h2>
+              <p class="text-sm text-gray-600">Madera: {{ p.wood_type }}</p>
+              <div class="flex space-x-4 mt-1">
+                <p class="text-sm">Stock: <span x-text="stocks[{{p.id}}] ?? {{p.stock}}" class="font-medium"></span></p>
+                <p class="text-sm">Precio: <span class="font-medium text-[#45a049]">${{ p.price }}</span></p>
+              </div>
+            </div>
+            <!-- botón "⋮" -->
+            <div class="relative" x-data="{ open: false }">
+              <button @click="open = !open" class="p-2 rounded-full hover:bg-gray-200 transition-colors">
+                <i class="fas fa-ellipsis-v text-gray-600"></i>
+              </button>
+              <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-xl z-50 overflow-hidden">
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
+                  <i class="fas fa-edit mr-2 text-blue-500"></i> Editar
+                </a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
+                  <i class="fas fa-trash-alt mr-2 text-red-500"></i> Eliminar
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Nueva sección: Productos Agregados Recientemente -->
+        <div class="mb-8 bg-gray-50 p-6 rounded-xl border border-gray-100">
+          <h2 class="text-xl font-semibold mb-4 text-[#4A4A4A] flex items-center">
+            <i class="fas fa-clock text-[#ff9800] mr-2"></i>
+            Productos Agregados Recientemente
+          </h2>
+          <div id="recent-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Los productos agregados recientemente se mostrarán aquí -->
+            <template x-for="product in recentProducts" :key="product.id">
+              <div class="bg-white p-4 rounded-lg shadow border-l-4 border-l-green-500 transition-all duration-300 hover:shadow-lg">
+                <div class="flex justify-between">
+                  <h3 class="font-semibold text-[#4A4A4A]" x-text="product.name"></h3>
+                  <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full flex items-center">
+                    <i class="fas fa-star mr-1"></i> Nuevo
+                  </span>
+                </div>
+                <p class="text-sm text-gray-600" x-text="'Madera: ' + product.wood_type"></p>
+                <div class="flex space-x-4 mt-1">
+                  <p class="text-sm" x-text="'Stock: ' + product.stock"></p>
+                  <p class="text-sm text-[#45a049]" x-text="'$' + product.price"></p>
+                </div>
+                <div class="mt-2 flex justify-end">
+                  <button @click="removeFromRecent(product.id)" class="text-xs text-gray-500 hover:text-red-500 flex items-center">
+                    <i class="fas fa-times mr-1"></i> Quitar de recientes
+                  </button>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- Estadísticas de Inventario -->
+        <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+          <h2 class="text-xl font-semibold mb-4 text-[#4A4A4A] flex items-center">
+            <i class="fas fa-chart-pie text-[#ff9800] mr-2"></i>
+            Estadísticas de Inventario
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 shadow-sm hover:shadow-md transition-all duration-300">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-600">Total Productos</p>
+                  <p class="text-2xl font-bold text-blue-700" x-text="totalProducts"></p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-full">
+                  <i class="fas fa-box text-blue-500"></i>
+                </div>
+              </div>
+            </div>
+            <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100 shadow-sm hover:shadow-md transition-all duration-300">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-600">Stock Total</p>
+                  <p class="text-2xl font-bold text-yellow-700" x-text="totalStock"></p>
+                </div>
+                <div class="bg-yellow-100 p-3 rounded-full">
+                  <i class="fas fa-layer-group text-yellow-500"></i>
+                </div>
+              </div>
+            </div>
+            <div class="bg-purple-50 p-4 rounded-lg border border-purple-100 shadow-sm hover:shadow-md transition-all duration-300">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-gray-600">Valor del Inventario</p>
+                  <p class="text-2xl font-bold text-purple-700" x-text="'$' + totalValue.toFixed(2)"></p>
+                </div>
+                <div class="bg-purple-100 p-3 rounded-full">
+                  <i class="fas fa-dollar-sign text-purple-500"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="mt-8 text-center text-gray-500 text-sm">
+        <p>&copy; 2025 Maderas Isabella. Todos los derechos reservados.</p>
+      </footer>
+    </div>
+  </main>
+
+  <!-- Mobile menu toggle (aparece en mobile) -->
+  <button class="fixed bottom-6 right-6 z-50 bg-[#ff9800] text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center lg:hidden">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Modal Agregar -->
+  <div x-show="openAdd" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div @click.away="closeAdd()" class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-[#4A4A4A]">Agregar Producto</h2>
+        <button @click="closeAdd()" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form @submit.prevent="submitAdd">
+        {% csrf_token %}
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-medium mb-1">Nombre</label>
+          <input type="text" x-model="form.name" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50" required>
+          <p x-text="errors.name" class="text-red-500 text-sm mt-1" x-show="errors.name"></p>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-medium mb-1">Tipo de madera</label>
+          <input type="text" x-model="form.wood_type" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50">
+          <p x-text="errors.wood_type" class="text-red-500 text-sm mt-1" x-show="errors.wood_type"></p>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-medium mb-1">Precio</label>
+          <div class="mt-1 relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <span class="text-gray-500 sm:text-sm">$</span>
+            </div>
+            <input type="number" step="0.01" x-model="form.price" class="pl-7 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50" required>
+          </div>
+          <p x-text="errors.price" class="text-red-500 text-sm mt-1" x-show="errors.price"></p>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-medium mb-1">Stock</label>
+          <input type="number" x-model="form.stock" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50" required>
+          <p x-text="errors.stock" class="text-red-500 text-sm mt-1" x-show="errors.stock"></p>
+        </div>
+        <div class="flex justify-end space-x-2 mt-6">
+          <button type="button" @click="closeAdd()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-[#ff9800] text-white rounded-lg hover:bg-[#e88c00] transition-colors flex items-center">
+            <i class="fas fa-save mr-2"></i> Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Editar -->
+  <div x-show="openEdit" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div @click.away="closeEdit()" class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-[#4A4A4A]">Editar Producto</h2>
+        <button @click="closeEdit()" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
       <form @submit.prevent="submitEdit">
         {% csrf_token %}
         <input type="hidden" x-model="editForm.id">
         <div class="mb-4">
-          <label class="block">Nombre</label>
-          <input type="text" x-model="editForm.name" class="mt-1 block w-full rounded border-gray-300" required>
-          <p x-text="errors.name" class="text-red-500 text-sm" x-show="errors.name"></p>
+          <label class="block text-gray-700 text-sm font-medium mb-1">Nombre</label>
+          <input type="text" x-model="editForm.name" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50" required>
+          <p x-text="errors.name" class="text-red-500 text-sm mt-1" x-show="errors.name"></p>
         </div>
         <div class="mb-4">
-          <label class="block">Tipo de madera</label>
-          <input type="text" x-model="editForm.wood_type" class="mt-1 block w-full rounded border-gray-300">
-          <p x-text="errors.wood_type" class="text-red-500 text-sm" x-show="errors.wood_type"></p>
+          <label class="block text-gray-700 text-sm font-medium mb-1">Tipo de madera</label>
+          <input type="text" x-model="editForm.wood_type" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50">
+          <p x-text="errors.wood_type" class="text-red-500 text-sm mt-1" x-show="errors.wood_type"></p>
         </div>
         <div class="mb-4">
-          <label class="block">Precio</label>
-          <input type="number" step="0.01" x-model="editForm.price" class="mt-1 block w-full rounded border-gray-300" required>
-          <p x-text="errors.price" class="text-red-500 text-sm" x-show="errors.price"></p>
+          <label class="block text-gray-700 text-sm font-medium mb-1">Precio</label>
+          <div class="mt-1 relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <span class="text-gray-500 sm:text-sm">$</span>
+            </div>
+            <input type="number" step="0.01" x-model="editForm.price" class="pl-7 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50" required>
+          </div>
+          <p x-text="errors.price" class="text-red-500 text-sm mt-1" x-show="errors.price"></p>
         </div>
         <div class="mb-4">
-          <label class="block">Stock</label>
-          <input type="number" x-model="editForm.stock" class="mt-1 block w-full rounded border-gray-300" required>
-          <p x-text="errors.stock" class="text-red-500 text-sm" x-show="errors.stock"></p>
+          <label class="block text-gray-700 text-sm font-medium mb-1">Stock</label>
+          <input type="number" x-model="editForm.stock" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50" required>
+          <p x-text="errors.stock" class="text-red-500 text-sm mt-1" x-show="errors.stock"></p>
         </div>
-        <div class="flex justify-between">
-          <button type="button" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700" @click="confirmDelete()">
-            Eliminar
+        <div class="flex justify-between mt-6">
+          <button type="button" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center" @click="confirmDelete()">
+            <i class="fas fa-trash-alt mr-2"></i> Eliminar
           </button>
           <div class="space-x-2">
-            <button type="button" @click="closeEdit()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Guardar Cambios</button>
+            <button type="button" @click="closeEdit()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Cancelar</button>
+            <button type="submit" class="px-4 py-2 bg-[#ff9800] text-white rounded-lg hover:bg-[#e88c00] transition-colors flex items-center">
+              <i class="fas fa-save mr-2"></i> Guardar
+            </button>
           </div>
         </div>
       </form>
     </div>
   </div>
-  
   <!-- Modal de Confirmación para Eliminar -->
   <div x-show="openDelete" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div @click.away="openDelete = false" class="bg-white p-6 rounded-lg w-full max-w-md">
-      <h2 class="text-2xl font-bold mb-4">Confirmar Eliminación</h2>
-      <p class="mb-6">¿Estás seguro de que deseas eliminar <span class="font-bold" x-text="editForm.name"></span>? Esta acción no se puede deshacer.</p>
-      <div class="flex justify-end space-x-2">
-        <button @click="openDelete = false" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
-        <button @click="deleteProduct()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Eliminar</button>
+    <div @click.away="openDelete = false" class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl">
+      <div class="text-center">
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+          <i class="fas fa-exclamation-triangle text-red-600"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Confirmar Eliminación</h2>
+        <p class="mb-6 text-gray-600">¿Estás seguro de que deseas eliminar <span class="font-bold text-gray-800" x-text="editForm.name"></span>? Esta acción no se puede deshacer.</p>
+        <div class="flex justify-center space-x-4">
+          <button @click="openDelete = false" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+            <i class="fas fa-times mr-2"></i> Cancelar
+          </button>
+          <button @click="deleteProduct()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+            <i class="fas fa-trash-alt mr-2"></i> Eliminar
+          </button>
+        </div>
       </div>
     </div>
   </div>
+  
+  <script>
 
-
-
-
-    <script>
-
-        function inventory() {
+    
+      function inventory() {
             return {
               openAdd: false,
               openEdit: false,
@@ -570,9 +788,9 @@ class="font-sans text-[#333333] bg-[rgb(246,246,247)] bg-[url('/static/diseños/
             }
           }
 
-    
-    </script>
-  </div>
-</div>
+  
+
+  </script>
+  
 </body>
 </html>

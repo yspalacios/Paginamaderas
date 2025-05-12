@@ -13,7 +13,8 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_http_methods
 from django.template.loader import render_to_string
-from django.db.models import Q
+from django.db.models import Q, Sum
+from django.db import models
 import os, subprocess, datetime, shutil, json
 from django.utils._os import safe_join
 from django.utils.html import strip_tags
@@ -29,8 +30,67 @@ def inicio(request):
     imagenes_publicadas = Producto.objects.filter(publicado=True).order_by('tipo_madera__nombre','id')
     return render(request, 'paginas/inicio.html', {'imagenes_publicadas': imagenes_publicadas})
 
-def libros(request):
-    return render(request, 'libros/index.html')
+
+# myapp/views.py
+from django.shortcuts import render
+
+def calendar_view(request):
+    return render(request, 'libros/calendario.html')
+
+def informes_view(request):
+    # Conteo de productos publicados y no publicados
+    published_count = Producto.objects.filter(publicado=True).count()
+    unpublished_count = Producto.objects.filter(publicado=False).count()
+
+    # Inventario por tipo de madera
+    inventory_qs = TipoMadera.objects.annotate(
+        total=models.Sum('productos__precio')  # o bien contar stock si usas otro modelo
+    )
+    # Si quisieras contar número de productos:
+    inventory_by_type = [
+        (tm.nombre, tm.productos.count())
+        for tm in TipoMadera.objects.all()
+    ]
+
+    # Usuarios activos
+    user_count = datos.objects.filter(is_active=True).count()
+
+    context = {
+        'published_count': published_count,
+        'unpublished_count': unpublished_count,
+        'inventory_by_type': inventory_by_type,
+        'user_count': user_count,
+    }
+    return render(request, 'libros/informes.html', context)
+
+@login_required(login_url="/libros/login/")
+def manage_index(request):
+    # 1. Conteos de cada módulo
+    gallery_count   = Producto.objects.count()      # Galería de publicidad
+    producto_publicado = Producto.objects.filter(publicado=True).count()     #Productos publicados
+    producto_no_publicado = Producto.objects.filter(publicado=False).count()    #Productos publicados
+    inventory_count = Product.objects.count()       # Lista de inventario
+    user_count      = datos.objects.count()         # Listado de usuarios
+    lista_folders   = Folder.objects.count()
+    docs_count      = Document.objects.count()      # Documentos de contratación
+
+    # Backups: contamos archivos .sql en la carpeta backups
+    backup_dir = os.path.join(settings.BASE_DIR, 'backups')
+    try:
+        backups_count = len([f for f in os.listdir(backup_dir) if f.endswith('.sql')])
+    except FileNotFoundError:
+        backups_count = 0
+
+    return render(request, 'libros/index.html', {
+        'gallery_count':   gallery_count,
+        'producto_publicado': producto_publicado,
+        'producto_no_publicado': producto_no_publicado,
+        'inventory_count': inventory_count,
+        'user_count':      user_count,
+        'lista_folders':    lista_folders,
+        'docs_count':      docs_count,
+        'backups_count':   backups_count,
+    })
 
 
 @login_required(login_url="/libros/login/")
@@ -81,7 +141,7 @@ def profile_view(request):
 # --------------------------
 @login_required(login_url="/libros/login/")
 @never_cache
-def index_view(request):
+def index(request):
     return render(request, "libros/index.html")
 
 def login_view(request):
@@ -269,7 +329,7 @@ def registro_login(request):
         # Si no es POST, se instancia un formulario vacío
         form = RegistroForm()
     # Se renderiza el template con el formulario en el contexto
-    return render(request, 'libros/registro_form.html', {'form': form})
+    return render(request, 'libros/lista_login.html', {'form': form})
 
 @login_required(login_url="/libros/login/")
 @never_cache

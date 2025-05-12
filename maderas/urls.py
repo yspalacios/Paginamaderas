@@ -22,7 +22,7 @@ urlpatterns = [
     # Rutas para la gestión de usuarios
     #===================================================================
     path('libros/login/', views.login_view, name="login"),
-    path('libros/index/', views.index_view, name="index"),
+    path('libros/index/', views.manage_index, name="index"),
     path('libros/cambia_con/<str:token>/', views.cambia_con, name='cambia_con'),
     path('libros/recu_contra/', views.recu_contra, name="recu_contra"),
     path('libros/registro/', views.registro_login, name='registro_login'),
@@ -76,7 +76,11 @@ urlpatterns = [
     path('libros/inventory/', views.inventory_list, name='inventory_list'),
     path('inventory/update-stock/', views.update_stock, name='update_stock'),
 
-
+    #==================================================================
+    #Ruta para el calendario e informes
+    #==================================================================
+    path('calendar/', views.calendar_view, name='calendar'),
+    path('informes/', views.informes_view, name='informes'),
 
     
 ]

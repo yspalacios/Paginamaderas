@@ -1,48 +1,87 @@
 {% regroup productos by tipo_madera as productos_por_tipo %}
 
 {% if productos_por_tipo %}
-  {% for grupo in productos_por_tipo %}
-    <section class="seccion-tipo">
-      <h2> Madera de {{ grupo.grouper }}</h2>
-      <div class="productos-horizontal">
-        {% for producto in grupo.list %}
-          <div class="producto-item">
-            <div class="producto-card">
-              {% if producto.imagen %}
-                <img src="{{ producto.imagen.url }}" class="producto-img" alt="{{ producto.nombre_producto }}">
-              {% else %}
-                <div class="producto-noimg">No hay imagen disponible</div>
-              {% endif %}
-              <div class="producto-body">
-                <h3 class="producto-title">{{ producto.nombre_producto }}</h3>
-                <div class="producto-info">
+  <!-- Contenedor de todas las secciones: flex horizontal, wrap si caben varias -->
+  <div class="flex flex-wrap gap-8">
+    {% for grupo in productos_por_tipo %}
+      <!-- Cada sección es una columna -->
+      <section class="flex flex-col flex-1 min-w-[320px] mb-12 bg-white rounded-2xl shadow overflow-hidden">
+        <!-- Título fijo arriba -->
+        <h2 class="py-3 bg-[#6b4f2a] text-white text-center font-semibold">
+          Madera de {{ grupo.grouper }}
+        </h2>
+        
+        <!-- Contenedor de tarjetas dentro de la sección, apilado verticalmente -->
+        <div class="flex flex-col divide-y divide-gray-200">
+          {% for producto in grupo.list %}
+            {% if producto.publicado %}
+              <div class="p-4 flex flex-col">
+                <!-- Imagen -->
+                {% if producto.imagen %}
+                  <img
+                    src="{{ producto.imagen.url }}"
+                    alt="{{ producto.nombre_producto }}"
+                    class="w-full h-40 object-cover rounded-md mb-4"
+                  >
+                {% else %}
+                  <div class="w-full h-40 flex items-center justify-center bg-gray-100 text-gray-500 italic rounded-md mb-4">
+                    No hay imagen disponible
+                  </div>
+                {% endif %}
+                
+                <!-- Datos -->
+                <h3 class="text-lg font-medium text-[#383838] mb-2">
+                  {{ producto.nombre_producto }}
+                </h3>
+                <div class="text-sm text-gray-600 space-y-1 mb-4">
                   <p><strong>Tipo:</strong> {{ producto.tipo_madera }}</p>
                   <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
-                  <p><strong>Precio:</strong> {{ producto.precio }}</p>
+                  <p><strong>Precio:</strong> ${{ producto.precio }}</p>
                 </div>
-                <div class="producto-buttons">
-                  <button class="btn-editar" data-producto-id="{{ producto.id }}">Editar</button>
-                  <button class="btn-eliminar"
-                          data-producto-id="{{ producto.id }}"
-                          data-producto-nombre="{{ producto.nombre_producto }}"
-                          data-eliminar-url="{% url 'confirmar_eliminar' producto.id %}">
+                
+                <!-- Botones editar/eliminar -->
+                <div class="flex flex-wrap gap-2 mb-4">
+                  <button
+                    class="flex-1 py-2 bg-[#ffc107] text-black rounded-lg hover:bg-[#e0a800] transition"
+                    data-producto-id="{{ producto.id }}"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    class="flex-1 py-2 bg-[#dc3545] text-white rounded-lg hover:bg-[#c82333] transition"
+                    data-producto-id="{{ producto.id }}"
+                    data-producto-nombre="{{ producto.nombre_producto }}"
+                    data-eliminar-url="{% url 'confirmar_eliminar' producto.id %}"
+                  >
                     Eliminar
                   </button>
-                  {% if not producto.publicado %}
-                    <button class="btn-publish" onclick="cambiarEstado({{ producto.id }}, 'publicar', this)">Publicar</button>
-                  {% else %}
-                    <button class="btn-unpublish" onclick="cambiarEstado({{ producto.id }}, 'quitar', this)">No Publicar</button>
-                  {% endif %}
                 </div>
+
+                <!-- Botón publicar/no publicar -->
+                {% if not producto.publicado %}
+                  <button
+                    class="w-full py-2 bg-[#17a2b8] text-white rounded-lg hover:bg-[#138496] transition"
+                    onclick="cambiarEstado({{ producto.id }}, 'publicar', this)"
+                  >
+                    Publicar
+                  </button>
+                {% else %}
+                  <button
+                    class="w-full py-2 bg-[#6c757d] text-white rounded-lg hover:bg-[#5a6268] transition"
+                    onclick="cambiarEstado({{ producto.id }}, 'quitar', this)"
+                  >
+                    No Publicar
+                  </button>
+                {% endif %}
               </div>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-    </section>
-  {% endfor %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  </div>
 {% else %}
-  <div class="no-productos">
+  <div class="py-16 text-center text-gray-500">
     <p>No hay productos disponibles.</p>
   </div>
 {% endif %}

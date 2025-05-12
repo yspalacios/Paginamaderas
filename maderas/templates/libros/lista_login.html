@@ -5,173 +5,186 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lista de Cuentas</title>
-  <!-- Tailwind CSS CDN -->
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+    .sidebar-link.active { background-color: rgba(69, 160, 73, 0.9); color: white; }
+    .dashboard-card { transition: all 0.3s ease; }
+    .dashboard-card:hover { transform: translateY(-5px); }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: #ff9800; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #e88c00; }
+    .card-gradient { background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%); }
+    .dropdown-animation { animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
 </head>
-<body
-  class="font-sans text-[#333333] bg-[rgb(246,246,247)] bg-[url('/static/diseños/imagenes/14.jpg')] bg-cover m-0 p-[30px]">
 
-  <!-- Header superior -->
-  <div
-    class="fixed top-0 left-0 w-full h-[100px] bg-[#4A4A4A] text-white z-[1001] flex items-center justify-center">
-    <div class="relative flex items-center justify-center w-[90%]">
-      <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo"
-        class="absolute left-[-20px] h-[100px] w-auto" />
-      <h4 class="m-0 text-[35px] font-bold text-center">
-        Maderas <span class="text-[#ff9800]">Isabella</span>
-      </h4>
-    </div>
-  </div>
-
-  <!-- Contenedor principal con Sidebar y Contenido -->
-  <div class="flex mt-[100px] ml-[250px] p-[20px] box-border">
-
-    <!-- Menú vertical (Sidebar) -->
-    <div
-      class="fixed top-[100px] left-0 w-[250px] h-[calc(100vh-100px)] bg-[#4A4A4A] text-white p-[25px] box-border">
-      <h2 class="text-[20px] mb-[20px] text-center">Menú</h2>
-      <div class="flex flex-col">
-        <a href="{% url 'index' %}"
-           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
-          Inicio
-        </a>
-        <a href="{% url 'gestionar_productos' %}"
-           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
-          Galería de Publicidad
-        </a>
-        <a href="{% url 'lista_login' %}"
-           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
-          Listado de Cuentas
-        </a>
-        <a href="{% url 'carpeta' %}"
-           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
-          Documentos de contratación
-        </a>
-        <a href="{% url 'manage_backups' %}"
-           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
-          Gestión de BD (backups)
-        </a>
-        <a href="{% url 'logout' %}"
-           class="block p-[12px] mb-[10px] text-[#DBC5AD] no-underline rounded-[4px] transition-colors duration-300 ease hover:bg-[#45a049] hover:text-white">
-          Cerrar Sesión
-        </a>
+<body class="bg-[rgb(246,246,247)] m-0 overflow-x-hidden">
+  <!-- Fondo con overlay -->
+  <div class="fixed inset-0 bg-[url('{% static 'diseños/imagenes/14.jpg' %}')] bg-cover opacity-50 z-0"></div>
+  
+  <!-- Header Superior -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-[#383838] to-[#4A4A4A] shadow-lg">
+    <div class="flex items-center justify-between h-20 px-6 max-w-[1800px] mx-auto">
+      <div class="flex items-center space-x-4">
+        <img src="{% static 'diseños/imagenes/logo.png' %}" alt="logo" class="h-16 w-auto object-contain" />
+        <h1 class="text-2xl md:text-3xl font-bold text-white">Maderas <span class="text-[#ff9800]">Isabella</span></h1>
       </div>
-    </div>
-
-    <!-- Contenido principal -->
-    <div class="flex-1 max-w-[1500px] bg-[rgba(255,255,255,0.77)] mx-auto p-[20px] rounded-[8px] shadow-[0_5px_15px_rgb(250,146,76),0_0_15px_5px_rgba(247,144,75,0.89)] box-border">
-      <div class="text-center mb-[20px]">
-        <h1 class="mb-[10px]">Lista de Cuentas Registradas</h1>
-        <div class="buttons inline-flex">
-          <button
-            class="bg-[#cf9d67] text-white py-[10px] px-[20px] rounded-[5px] cursor-pointer transition-colors duration-300 ease hover:bg-[#45a049]"
-            type="button" onclick="openCreateAccountModal()">
-            Crear Cuenta
-          </button>
-          <a href="{% url 'index' %}" class="mx-[10px]">
-            <button
-              class="bg-[#cf9d67] text-white py-[10px] px-[20px] rounded-[5px] cursor-pointer transition-colors duration-300 ease hover:bg-[#45a049]"
-              type="button">
-              Regresa al inicio
-            </button>
-          </a>
+      <div class="hidden md:flex items-center flex-1 max-w-md mx-6">
+        <div class="relative w-full">
+          <input type="text" placeholder="Buscar..." class="w-full px-4 py-2 rounded-full bg-[#5a5a5a] text-white border-none focus:outline-none focus:ring-2 focus:ring-[#ff9800]">
+          <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#ff9800]"><i class="fas fa-search"></i></button>
         </div>
       </div>
+      <div class="group relative inline-flex items-center cursor-pointer">
+      <div class="w-12 h-12 rounded-full border-2 border-[#ff9800] shadow-md"
+        style=" background-image: url('{% if user.profile_image %}{{ user.profile_image.url }}{% else %}{% static 'diseños/imagenes/default-profile.png' %}{% endif %}');
+          background-size: cover; background-position: center; "> </div>        <div class="ml-3 hidden md:block">
+          <p class="text-white font-medium text-sm leading-tight">{{ user.nombres }} {{ user.apellidos }}</p>
+          <p class="text-gray-300 text-xs">Administrador</p>
+        </div>
+        <i class="fas fa-chevron-down text-white ml-2 text-xs"></i>
+        <div class="hidden group-hover:block dropdown-animation absolute right-0 top-full mt-2 bg-white min-w-[220px] shadow-xl rounded-lg overflow-hidden divide-y divide-gray-100 z-50">
+          <div class="px-4 py-3 bg-gray-50">
+            <p class="text-sm font-semibold text-gray-700">{{ user.nombres }} {{ user.apellidos }}</p>
+            <p class="text-xs text-gray-500">{{ user.email }}</p>
+          </div>
+          <div class="py-1">
+            <a href="{% url 'profile' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-user mr-2 text-[#ff9800]"></i> Perfil</a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-star mr-2 text-[#ff9800]"></i> Calificaciones</a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-calendar mr-2 text-[#ff9800]"></i> Calendario</a>
+          </div>
+          <div class="py-1">
+            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-file-alt mr-2 text-[#ff9800]"></i> Archivos privados</a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-chart-bar mr-2 text-[#ff9800]"></i> Informes</a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-cog mr-2 text-[#ff9800]"></i> Preferencias</a>
+          </div>
+          <div class="py-1">
+            <a href="{% url 'logout' %}" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50"><i class="fas fa-sign-out-alt mr-2"></i> Cerrar sesión</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-      <div class="overflow-x-auto mt-[20px]">
-        <table class="w-full border-collapse bg-white shadow-[0_0_10px_rgba(15,15,15,0.12)]">
-          <thead class="bg-[#cf9d67] text-white">
+  <!-- Sidebar -->
+  <aside class="fixed top-20 left-0 w-64 h-[calc(100vh-5rem)] bg-gradient-to-b from-[#4A4A4A] to-[#353535] text-white overflow-y-auto z-40 shadow-lg">
+    <div class="p-5">
+      <h2 class="text-lg font-semibold text-center mb-6 text-[#ff9800] border-b border-gray-600 pb-2">Panel de Control</h2>
+      <nav class="space-y-1">
+        <a href="{% url 'index' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all"><i class="fas fa-home mr-3 text-[#ff9800] w-5"></i> Inicio</a>
+        <a href="{% url 'gestionar_productos' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all"><i class="fas fa-images mr-3 text-[#ff9800] w-5"></i> Galería de Publicidad</a>
+        <a href="{% url 'inventory_list' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all"><i class="fas fa-boxes mr-3 text-[#ff9800] w-5"></i> Lista de inventario</a>
+        <a href="{% url 'lista_login' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all active"><i class="fas fa-users mr-3 text-[#ff9800] w-5"></i> Listado de Cuentas</a>
+        <a href="{% url 'carpeta' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all"><i class="fas fa-folder-open mr-3 text-[#ff9800] w-5"></i> Documentos de contratación</a>
+        <a href="{% url 'manage_backups' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all"><i class="fas fa-database mr-3 text-[#ff9800] w-5"></i> Gestión de BD (backups)</a>
+      </nav>
+      <div class="pt-6 mt-6 border-t border-gray-600">
+        <a href="{% url 'logout' %}" class="flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-red-600 hover:text-white transition-all"><i class="fas fa-sign-out-alt mr-3 w-5"></i>Cerrar Sesión</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="pt-24 pb-8 px-6 ml-64 min-h-screen relative z-10">
+    <div class="max-w-[1500px] mx-auto bg-[rgba(255,255,255,0.77)] p-6 rounded-xl shadow-lg">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-semibold text-[#4A4A4A]">Lista de Cuentas Registradas</h1>
+        <div class="flex space-x-4">
+          <button class="bg-[#ff9800] text-white py-2 px-4 rounded-full shadow hover:bg-[#e88c00] transition" type="button" onclick="openCreateAccountModal()">Crear Cuenta</button>
+          <a href="{% url 'index' %}" class="bg-[#4A4A4A] text-white py-2 px-4 rounded-full shadow hover:bg-[#333333] transition">Regresar al inicio</a>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead class="bg-gradient-to-r from-[#383838] to-[#4A4A4A] text-white">
             <tr>
-              <th class="py-[12px] px-[15px] text-left">Nombres</th><th>|</th>
-              <th class="py-[12px] px-[15px] text-left">Apellidos</th><th>|</th>
-              <th class="py-[12px] px-[15px] text-left">Correo</th><th>|</th>
-              <th class="py-[12px] px-[15px] text-left">Teléfono</th><th>|</th>
-              <th class="py-[12px] px-[15px] text-left">Pregunta de Seguridad</th><th>|</th>
-              <th class="py-[12px] px-[15px] text-left">Respuesta de Seguridad</th><th>|</th>
-              <th class="py-[12px] px-[15px] text-left">Correo de Recuperación</th><th>|</th>
-              <th class="py-[12px] px-[15px] text-left">Estado</th><th>|</th>
-              <th class="py-[12px] px-[15px] text-left">Opciones</th>
+              <th class="py-3 px-4 text-left">Nombres</th>
+              <th class="py-3 px-4 text-left">Apellidos</th>
+              <th class="py-3 px-4 text-left">Correo</th>
+              <th class="py-3 px-4 text-left">Teléfono</th>
+              <th class="py-3 px-4 text-left">Pregunta Seguridad</th>
+              <th class="py-3 px-4 text-left">Respuesta Seguridad</th>
+              <th class="py-3 px-4 text-left">Correo Recuperación</th>
+              <th class="py-3 px-4 text-left">Estado</th>
+              <th class="py-3 px-4 text-left">Opciones</th>
             </tr>
           </thead>
           <tbody>
             {% for cuenta in cuentas %}
-            <tr class="hover:bg-[rgba(146,143,143,0.6)]">
-              <td class="py-[12px] px-[15px]">{{ cuenta.nombres }}</td><th>|</th>
-              <td class="py-[12px] px-[15px]">{{ cuenta.apellidos }}</td><th>|</th>
-              <td class="py-[12px] px-[15px]">{{ cuenta.email }}</td><th>|</th>
-              <td class="py-[12px] px-[15px]">{{ cuenta.phone }}</td><th>|</th>
-              <td class="py-[12px] px-[15px]">{{ cuenta.security_question }}</td><th>|</th>
-              <td class="py-[12px] px-[15px]">{{ cuenta.security_answer }}</td><th>|</th>
-              <td class="py-[12px] px-[15px]">{{ cuenta.recovery_email }}</td><th>|</th>
-              <td class="py-[12px] px-[15px]">
-                {{ cuenta.status }}
+            <tr class="hover:bg-[#f4f4f4]">
+              <td class="py-2 px-4">{{ cuenta.nombres }}</td>
+              <td class="py-2 px-4">{{ cuenta.apellidos }}</td>
+              <td class="py-2 px-4">{{ cuenta.email }}</td>
+              <td class="py-2 px-4">{{ cuenta.phone }}</td>
+              <td class="py-2 px-4">{{ cuenta.security_question }}</td>
+              <td class="py-2 px-4">{{ cuenta.security_answer }}</td>
+              <td class="py-2 px-4">{{ cuenta.recovery_email }}</td>
+              <td class="py-2 px-4 flex items-center space-x-2">{{ cuenta.status }}
                 {% if cuenta.status == 'Activo' %}
-                  <a href="{% url 'desactivar_cuenta' cuenta.id %}" title="Desactivar" class="text-[#cf9d67] font-bold hover:underline">🔓</a>
+                  <a href="{% url 'desactivar_cuenta' cuenta.id %}" class="text-red-500 hover:underline" title="Desactivar"><i class="fas fa-lock-open"></i></a>
                 {% else %}
-                  <a href="{% url 'activar_cuenta' cuenta.id %}" title="Activar" class="text-[#cf9d67] font-bold hover:underline">🔒</a>
+                  <a href="{% url 'activar_cuenta' cuenta.id %}" class="text-green-500 hover:underline" title="Activar"><i class="fas fa-lock"></i></a>
                 {% endif %}
-              </td><th>|</th>
-              <td class="py-[12px] px-[15px]">
-                <button
-                  class="bg-[#cf9d67] text-white py-[5px] px-[10px] rounded-[4px] cursor-pointer transition-colors duration-300 ease hover:bg-[#45a049]"
-                  type="button"
-                  onclick="openEditModal(
-                    {{ cuenta.id }}, '{{ cuenta.email }}', '{{ cuenta.phone }}',
-                    '{{ cuenta.security_question }}', '{{ cuenta.security_answer }}',
-                    '{{ cuenta.recovery_email }}' )">
-                  Editar
-                </button>
-                <button
-                  class="bg-[#cf9d67] text-white py-[5px] px-[10px] rounded-[4px] cursor-pointer transition-colors duration-300 ease hover:bg-[#45a049] ml-[5px]"
-                  type="button" onclick="openDeleteModal({{ cuenta.id }})">
-                  Eliminar
-                </button>
+              </td>
+              <td class="py-2 px-4 space-x-2">
+                <button class="bg-[#ff9800] text-white py-1 px-3 rounded hover:bg-[#e88c00] transition" onclick="openEditModal({{ cuenta.id }}, '{{ cuenta.email }}', '{{ cuenta.phone }}','{{ cuenta.security_question }}','{{ cuenta.security_answer }}','{{ cuenta.recovery_email }}')">Editar</button>
+                <button class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition" onclick="openDeleteModal({{ cuenta.id }})">Eliminar</button>
               </td>
             </tr>
             {% empty %}
-            <tr>
-              <td colspan="15" class="py-[12px] px-[15px] text-center">No hay cuentas registradas.</td>
-            </tr>
+            <tr><td colspan="9" class="py-4 text-center text-gray-500">No hay cuentas registradas.</td></tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- Modal para confirmar eliminación -->
-  <div id="deleteModal"
-       class="hidden fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-60 flex justify-center items-center z-[1000]">
-    <div class="bg-white p-[2rem] rounded-[8px] max-w-[500px] w-full text-center">
-      <span class="absolute right-[10px] top-[10px] text-[20px] cursor-pointer" onclick="closeDeleteModal()">&times;</span>
-      <h3>¿Estás seguro de eliminar esta cuenta?</h3>
-      <div class="mt-[20px]">
-        <button
-          class="bg-[#cf9d67] text-white py-[5px] px-[10px] rounded-[4px] mr-[10px] hover:bg-[#45a049] transition-colors duration-300 ease"
-          onclick="confirmDelete()">
-          Sí, eliminar
-        </button>
-        <button
-          class="bg-gray-300 text-gray-800 py-[5px] px-[10px] rounded-[4px] hover:bg-gray-400 transition-colors duration-300 ease"
-          onclick="closeDeleteModal()">
-          Cancelar
-        </button>
+  <!-- Modales e includes -->
+  <div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg max-w-md w-full text-center">
+      <button class="absolute top-4 right-4 text-2xl" onclick="closeDeleteModal()">&times;</button>
+      <h3 class="text-lg font-semibold mb-4">¿Estás seguro de eliminar esta cuenta?</h3>
+      <div class="flex justify-center space-x-4">
+        <button class="bg-[#ff9800] text-white py-2 px-4 rounded hover:bg-[#e88c00] transition" onclick="confirmDelete()">Sí, eliminar</button>
+        <button class="bg-gray-300 text-gray-800 py-2 px-4 rounded hover:bg-gray-400 transition" onclick="closeDeleteModal()">Cancelar</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal de edición -->
-  <div id="editModal"
-       class="hidden fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-60 flex justify-center items-center z-[9999]">
-    <div class="relative bg-white p-[2rem] rounded-[8px] max-w-[500px] w-[90%] shadow-[0_0_15px_rgba(0,0,0,0.3)] max-h-[90%] overflow-y-auto">
-      <span class="absolute right-[10px] top-[10px] text-[20px] cursor-pointer" onclick="closeEditModal()">&times;</span>
+  <div id="editModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+    <div class="relative bg-white p-6 rounded-lg max-w-md w-full max-h-[90%] overflow-y-auto shadow-lg">
+      <button class="absolute top-4 right-4 text-2xl" onclick="closeEditModal()">&times;</button>
       {% include 'libros/editar_cuenta_form.html' %}
     </div>
   </div>
 
-  <!-- Modal de creación -->
   {% include 'libros/registro_form.html' %}
 
+  <script>
+    // Script para marcar enlace activo
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && (currentPath === href || (currentPath.includes(href) && href !== '/'))) {
+        link.classList.add('active');
+      }
+    });
+  </script>
   <script src="{% static 'js/lista_login.js' %}?v={{ timestamp }}"></script>
 </body>
 </html>

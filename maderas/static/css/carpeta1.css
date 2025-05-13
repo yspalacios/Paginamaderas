@@ -1,219 +1,7 @@
-/* Estilos Globales */
-body {
-    background: url("/static/diseños/imagenes/15.jpg");
-    background-color: rgb(246, 246, 247);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
-    margin: 0;
-    padding: 30px;
-}
-
-/* Header: Barra superior */
-.headermenu {
-    background-color: #4A4A4A;
-    color: #fff;
-    height: 100px;
-    /* Valor fijo para evitar problemas con porcentajes */
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1001;
-    display: flex;
-    align-items: center;
-    /* Centra verticalmente */
-    justify-content: center;
-    /* Centra horizontalmente el contenido */
-}
-
-/* Contenedor del logo y el texto */
-.hmenu {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80%;
-    /* Ajusta según el espacio disponible */
-    position: relative;
-}
-
-/* Texto del header */
-.hmenu h4 {
-    margin: 0;
-    font-size: 35px;
-    font-weight: bold;
-    text-align: center;
-}
-
-/* Imagen del logo */
-.hmenu .img {
-    position: absolute;
-    left: 25px;
-    /* Alineada con la palabra "Menú" del sidebar */
-    height: 100px;
-    /* Centrado verticalmente en el header */
-    width: auto;
-}
-
-.headermenu span {
-    color: #ff9800;
-}
-
-/* Estilos para el menú circular desplegable */
-.user-menu {
-    position: relative;
-    display: inline-block;
-    margin-right: 20px;
-    /* Espacio a la derecha */
-}
-
-.user-circle {
-    width: 80px;
-    height: 80px;
-    background-color: rgb(255, 179, 0);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border: 2px solid #000000;
-    /* Adaptado al color de acento de tu sitio */
-    color: #1b1b1b;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 60px;
-    /* Asegura que aparezca debajo del círculo */
-    background-color: white;
-    min-width: 200px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1002;
-    border-radius: 4px;
-    padding: 0;
-    /* Elimina padding adicional */
-    margin: 0;
-    /* Elimina márgenes no deseados */
-}
-
-.dropdown-content a {
-    color: #4A4A4A;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    font-size: 14px;
-    border-bottom: 1px solid #eee;
-}
-
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
-
-.user-menu:hover .dropdown-content {
-    display: block;
-}
-
-.user-menu {
-    display: flex;
-    align-items: center;
-    gap: 1px;
-}
-
-.user-name {
-    color: white;
-    font-weight: bold;
-}
-
-/* Sidebar (menú vertical izquierdo) */
-.sidebar {
-    background-color: #4A4A4A;
-    width: 250px;
-    padding: 25px;
-    color: #fff;
-    position: fixed;
-    top: 100px;
-    left: 0;
-    height: calc(100vh - 100px);
-    box-sizing: border-box;
-}
-
-.sidebar h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.sidebar .menu a {
-    display: block;
-    padding: 12px;
-    margin-bottom: 10px;
-    color: #DBC5AD;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background 0.3s ease, color 0.3s ease;
-}
-
-.sidebar .menu a:hover {
-    background-color: #45a049;
-    color: #fff;
-}
-
-/* Área principal: contenedor para el contenido (separa del header y sidebar) */
-.main-content {
-    display: flex;
-    margin-top: 100px;
-    margin-left: 250px;
-    ;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-/* Contenedor principal dentro de la zona de contenido */
-.container {
-    flex: 1;
-    max-width: 1500px;
-    background: rgba(255, 255, 255, 0.77);
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow:
-        0 5px 15px rgb(250, 146, 76),
-        0 0 15px 5px rgba(247, 144, 75, 0.89);
-}
-
-
-
-/* Encabezado */
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #000000;
-}
-
-/* Grupos de formulario e inputs */
-.form-group {
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-input[type="text"],
-input[type="file"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 80%;
-    max-width: 400px;
-    margin: 5px auto;
-    display: block;
-}
-
 /* Botones con estilo de madera */
 .btn {
     padding: 10px 20px;
-    background: #cf9d67;
+    background: #b0cf67;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -230,10 +18,10 @@ input[type="file"] {
 
 /* Estilo para carpetas */
 .folder {
-    background-color: #FFF8DC;
+    background-color: #757575;
     padding: 15px;
     margin-bottom: 20px;
-    border: 1px solid #deb887;
+    border: 1px solid #000000;
     border-radius: 6px;
     transition: all 0.3s ease;
 }
@@ -251,7 +39,7 @@ input[type="file"] {
 .folder-toggle {
     margin-right: 10px;
     font-size: 20px;
-    color: #5A2D0C;
+    color: #000000;
     cursor: pointer;
     transition: transform 0.3s;
     display: inline-block;
@@ -260,31 +48,31 @@ input[type="file"] {
 }
 
 .folder.expanded {
-    box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+    box-shadow: 0 4px 8px rgb(0, 0, 0);
 }
 
 .folder-title {
     font-size: 1.5em;
     font-weight: bold;
-    color: #5A2D0C;
+    color: #ffffff;
     flex: 1;
     margin-right: 15px;
 }
 
 .folder-content {
     padding-top: 10px;
-    border-top: 1px solid #deb887;
+    border-top: 1px solid #080808;
     margin-top: 5px;
 }
 
 /* Modificaciones para mostrar el estado dentro del header */
 .folder-status {
-    background-color: #F5DEB3;
+    background-color: #ffffff;
     padding: 5px 10px;
     border-radius: 3px;
     margin: 5px 0;
     font-size: 14px;
-    color: #5A2D0C;
+    color: #000000;
 }
 
 /* Mejoras para los botones en el header */
@@ -295,17 +83,21 @@ input[type="file"] {
 
 /* Animación para la flecha */
 .folder.expanded .folder-toggle {
-    transform: rotate(90deg);
+    transform: rotate(10deg);
+}
+
+.label{
+    color: white;
 }
 
 /* Menú de opciones */
 .options-menu {
     display: none;
     margin-top: 10px;
-    background-color: #F5DEB3;
+    background-color: #636363;
     padding: 10px;
     border-radius: 4px;
-    border: 1px solid #deb887;
+    border: 1px solid #000000;
 }
 
 /* Sección de documentos */
@@ -349,6 +141,8 @@ input[type="file"] {
     position: fixed;
     top: 0;
     left: 0;
+    padding: 50px;
+    margin: 20px    ;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);

@@ -244,50 +244,8 @@
 }
 
 
-/* Contenedor general */
-nav[aria-label="breadcrumb"] {
-    background-color: rgba(0, 0, 0, 0.6);
-    /* Fondo semitransparente oscuro */
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    margin-bottom: 1rem;
-}
 
-/* Lista de migas */
-nav[aria-label="breadcrumb"] .breadcrumb {
-    background: transparent;
-    margin: 0;
-    padding: 0;
-}
 
-/* Separador / flecha */
-nav[aria-label="breadcrumb"] .breadcrumb-item+.breadcrumb-item::before {
-    content: "›";
-    /* Puedes usar “>”, “/” o cualquier símbolo */
-    margin: 0 0.5rem;
-    color: #ddd;
-}
-
-/* Enlaces */
-nav[aria-label="breadcrumb"] .breadcrumb-item a {
-    color: #fff;
-    /* Blanco para contraste */
-    text-decoration: none;
-    font-weight: 500;
-}
-
-nav[aria-label="breadcrumb"] .breadcrumb-item a:hover {
-    text-decoration: underline;
-}
-
-/* Elemento activo (última miga) */
-nav[aria-label="breadcrumb"] .breadcrumb-item.active {
-    color: #bbb;
-    /* Gris claro */
-    font-weight: 600;
-    pointer-events: none;
-    /* No clicable */
-}
 
 /* Modal de nueva carpeta */
 #modal-nueva-carpeta {

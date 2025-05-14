@@ -100,6 +100,27 @@
 
   <!-- Main Content -->
   <main class="pt-24 pb-8 px-6 ml-64 min-h-screen relative z-10">
+    <div class="max-w-[1500px] mx-auto">
+
+    <!-- Breadcrumb -->
+      <nav class="flex mb-6 text-sm" aria-label="breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+          <li class="flex items-center">
+            <a href="{% url 'index' %}" class="text-gray-700 hover:text-[#ff9800]">
+              <i class="fas fa-home"></i>
+            </a>
+          </li>
+          <li class="flex items-center">
+            <span class="mx-2 text-gray-500">/</span>
+            <a href="{% url 'index' %}" class="text-gray-700 hover:text-[#ff9800]">Dashboard</a>
+          </li>
+          <li class="flex items-center">
+            <span class="mx-2 text-gray-500">/</span>
+            <span class="text-gray-500">Listado de usuarios</span>
+          </li>
+        </ol>
+      </nav>
+
     <div class="max-w-[1500px] mx-auto bg-[rgba(255,255,255,0.77)] p-6 rounded-xl shadow-lg">
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-semibold text-[#4A4A4A]">Lista de Cuentas Registradas</h1>

@@ -63,6 +63,7 @@ def informes_view(request):
     }
     return render(request, 'libros/informes.html', context)
 
+
 @login_required(login_url="/libros/login/")
 def manage_index(request):
     # 1. Conteos de cada módulo
@@ -145,6 +146,7 @@ def index(request):
     return render(request, "libros/index.html")
 
 def login_view(request):
+    context = {}
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -152,11 +154,13 @@ def login_view(request):
             user = datos.objects.get(email=email)
         except datos.DoesNotExist:
             messages.error(request, "Correo o contraseña inválidos")
-            return redirect('login')
+            context['show_login_modal'] = True
+            return render(request, 'paginas/inicio.html', context)
         
         if user.status != "Activo":
             messages.error(request, "La cuenta no está activada. Por favor, contacta con el administrador.")
-            return redirect('login')
+            context['show_login_modal'] = True
+            return render(request, 'paginas/inicio.html', context)
 
         if user.check_password(password):
             messages.success(request, "Inicio de sesión exitoso")
@@ -164,8 +168,10 @@ def login_view(request):
             return redirect('index')
         else:
             messages.error(request, "Correo o contraseña inválidos")
-            return redirect('login')
-    return render(request, 'libros/login.html')
+            context['show_login_modal'] = True
+            return render(request, 'paginas/inicio.html', context)
+        
+    return render(request, 'paginas/inicio.html')
 
 def logout_view(request):
     logout(request)
@@ -734,7 +740,7 @@ def delete_backup(request):
 
 def inventory_list(request):
     # AJAX POST para crear producto
-    if request.method=='POST' and request.headers.get('x-requested-with')=='XMLHttpRequest':
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data = json.loads(request.body)
         form = ProductForm(data)
         if form.is_valid():
@@ -742,19 +748,24 @@ def inventory_list(request):
             return JsonResponse({
                 'success': True,
                 'product': {
-                    'id':        p.id,
-                    'name':      p.name,
-                    'wood_type': p.wood_type,
-                    'price':     str(p.price),
-                    'stock':     p.stock,
+                    'id':           p.id,
+                    'name':         p.name,
+                    'wood_type':    p.wood_type,   # ojo con tu campo aquí
+                    'price':        str(p.price),
+                    'stock':        p.stock,
                 }
             })
         else:
-            return JsonResponse({'success':False,'errors':form.errors}, status=400)
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
 
     # GET normal
     products = Product.objects.all().order_by('-created_at')
-    return render(request,'libros/inventory.html',{'products':products})
+    tipos = TipoMadera.objects.all()     # <-- traemos todos los tipos de madera
+    context = {
+        'products': products,
+        'tipos_madera': tipos,           # <-- los pasamos al template
+    }
+    return render(request, 'libros/inventory.html', context)
 
 
 @require_POST

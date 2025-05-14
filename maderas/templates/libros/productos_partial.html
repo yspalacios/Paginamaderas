@@ -11,18 +11,16 @@
           Madera de {{ grupo.grouper }}
         </h2>
         
-        <!-- Contenedor de tarjetas dentro de la sección, apilado verticalmente -->
-        <div class="flex flex-col divide-y divide-gray-200">
+        <!-- Contenedor de tarjetas dentro de la sección, apilado horizontalmente -->
+        <div class="flex flex-wrap gap-6 p-4">
           {% for producto in grupo.list %}
-            {% if producto.publicado %}
-              <div class="p-4 flex flex-col">
+            <div class="" >
+              <div class="p-4 flex flex-col h-full">
                 <!-- Imagen -->
                 {% if producto.imagen %}
                   <img
-                    src="{{ producto.imagen.url }}"
-                    alt="{{ producto.nombre_producto }}"
-                    class="w-full h-40 object-cover rounded-md mb-4"
-                  >
+                    src="{{ producto.imagen.url }}" alt="{{ producto.nombre_producto }}" 
+                    class="w-full h-40 object-cover rounded-md mb-4">
                 {% else %}
                   <div class="w-full h-40 flex items-center justify-center bg-gray-100 text-gray-500 italic rounded-md mb-4">
                     No hay imagen disponible
@@ -30,17 +28,17 @@
                 {% endif %}
                 
                 <!-- Datos -->
-                <h3 class="text-lg font-medium text-[#383838] mb-2">
+                <h3 class="text-lg font-semibold text-[#383838] mb-2">
                   {{ producto.nombre_producto }}
                 </h3>
-                <div class="text-sm text-gray-600 space-y-1 mb-4">
+                <div class="text-sm text-gray-600 space-y-1 mb-4 flex-1">
                   <p><strong>Tipo:</strong> {{ producto.tipo_madera }}</p>
                   <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
                   <p><strong>Precio:</strong> ${{ producto.precio }}</p>
                 </div>
                 
                 <!-- Botones editar/eliminar -->
-                <div class="flex flex-wrap gap-2 mb-4">
+                <div class="flex gap-2 mb-4">
                   <button
                     class="flex-1 py-2 bg-[#ffc107] text-black rounded-lg hover:bg-[#e0a800] transition"
                     data-producto-id="{{ producto.id }}"
@@ -74,7 +72,7 @@
                   </button>
                 {% endif %}
               </div>
-            {% endif %}
+            </div>
           {% endfor %}
         </div>
       </section>

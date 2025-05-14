@@ -39,14 +39,14 @@
                 
                 <!-- Botones editar/eliminar -->
                 <div class="flex gap-2 mb-4">
-                  <button
-                    class="flex-1 py-2 bg-[#ffc107] text-black rounded-lg hover:bg-[#e0a800] transition"
-                    data-producto-id="{{ producto.id }}"
+                  <button 
+                    class="flex-1 py-2 bg-[#ffc107] text-black rounded-lg hover:bg-[#e0a800] transition btn-editar"
+                    data-producto-id="{{ producto.id }}" data-producto-nombre="{{ producto.nombre_producto}}" type="button"
                   >
                     Editar
                   </button>
-                  <button
-                    class="flex-1 py-2 bg-[#dc3545] text-white rounded-lg hover:bg-[#c82333] transition"
+                  <button 
+                    class="flex-1 py-2 bg-[#dc3545] text-white rounded-lg hover:bg-[#c82333] transition btn-eliminar"
                     data-producto-id="{{ producto.id }}"
                     data-producto-nombre="{{ producto.nombre_producto }}"
                     data-eliminar-url="{% url 'confirmar_eliminar' producto.id %}"

@@ -2,81 +2,149 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Recuperar Contraseña</title>
-  <link rel="stylesheet" href="{% static 'css/recu_contra.css' %}?v={{ timestamp }}">
-</head>
-<body>
 
-  <header>
-    <nav class="nav-main">
-      <ul>
-        <li><a href="#inicio">🔰 Inicio</a></li>
-        <li><a href="#productos">👀 aprende lo que hacemos</a></li>
-        <li><a href="#imagenespublicadas">🛒 Ver imagenes Publicadas</a></li>
-        <li><a href="#nosotros">🧑‍💻 Nosotros</a></li>
-        <li><a href="#ubicanos">🗺️ Direccion</a></li>
-        <li><a href="#contacto">📱 Contacto</a></li>
-        <li><a href="{% url 'login' %}">Inicia sesión</a></li>
-      </ul>
-    </nav>
-    <a href="{% url 'inicio'%}">
-      <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="logo">
-    </a>
-  </header>
-  
-  <div class="content-wrapper">
-    <form class="reset-form" method="POST">
-      {% csrf_token %}
-      <h2>Recuperar Contraseña</h2>
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-warning">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-      <p>Introduce tus datos y te enviaremos un enlace para restablecer tu contraseña.</p>
-      
-      <div class="form-group">
-        <input type="email" name="email" placeholder="Correo electrónico" required>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'madera-primary': '#6b4423',
+            'madera-secondary': '#a67c52',
+            'madera-accent': '#d9b38c',
+            'madera-light': '#f5f0e8',
+            'madera-dark': '#3a2512'
+          },
+          fontFamily: {
+            sans: ['PT Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[rgb(246,246,247)] m-0 overflow-x-hidden font-sans">
+  <!-- Fondo con overlay -->
+  <div class="fixed inset-0 bg-[url('{% static 'diseños/imagenes/14.jpg' %}')] bg-cover opacity-50 z-0"></div>
+
+  <!-- Header y Navegación -->
+  <header class="relative z-10 bg-gradient-to-r from-[#383838] to-[#4A4A4A] shadow-md">
+    <div class="max-w-7xl mx-auto flex items-center justify-between p-4 md:px-6">
+      <a href="{% url 'inicio' %}" class="flex items-center">
+        <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="h-16">
+      </a>
+      <nav class="hidden md:block">
+        <ul class="flex space-x-4">
+          <li><a href="#inicio" class="text-white font-bold text-lg hover:text-madera-accent">🔰 Inicio</a></li>
+          <li><a href="#productos" class="text-white font-bold text-lg hover:text-madera-accent">👀 Aprende lo que hacemos</a></li>
+          <li><a href="#imagenespublicadas" class="text-white font-bold text-lg hover:text-madera-accent">🛒 Imágenes</a></li>
+          <li><a href="#nosotros" class="text-white font-bold text-lg hover:text-madera-accent">🧑‍💻 Nosotros</a></li>
+          <li><a href="#ubicanos" class="text-white font-bold text-lg hover:text-madera-accent">🗺️ Dirección</a></li>
+          <li><a href="#contacto" class="text-white font-bold text-lg hover:text-madera-accent">📱 Contacto</a></li>
+          <li><a href="{% url 'login' %}" class="text-white font-bold text-lg hover:text-madera-accent">Inicia sesión</a></li>
+        </ul>
+      </nav>
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button @click="open = !open" x-data="{ open: false }" class="text-white focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x-show="!open" d="M4 6h16M4 12h16M4 18h16" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x-show="open" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <div x-show="open" class="mt-2 bg-[#383838] rounded-lg shadow-lg">
+          <ul class="flex flex-col">
+            <li><a href="#inicio" class="block px-4 py-2 text-white hover:bg-madera-secondary">🔰 Inicio</a></li>
+            <li><a href="#productos" class="block px-4 py-2 text-white hover:bg-madera-secondary">👀 Aprende</a></li>
+            <li><a href="#imagenespublicadas" class="block px-4 py-2 text-white hover:bg-madera-secondary">🛒 Imágenes</a></li>
+            <li><a href="#nosotros" class="block px-4 py-2 text-white hover:bg-madera-secondary">🧑‍💻 Nosotros</a></li>
+            <li><a href="#ubicanos" class="block px-4 py-2 text-white hover:bg-madera-secondary">🗺️ Dirección</a></li>
+            <li><a href="#contacto" class="block px-4 py-2 text-white hover:bg-madera-secondary">📱 Contacto</a></li>
+            <li><a href="{% url 'login' %}" class="block px-4 py-2 text-white hover:bg-madera-secondary">Inicia sesión</a></li>
+          </ul>
+        </div>
       </div>
-      
-      <p>Poner aquí la tabla para escoger la pregunta de seguridad</p>
-      <div class="form-group">
-        <label for="security_question">Escoge tu pregunta de seguridad registrada:</label>
-        <div class="select-wrapper">
-          <select name="security_question" id="security_question" required>
+    </div>
+  </header>
+
+  <!-- Formulario Recuperar Contraseña -->
+  <div class="relative z-10 flex items-center justify-center py-16">
+    <div class="w-full max-w-md mx-auto p-6 bg-white bg-opacity-90 rounded-2xl shadow-lg">
+      <form method="POST" class="space-y-6">
+        {% csrf_token %}
+        <h2 class="text-2xl font-bold text-madera-dark text-center">Recuperar Contraseña</h2>
+
+        {% if messages %}
+          <div class="space-y-2">
+            {% for message in messages %}
+              <div class="text-madera-secondary bg-madera-light px-4 py-2 rounded">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <p class="text-center text-gray-700">Introduce tus datos y te enviaremos un enlace para restablecer tu contraseña.</p>
+
+        <div>
+          <input type="email" name="email" placeholder="Correo electrónico" required
+                 class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-madera-primary" />
+        </div>
+
+        <div>
+          <label for="security_question" class="block text-madera-dark font-medium mb-1">Escoge tu pregunta de seguridad registrada:</label>
+          <select id="security_question" name="security_question" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-madera-primary">
             <option value="">Selecciona una pregunta</option>
             <option value="nombre_mascota">¿Cuál es el nombre de tu primera mascota?</option>
             <option value="ciudad_nacimiento">¿En qué ciudad naciste?</option>
             <option value="color_favorito">¿Cuál es tu color favorito?</option>
           </select>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="security_answer">Respuesta a la pregunta de seguridad:</label>
-        <input type="text" id="security_answer" name="security_answer" placeholder="Respuesta a tu pregunta de seguridad" required>
-      </div>
-      
-      <button type="submit">cambia tu contraseña</button>
-      <a href="{% url 'login' %}" class="back-link">Volver al inicio de sesión</a>
-    </form>
+
+        <div>
+          <label for="security_answer" class="block text-madera-dark font-medium mb-1">Respuesta a la pregunta de seguridad:</label>
+          <input type="text" id="security_answer" name="security_answer" placeholder="Respuesta a tu pregunta de seguridad" required
+                 class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-madera-primary" />
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-full bg-madera-primary text-white font-bold hover:bg-madera-secondary transition-colors">
+          Cambia tu contraseña
+        </button>
+
+        <div class="text-center">
+          <a href="{% url 'login' %}" class="text-madera-accent hover:text-madera-secondary font-medium">Volver al inicio de sesión</a>
+        </div>
+      </form>
+    </div>
   </div>
 
-  <footer id="contacto">
-    <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" width="150">
-    <p>Somos un proveedor de maderas finas dedicada a la compra de bosques, tala y venta de madera y transformación de la misma</p>
-    <h2>CONTACTO</h2>
-    <p>Puede contactarnos a través de:</p>
-    <address>
-      <a href="https://web.facebook.com/people/Maderas-Isabella-AEI-SAS/100085008207707/" class="footer-link">
-        Página de Facebook
-      </a><br>
-      📱 Teléfono: +57 3223280615 - +57 3103178649<br>
-      🧭 Dirección: Carrera 1 #No. 3-88, Socha, Boyacá, Colombia
-    </address>
-    <p>&copy; 2024 Maderas Isabella. Todos los derechos reservados.</p>
+  <!-- Footer -->
+  <footer id="contacto" class="relative z-10 bg-gradient-to-r from-[#383838] to-[#4A4A4A] text-white py-8 px-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8">
+      <div class="flex-shrink-0">
+        <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="w-36">
+      </div>
+      <div class="text-center md:text-left">
+        <p class="text-sm text-gray-400 mb-4">Somos un proveedor de maderas finas dedicada a la compra de bosques, tala y venta de madera y transformación de la misma.</p>
+        <h2 class="text-xl font-bold text-madera-accent mb-4">CONTACTO</h2>
+        <address class="not-italic text-sm">
+          <a href="https://web.facebook.com/people/Maderas-Isabella-AEI-SAS/100085008207707/" class="text-madera-accent hover:text-white block mb-2">Página de Facebook</a>
+          📱 Teléfono: +57 3223280615 - +57 3103178649<br>
+          🧭 Dirección: Carrera 1 #No. 3-88, Socha, Boyacá, Colombia
+        </address>
+        <p class="text-sm text-gray-400 mt-4">&copy; 2024 Maderas Isabella. Todos los derechos reservados.</p>
+      </div>
+    </div>
   </footer>
-
 </body>
-</html> 
+</html>

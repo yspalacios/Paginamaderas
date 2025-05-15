@@ -181,12 +181,11 @@
       <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
         <div class="flex items-center justify-between mb-6">
           <h1 class="text-2xl md:text-3xl font-bold text-[#4A4A4A]">Gestión de carpetas y documentos</h1>          
-            <button @click="openAdd = true" class="px-4 py-2 bg-[#ff9800] text-white rounded-lg hover:bg-[#e88c00] transition-colors duration-300 flex items-center">
+            <button id="openNewFolderModalBtn" onclick="openNewFolderModal()" class="px-4 py-2 bg-[#ff9800] text-white rounded-lg hover:bg-[#e88c00] transition-colors duration-300 flex items-center">
           <i class="fas fa-plus mr-2" ></i> Crear nuevo trabajador </button> 
-          <button @click="openAdd = true" class="px-4 py-2 bg-[#ff9800] text-white rounded-lg hover:bg-[#e88c00] transition-colors duration-300 flex items-center">
-            <i class="fas fa-plus mr-2"></i>Descargar Prestaciones en PDF</button>
-          <button @click="openAdd = true" class="px-4 py-2 bg-[#ff9800] text-white rounded-lg hover:bg-[#e88c00] transition-colors duration-300 flex items-center">
-            <i class="fas fa-plus mr-2"></i>Descargar Prestaciones en Excel</button>
+          <button id="downloadSelectedPdfBtn"
+          class="px-4 py-2 bg-[#ff9800] text-white rounded-lg hover:bg-[#e88c00] transition-colors duration-300 flex items-center">
+            <i class="fas fa-file-pdf mr-2"></i>Descargar Pdf de la carpeta seleccionada</button>
         </div>   
       </div> 
       <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
@@ -197,13 +196,23 @@
       <!-- Barra de búsqueda de carpetas -->
       <div class="rounded-xl shadow-lg p-6 mb-8">
         <div class="relative w-full">
-        <input type="text" id="searchInput" placeholder="Buscar carpeta..." class="w-full px-4 py-2 rounded-full bg-[#5a5a5a] text-white focus:outline-none focus:ring-2 focus:ring-[#ff9800]">
+        <input type="text" id="searchInput" placeholder="Buscar carpeta..." 
+        class="w-full px-4 py-2 rounded-full bg-[#5a5a5a] text-white focus:outline-none focus:ring-2 focus:ring-[#ff9800]">
           <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#ff9800]">
             <i class="fas fa-search"></i>
+          </button>
       </div>
 
-      <!-- Contenedor donde se mostrarán las carpetas creadas -->
-      <div id="foldersContainer" class="p-6 mb-8"></div>
+      <!-- Contenedor de carpetas -->
+      <div id="foldersContainer" class="p-6 mb-8">
+        {# Cada carpeta inyectada por JS debe incluir este input radio: #}
+        {# 
+        <div class="folder-item mb-2 p-4 border rounded flex items-center">
+          <input type="radio" name="selectedFolder" value="{{ folder.id }}" id="selectFolder{{ folder.id }}" class="mr-3">
+          <label for="selectFolder{{ folder.id }}" class="flex-1">{{ folder.name }}</label>
+        </div>
+        #}
+      </div>
     </div>
 
     <!-- Modal para crear carpeta (input + botón) -->
@@ -314,6 +323,22 @@
     function closeModalmostrar() {
       document.getElementById('modal-mostrar').style.display = 'none';
     }
+
+
+    // Descarga PDF de la carpeta seleccionada
+      document.getElementById('downloadSelectedPdfBtn').addEventListener('click', function() {
+    const sel = document.querySelector('input[name="selectedFolder"]:checked');
+    if (!sel) {
+      alert('Por favor, selecciona una carpeta antes de descargar.');
+      return;
+    }
+    const folderId = sel.value;
+    // Construimos la URL Django usando el nombre de la ruta
+    const urlTemplate = "{% url 'download_benefits_pdf' 0 %}";  
+    // Django renderea algo como "/download-benefits-pdf/0/"
+    const url = urlTemplate.replace('/0/', `/${folderId}/`);
+    window.location.href = url;
+  });
   </script>
   <script src="{% static 'js/carpeta.js' %}"></script>
 </body>

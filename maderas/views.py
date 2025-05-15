@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, FileResponse, HttpResponseForbidden, HttpResponse
+from django.http import JsonResponse, FileResponse, HttpResponseForbidden, HttpResponse, Http404
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -15,13 +15,12 @@ from django.views.decorators.http import require_POST, require_http_methods
 from django.template.loader import render_to_string
 from django.db.models import Q, Sum
 from django.db import models
-import os, subprocess, datetime, shutil, json
+import os, io, subprocess, datetime, shutil, json
 from django.utils._os import safe_join
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 from datetime import datetime
-
-
+from reportlab.pdfgen import canvas
 
 # --------------------------
 # Vistas para páginas estáticas
@@ -69,9 +68,11 @@ def manage_index(request):
     # 1. Conteos de cada módulo
     gallery_count   = Producto.objects.count()      # Galería de publicidad
     producto_publicado = Producto.objects.filter(publicado=True).count()     #Productos publicados
-    producto_no_publicado = Producto.objects.filter(publicado=False).count()    #Productos publicados
+    producto_no_publicado = Producto.objects.filter(publicado=False).count()
     inventory_count = Product.objects.count()       # Lista de inventario
-    user_count      = datos.objects.count()         # Listado de usuarios
+    usuarios_total      = datos.objects.count()                     # Total de usuarios
+    cuentas_activas = datos.objects.filter(status='Activo').count()         # Listado de usuarios
+    count_inactive  = datos.objects.filter(status='No Activo').count()  # Cuentas inactivas
     lista_folders   = Folder.objects.count()
     docs_count      = Document.objects.count()      # Documentos de contratación
 
@@ -87,7 +88,9 @@ def manage_index(request):
         'producto_publicado': producto_publicado,
         'producto_no_publicado': producto_no_publicado,
         'inventory_count': inventory_count,
-        'user_count':      user_count,
+        'usuarios_total': usuarios_total,
+        'cuentas_activas':      cuentas_activas,
+        'count_inactive': count_inactive,
         'lista_folders':    lista_folders,
         'docs_count':      docs_count,
         'backups_count':   backups_count,
@@ -489,6 +492,47 @@ def delete_document(request, doc_id):
     return JsonResponse({'message': 'Método no permitido'}, status=405)
 
 
+def download_benefits_pdf(request, folder_id):
+    # Recupera la carpeta y sus datos
+    try:
+        folder = Folder.objects.get(pk=folder_id)
+    except Folder.DoesNotExist:
+        raise Http404("Carpeta no encontrada")
+
+    # Crea un buffer en memoria
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer)
+
+    # Título
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(100, 800, f"Prestaciones de Carpeta: {folder.name}")
+
+    # Datos línea a línea
+    p.setFont("Helvetica", 12)
+    line_y = 760
+    for label, attr in [
+        ("Fecha de inicio", folder.fecha_inicio),
+        ("Puesto designado", folder.puesto_designado),
+        ("Salario actual", folder.salario_actual),
+        ("Horas de trabajo", folder.horas_trabajo),
+        ("Tiempo de contrato", folder.tiempo_contrato),
+        ("Número de identidad", folder.numero_identidad),
+        ("Número de seguro social", folder.numero_seguro_social),
+        ("EPS", folder.eps),
+        ("AFP", folder.fondo_pensiones),
+        ("ARL", folder.arl),
+    ]:
+        p.drawString(80, line_y, f"{label}: {attr}")
+        line_y -= 20
+
+    p.showPage()
+    p.save()
+    buffer.seek(0)
+
+    # Devuelve el PDF como descarga
+    return FileResponse(buffer, as_attachment=True, filename=f"prestaciones_{folder.id}.pdf")
+
+
 
 # --------------------------
 # Vistas para cambiar la contraseña
@@ -785,8 +829,6 @@ def update_stock(request):
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
     
     
-    
-
 @require_http_methods(["PUT"])
 def update_product(request, product_id):
     """Vista para actualizar un producto existente mediante AJAX"""

@@ -1,34 +1,68 @@
-{% load static %} 
-<!DOCTYPE html> 
-<html lang="es"> 
-<head>   
-  <meta charset="UTF-8">   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">   
-  <title>Cambiar Contraseña</title>      
-  <link rel="stylesheet" href="{% static 'css/cambia_con.css' %}"> 
-</head> 
-<body>    
-  <div class="content-wrapper">     
-    <form class="reset-form" method="POST" onsubmit="return validatePasswordChange()">       
-      {% csrf_token %}       
-      <h2>Cambia Tu Contraseña</h2>       
-      {% if messages %}         
-        {% for message in messages %}           
-          <div class="alert alert-warning">{{ message }}</div>         
-        {% endfor %}       
-      {% endif %}       
-      <div class="form-group">         
-        <label for="new_password">Nueva Contraseña</label>         
-        <input type="password" id="new_password" name="new_password" placeholder="Ingresa la nueva contraseña" required>       
-      </div>       
-      <div class="form-group">         
-        <label for="confirm_password">Confirmar Nueva Contraseña</label>         
-        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirma la nueva contraseña" required>       
-      </div>       
-      <button type="submit">Cambiar Contraseña</button>       
-      <a href="{% url 'login' %}" class="back-link">Volver al inicio de sesión</a>     
-    </form>   
-  </div>    
-  <script src="{% static 'js/cambia_con.js' %}"></script> 
-</body> 
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cambiar Contraseña</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'madera-primary': '#6b4423',
+            'madera-secondary': '#a67c52',
+            'madera-accent': '#d9b38c',
+            'madera-light': '#f5f0e8',
+            'madera-dark': '#3a2512'
+          },
+          fontFamily: {
+            sans: ['PT Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="relative bg-[rgb(246,246,247)] font-sans min-h-screen flex items-center justify-center">
+  <!-- Fondo y overlay opcional -->
+  <div class="fixed inset-0 bg-[url('{% static 'diseños/imagenes/14.jpg' %}')] bg-cover opacity-30"></div>
+  <div class="relative z-10 w-full max-w-md mx-auto p-6 bg-white bg-opacity-90 rounded-2xl shadow-lg">
+    <form method="POST" onsubmit="return validatePasswordChange()" class="space-y-6">
+      {% csrf_token %}
+      <h2 class="text-3xl font-bold text-madera-dark text-center">Cambia Tu Contraseña</h2>
+
+      
+
+      <div>
+        <label for="new_password" class="block text-madera-dark font-medium mb-1">Nueva Contraseña</label>
+        <input type="password" id="new_password" name="new_password" placeholder="Ingresa la nueva contraseña" required
+               class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-madera-primary" />
+      </div>
+
+      <div>
+        <label for="confirm_password" class="block text-madera-dark font-medium mb-1">Confirmar Nueva Contraseña</label>
+        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirma la nueva contraseña" required
+               class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-madera-primary" />
+      </div>
+
+      <button type="submit" class="w-full py-3 rounded-full bg-madera-primary text-white font-bold hover:bg-madera-secondary transition-colors">
+        Cambiar Contraseña
+      </button>
+
+      <div class="text-center">
+        <a href="{% url 'login' %}" class="text-madera-accent hover:text-madera-secondary font-medium">
+          Volver al inicio de sesión
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <script src="{% static 'js/cambia_con.js' %}"></script>
+</body>
 </html>

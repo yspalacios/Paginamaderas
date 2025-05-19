@@ -36,21 +36,29 @@
   <div class="fixed inset-0 bg-[url('{% static 'diseños/imagenes/14.jpg' %}')] bg-cover opacity-50 z-0"></div>
   <!-- Header y Navegación -->
   <header class="bg-gradient-to-r from-[#383838] to-[#4A4A4A] sticky top-0 z-50 shadow-md flex flex-col md:flex-row justify-between items-center p-4 md:px-6">
-    <a href="{% url 'inicio' %}" class="flex items-center mb-4 md:mb-0">
-      <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="h-16">
-    </a>
-    <nav class="w-full md:w-auto">
-      <ul class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
-        <li><a href="#inicio" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">🏠 Inicio</a></li>
-        <li><a href="#productos" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">👀 Aprende lo que hacemos</a></li>
-        <li><a href="#imagenespublicadas" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">🛒 Ver imágenes Publicadas</a></li>
-        <li><a href="#nosotros" class="text-white font-bold text-2xl px-4 py-2 rounded  hover:bg-[#45a049] transition-colors block">👷 Nosotros</a></li>
-        <li><a href="#ubicanos" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">📌 Dirección</a></li>
-        <li><a href="#contacto" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">📞 Contacto</a></li>
-        <li><a href="{% url 'login' %}" class="text-white font-bold text-2xl px-4 py-3 rounded bg-[#e88c00;]  hover:text-madera-dark transition-colors block">Inicia sesión</a></li>
-      </ul>
-    </nav>
-  </header>
+  <!-- Logo -->
+  <a href="{% url 'inicio' %}" class="flex items-center mb-4 md:mb-0">
+    <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="h-16">
+  </a>
+
+  <!-- Botón del menú hamburguesa (visible en pantallas pequeñas) -->
+  <button id="menu-toggle" class="text-white text-3xl md:hidden focus:outline-none">
+    ☰
+  </button>
+
+  <!-- Navegación -->
+  <nav id="menu" class="w-full md:w-auto hidden md:flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+    <ul class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+      <li><a href="#inicio" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">🏠 Inicio</a></li>
+      <li><a href="#productos" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">👀 Aprende lo que hacemos</a></li>
+      <li><a href="#imagenespublicadas" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">🛒 Ver imágenes Publicadas</a></li>
+      <li><a href="#nosotros" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">👷 Nosotros</a></li>
+      <li><a href="#ubicanos" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">📌 Dirección</a></li>
+      <li><a href="#contacto" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">📞 Contacto</a></li>
+      <li><a href="{% url 'login' %}" class="text-white font-bold text-2xl px-4 py-3 rounded bg-[#e88c00;] hover:text-madera-dark transition-colors block">Inicia sesión</a></li>
+    </ul>
+  </nav>
+</header>
 <main class="relative z-10">
  
     {% block contenido %}
@@ -61,14 +69,15 @@
 
   <!-- Contenido del texto -->
   <div class="relative z-10 max-w-4xl px-6">
-    <h1 class="text-6xl font-bold mb-6">Bienvenidos  A maderas Isabella</h1>
-    <p class="text-2xl mb-8">Somos un gran equipo de profesionales y técnicos especializados en los requerimientos de los sectores de la industria de Carrocerías, Carpintería, Construcción y Logística & Embalaje.</p>
+    <h1 class="text-6xl font-bold mb-6" > Bienvenidos A Maderas Isabella AEI S.A.S.</h1>
+    <p class="text-2xl mb-8"> Transformamos la naturaleza en calidad.
+Expertos en maderas finas: compra de bosques, tala responsable y venta de madera procesada.</p>
     <a href="#productos" class="inline-block bg-green-600 text-white px-8 py-4 rounded-md text-xl hover:bg-green-700 transition-colors">Ir a Productos</a>
   </div>
 </section>
 
     <!-- Sección de Productos -->
-    <section id="productos" class=" mb-16 shadow-lg p-8 max-w-7xl mx-auto border-4 border-orange-x1 rounded-lg ring-4 ring-orange-500/30" style="background-color: rgba(255, 255, 255, 0.5);">
+    <section id="productos" class=" mb-16 shadow-lg p-8 max-w-5x1 mx-auto border-4 border-orange-x1 rounded-lg ring-4 ring-orange-500/30" style="background-color: rgba(255, 255, 255, 0.5);">
       <h1 class="text-5xl font-bold text-black text-center mb-8 relative after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-gradient-to-r from-[#383838] to-[#4A4A4A]-accent after:rounded">Nuestro Trabajo</h1>
       
       
@@ -101,7 +110,7 @@
     </section>
 
     <!-- Sección de Imágenes Publicadas -->
-    <section id="imagenespublicadas" class="mb-16 bg-amber-50 rounded-lg shadow-md p-8 max-w-7xl mx-auto border-4 border-orange-400" style="background-color: rgba(255, 255, 255, 0.5);">
+    <section id="imagenespublicadas" class="mb-16 bg-amber-50 rounded-lg shadow-md p-8 max-w-5x1 mx-auto border-4 border-orange-400" style="background-color: rgba(255, 255, 255, 0.5);">
       <h2 class="text-5xl font-bold text-black text-center mb-8 relative after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-gradient-to-r from-[#383838] to-[#4A4A4A]-accent after:rounded">Productos</h2>
       
       {% regroup imagenes_publicadas by tipo_madera as imagenes_por_tipo %}
@@ -141,79 +150,82 @@
       </div>
     </section>
 
-    <!-- Sección de Información Institucional (Nosotros) -->
-    <section id="nosotros" class="mb-16 16 bg-amber-50 text-black max-w-7xl mx-auto border-4 border-orange-400"style="background-color: rgba(255, 255, 255, 0.5);">
-      <h2 class="text-5xl font-bold text-center mb-12">Nosotros</h2>
-    
-  
-        <!-- Línea roja vertical en el centro -->
-    <div class="absolute top-12 left-1/2 transform -translate-x-1/2 h-[calc(100%-4rem)] w-1 bg-madera-primary  "></div>
-        
-   
-        <!-- MISIÓN - IZQUIERDA -->
-        <div class="mb-20 ml-10 flex justify-start">
-          <div class="bg-madera-secondary text-white  rounded-lg p-6 shadow-md w-full max-w-md border-l-4 border-madera-primary ">
-            <h3 class="text-5xl font-bold mb-2">Misión</h3>
-            <p class="text-2xl">En Maderas Isabella AEI SAS buscamos satisfacer la demanda integral de madera como materia prima renovable, brindando calidad tanto en la selección de nuestros productos como en nuestra calidad humana. Buscamos cumplir las expectativas de nuestros clientes, mediante un servicio ágil, garantizando la entrega oportuna, proporcionando calidad, a precios muy competitivos, todo de la mano de nuestro talento humano siempre comprometido y motivado a trabajar en conjunto, con dedicación y esfuerzo al servicio del cliente.</p>
-          </div>
-        </div>
+  <section id="nosotros" class="relative mb-16 text-black max-w-5x1 mx-auto px-6 py-12 rounded-lg shadow-xlbg-contain bg-center bg-no-repeat" style="background-image: url('{% static 'diseños/imagenes/6.jpg' %}');">
+  <div class="absolute inset-0 bg-white bg-opacity-80 rounded-lg"></div>
+  <div class="relative z-10">
 
-       
-    
-        <!-- VISIÓN - DERECHA -->
-        <div class="mb-10 mr-10 flex justify-end">
-          <div class="bg-madera-secondary text-white rounded-lg p-6 shadow-md w-full max-w-md border-l-4 border-madera-primary ">
-            <h3 class="text-5xl font-bold mb-2">Visión</h3>
-            <p class="text-2xl">En Maderas Isabella AEI S.A.S. buscamos consolidarnos como una de las empresas más competitivas, sólidas y reconocidas a nivel nacional del sector maderero. Por ello es fundamental contar con la calidad humana de nuestro equipo de trabajo, apoyados en la vocación de servicio, la capacidad de respuesta, la calidad, mayor eficiencia, la garantía de entrega y el mejoramiento continuo de nuestros procesos operados con responsabilidad al medio ambiente. Queremos alcanzar altos niveles de desarrollo generando así calidad de vida para nuestro personal y responsabilidad social con nuestros clientes y entorno.</p>
-          </div>
+   <h2 class="text-5xl font-bold text-black text-center mb-8 relative after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-gradient-to-r from-[#383838] to-[#4A4A4A]-accent after:rounded">Nosotros</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- Misión -->
+      <div class="transition-transform transform hover:scale-105 hover:shadow-2xl bg-gradient-to-r from-[#383838] to-[#4A4A4A] text-white rounded-lg p-6 shadow-md border-l-4 border-green-500">
+        <div class="flex items-center mb-4">
+          <svg class="w-7 h-7 text-green-400 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+          <h3 class="text-3xl font-bold">Misión</h3>
         </div>
-    
-        <!-- VALORES - IZQUIERDA -->
-        <div class="mb-10 ml-10 flex justify-start">
-          <div class="bg-madera-secondary text-white rounded-lg p-6 shadow-md w-full max-w-md border-l-4 border-madera-primary ">
-            <h3 class="text-5xl font-bold mb-2">Valores</h3>
-            <ul class="list-disc list-inside">
-              <li class="text-2xl">Respeto: Lo reflejamos en cada una de las relaciones interpersonales que se desarrollan con los clientes internos y externos de la organización.</li>
-              <li class="text-2xl">Honradez: Actuamos con transparencia en cada una de las acciones que ejecutamos dentro y fuera de la organización.</li>
-              <li class="text-2xl">Iniciativa: Ejecutamos nuestras labores con entusiasmo, dedicación y dando siempre algo más de nosotros y dejando huella en nuestras acciones.</li>
-              <li class="text-2xl">Compromiso: Asumimos las acciones con esfuerzo y empeño, generando confianza en nuestras actividades.</li>
-              <li class="text-2xl">Honestidad: Actuamos y decimos siempre la verdad en nuestras actividades.</li>
-            </ul>
-          </div>
-        </div>
-    
-        <!-- POLÍTICA DE CALIDAD - DERECHA -->
-        <div class="mb-10 mr-10 flex justify-end">
-          <div class="bg-madera-secondary text-white rounded-lg p-6 shadow-md w-full max-w-md border-l-4 border-madera-primary ">
-            <h3 class="text-5xl font-bold mb-2">Política de Calidad</h3>
-            <p class="text-2xl">Con el objeto de satisfacer las necesidades y expectativas de nuestros clientes, todos los que pertenecemos a Maderas Isabella AEI S.A.S. nos comprometemos a: </p>
-            <ul class="list-disc list-inside">
-              <li class="text-2xl">Brindar un servicio de calidad en los productos, impulsando la efectividad, el mejoramiento en los procesos y la racionalización en la utilización de los recursos.</li>
-              <li class="text-2xl">Proteger el medio ambiente, promover el bienestar de cada colaborador y de la comunidad.</li>
-              <li class="text-2xl">Apoyar el empleo y cumplir la ley de forma íntegra.</li>
-              <li class="text-2xl">Capacitar el personal para la optimización de su desempeño y la importancia de un trabajo eficaz y eficiente, así como crear un sentido de pertenencia en cada colaborador.</li>
-             
-            </ul>
-          </div>
-        </div>
-    
-        <!-- POLÍTICA DE SEGURIDAD Y SALUD - IZQUIERDA -->
-        <div class="mb-10 ml-10 flex justify-start">
-          <div class="bg-madera-secondary text-white rounded-lg p-6 shadow-md w-full max-w-md border-l-4 border-madera-primary ">
-            <h3 class="text-5xl font-bold mb-2">Política de Seguridad y Salud</h3>
-            <p class="text-3xl">Identificar los peligros, evaluar y valorar los riesgos y establecer los respectivos controles:</p>
-            <li class="text-2xl">Proteger la seguridad y salud de todos los trabajadores, mediante la mejora continua del SGSST..</li>
-            <li class="text-2xl">Cumplir la normatividad nacional vigente aplicable en materia de riesgos laborales.</li>
-            <li class="text-2xl">* Establecer una cultura de prevención de riesgos laborales.</li>
-          </div>
-        </div>
-    
+        <p class="text-lg">En Maderas Isabella AEI SAS buscamos satisfacer la demanda integral de madera como materia prima renovable, brindando calidad tanto en la selección de nuestros productos como en nuestra calidad humana. Buscamos cumplir las expectativas de nuestros clientes, mediante un servicio ágil, garantizando la entrega oportuna, proporcionando calidad, a precios muy competitivos, todo de la mano de nuestro talento humano siempre comprometido y motivado a trabajar en conjunto, con dedicación y esfuerzo al servicio del cliente.</p>
       </div>
-    </section>
+
+      <!-- Visión -->
+      <div class="transition-transform transform hover:scale-105 hover:shadow-2xl bg-gradient-to-r from-[#383838] to-[#4A4A4A] text-white rounded-lg p-6 shadow-md border-l-4 border-blue-500">
+        <div class="flex items-center mb-4">
+          <svg class="w-7 h-7 text-blue-400 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M3 6h18M3 14h18M3 18h18"></path></svg>
+          <h3 class="text-3xl font-bold">Visión</h3>
+        </div>
+        <p class="text-lg">En Maderas Isabella AEI S.A.S. buscamos consolidarnos como una de las empresas más competitivas, sólidas y reconocidas a nivel nacional del sector maderero. Por ello es fundamental contar con la calidad humana de nuestro equipo de trabajo, apoyados en la vocación de servicio, la capacidad de respuesta, la calidad, mayor eficiencia, la garantía de entrega y el mejoramiento continuo de nuestros procesos operados con responsabilidad al medio ambiente. Queremos alcanzar altos niveles de desarrollo generando así calidad de vida para nuestro personal y responsabilidad social con nuestros clientes y entorno.</p>
+      </div>
+
+      <!-- Valores Corporativos -->
+      <div class="transition-transform transform hover:scale-105 hover:shadow-2xl bg-gradient-to-r from-[#383838] to-[#4A4A4A] text-white rounded-lg p-6 shadow-md border-l-4 border-yellow-500">
+        <div class="flex items-center mb-4">
+          <svg class="w-7 h-7 text-yellow-400 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+          <h3 class="text-3xl font-bold">Valores Corporativos</h3>
+        </div>
+        <ul class="list-disc list-inside text-lg space-y-1">
+          <li><strong>Respeto:</strong> Lo reflejamos en cada una de las relaciones interpersonales que se desarrollan con los clientes internos y externos de la organización.</li>
+          <li><strong>Honradez:</strong> Actuamos con transparencia en cada una de las acciones que ejecutamos dentro y fuera de la organización.</li>
+          <li><strong>Iniciativa:</strong> Ejecutamos nuestras labores con entusiasmo, dedicación y dando siempre algo más de nosotros y dejando huella en nuestras acciones.</li>
+          <li><strong>Compromiso:</strong> Asumimos las acciones con esfuerzo y empeño, generando confianza en nuestras actividades.</li>
+          <li><strong>Honestidad:</strong> Actuamos y decimos siempre la verdad en nuestras actividades.</li>
+        </ul>
+      </div>
+
+      <!-- Política de Calidad -->
+      <div class="transition-transform transform hover:scale-105 hover:shadow-2xl bg-gradient-to-r from-[#383838] to-[#4A4A4A] text-white rounded-lg p-6 shadow-md border-l-4 border-purple-500">
+        <div class="flex items-center mb-4">
+          <svg class="w-7 h-7 text-purple-400 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"></path></svg>
+          <h3 class="text-3xl font-bold">Política de Calidad</h3>
+        </div>
+        <ul class="list-disc list-inside text-lg space-y-1">
+          <li>Brindar un servicio de calidad en los productos, impulsando la efectividad, el mejoramiento en los procesos y la racionalización en la utilización de los recursos.</li>
+          <li>Proteger el medio ambiente, promover el bienestar de cada colaborador y de la comunidad.</li>
+          <li>Apoyar el empleo y cumplir la ley de forma íntegra.</li>
+          <li>Capacitar el personal para la optimización de su desempeño y la importancia de un trabajo eficaz y eficiente, así como crear un sentido de pertenencia en cada colaborador.</li>
+        </ul>
+      </div>
+
+      <!-- Política de Seguridad y Salud -->
+      <div class="transition-transform transform hover:scale-105 hover:shadow-2xl bg-gradient-to-r from-[#383838] to-[#4A4A4A] text-white rounded-lg p-6 shadow-md border-l-4 border-red-500">
+        <div class="flex items-center mb-4">
+          <svg class="w-7 h-7 text-red-400 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3"></path></svg>
+          <h3 class="text-3xl font-bold">Política de Seguridad y Salud en el Trabajo</h3>
+        </div>
+        <ul class="list-disc list-inside text-lg space-y-1">
+          <li>Proteger la seguridad y salud de todos los trabajadores, mediante la mejora continua del SGSST.</li>
+          <li>Cumplir la normatividad nacional vigente aplicable en materia de riesgos laborales.</li>
+          <li>Establecer una cultura de prevención de riesgos laborales.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
     
 
     <!-- Sección de Ubicación -->
-    <section id="ubicanos" class="mb-16 bg-amber-50 rounded-lg shadow-md p-8 max-w-7xl mx-auto border-4 border-orange-400"style="background-color: rgba(255, 255, 255, 0.5);">
+    <section id="ubicanos" class="mb-16 bg-amber-50 rounded-lg shadow-md p-8 max-w-5x1 mx-auto border-4 border-orange-400"style="background-color: rgba(255, 255, 255, 0.5);">
       <h2 class="text-3xl font-bold text-black text-center mb-8 relative after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-gradient-to-r from-[#383838] to-[#4A4A4A]-accent after:rounded">Ubicación</h2>
       <div class="rounded-lg overflow-hidden shadow-md h-96">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.9834820965357!2d-72.68778035395665!3d5.997003745817748!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e6bd3430ffa69cf%3A0x330b1847b063fa2f!2sMADERAS%20ISABELLA%20AEI%20SAS!5e0!3m2!1ses-419!2sco!4v1740746993197!5m2!1ses-419!2sco" 
@@ -235,9 +247,7 @@
       <!-- Texto al lado de la imagen -->
       <div class="flex flex-row items-center gap-8">
         <div class="text-left">
-          <p class="text-sm text-gray-400 mb-4">
-            Somos un proveedor de maderas finas dedicada a la compra de bosques, tala y venta de madera y transformación de la misma.
-          </p>
+         
           <h2 class="text-xl font-bold text-madera-accent mb-4">Contacto</h2>
           <address class="not-italic text-sm">
             <a href="https://web.facebook.com/people/Maderas-Isabella-AEI-SAS/100085008207707/" class="text-madera-accent hover:text-white transition-colors block mb-2">
@@ -259,6 +269,10 @@
   <a href="https://wa.me/573223280615" class="fixed bottom-20 right-5 z-50" target="_blank">
     <img src="{% static 'diseños/imagenes/whst.webp' %}" alt="WhatsApp" class="w-14 h-14 rounded-full shadow-md transition-transform hover:scale-110">
   </a>
+
+
+
+  
   
   <script>
     // Script para el carrusel
@@ -353,6 +367,17 @@
     
     // Iniciar animaciones cuando se carga la página
     document.addEventListener('DOMContentLoaded', animateSections);
+
+
+      document.addEventListener('DOMContentLoaded', function () {
+    const menuToggle = document.getElementById('menu-toggle');
+    const menu = document.getElementById('menu');
+
+    menuToggle.addEventListener('click', function () {
+      menu.classList.toggle('hidden'); // Muestra/oculta el menú
+      menu.classList.toggle('flex'); // Asegura que el menú se muestre como un contenedor flex
+    });
+  });
   </script>
 </body>
 </html>

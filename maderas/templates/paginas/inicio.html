@@ -6,9 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block titulo %}Maderas Isabella{% endblock %}</title>
   <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Incluir Tailwind CSS -->
+  <!--  Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
+  <!-- el alpine.js-->
+     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+      <script>
     tailwind.config = {
       theme: {
         extend: {
@@ -32,7 +35,7 @@
   </script>
 </head>
 <body class="bg-[rgb(246,246,247)] m-0 overflow-x-hidden">
-  <!-- Fondo con overlay -->
+  <!-- Fondo con overlay :3 -->
   <div class="fixed inset-0 bg-[url('{% static 'diseños/imagenes/14.jpg' %}')] bg-cover opacity-50 z-0"></div>
   <!-- Header y Navegación -->
   <header class="bg-gradient-to-r from-[#383838] to-[#4A4A4A] sticky top-0 z-50 shadow-md flex flex-col md:flex-row justify-between items-center p-4 md:px-6">

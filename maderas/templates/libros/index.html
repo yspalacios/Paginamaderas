@@ -289,12 +289,16 @@
           <div class="card-gradient p-6">
             <h2 class="text-xl font-semibold mb-3 text-[#4A4A4A] flex items-center">
               <span>Usuarios Registrados</span>
-              <span class="ml-auto bg-[#4A4A4A] text-white text-xs py-1 px-2 rounded-full">{{ user_count }}</span>
+              <span class="ml-auto bg-[#4A4A4A] text-white text-xs py-1 px-2 rounded-full">{{ usuarios_total }}</span>
             </h2>
             <div class="space-y-2">
               <div class="flex justify-between text-sm">
                 <span class="text-gray-600">Cuentas activas:</span>
-                <span class="font-medium">{{ user_count }}</span>
+                <span class="font-medium">{{ cuentas_activas }}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Cuentas inactivas: </span>
+                <span class="font-medium text-red-600">{{ count_inactive }}</span>
               </div>
               <div class="flex -space-x-2">
                 <div class="w-8 h-8 rounded-full bg-[#ff9800] flex items-center justify-center text-white text-xs">JD</div>

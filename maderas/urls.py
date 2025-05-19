@@ -48,6 +48,7 @@ urlpatterns = [
     path('update-status/<int:folder_id>/', views.update_folder_status, name='update_folder_status'),
     path('upload-documents/<int:folder_id>/', views.upload_documents, name='upload_documents'),
     path('update-benefits/<int:folder_id>/', views.update_benefits, name='update_benefits'),
+    path('download-benefits-pdf/<int:folder_id>/', views.download_benefits_pdf, name='download_benefits_pdf'),
     path('delete-folder/<int:folder_id>/', views.delete_folder, name='delete_folder'),
     path('delete-document/<int:doc_id>/', views.delete_document, name='delete_document'),
     path('busqueda_ajax/', views.gestionar_productos_ajax, name='busqueda_ajax'),    
@@ -74,7 +75,8 @@ urlpatterns = [
     #==================================================================
     
     path('libros/inventory/', views.inventory_list, name='inventory_list'),
-    path('inventory/update-stock/', views.update_stock, name='update_stock'),
+    path('producto/eliminar/<int:product_id>/', views.delete_product, name='delete_product'),
+    path('inventario/actualizar/<int:product_id>/', views.update_product, name='update_product'),
 
     #==================================================================
     #Ruta para el calendario e informes

@@ -162,7 +162,7 @@
         
         <a href="{% url 'gestionar_productos' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-images mr-3 text-[#ff9800] w-5"></i>
-          <span>Galería de Publicidad</span>
+          <span>Gestion de productos</span>
         </a>
         
         <a href="{% url 'inventory_list' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
@@ -208,7 +208,11 @@
           </li>
           <li class="flex items-center">
             <span class="mx-2 text-gray-500">/</span>
-            <span class="text-gray-500">Inventario</span>
+            <a href="{% url 'index' %}" class="text-gray-700 hover:text-[#ff9800]">Dashboard</a>
+          </li>
+          <li class="flex items-center">
+            <span class="mx-2 text-gray-500">/</span>
+            <span class="text-gray-500">Lista de inventario</span>
           </li>
         </ol>
       </nav>
@@ -222,35 +226,47 @@
           </button>
         </div>
 
-        <!-- Lista de productos existentes -->
-        <div id="product-list" class="space-y-4 mb-8">
-          {% for p in products %}
-          <div id="prod-{{p.id}}" class="bg-gray-50 p-4 rounded-lg shadow-md border border-gray-100 flex justify-between items-center hover:shadow-lg transition-all duration-300">
-            <div>
-              <h2 class="font-semibold text-[#4A4A4A]">{{ p.name }}</h2>
-              <p class="text-sm text-gray-600">Madera: {{ p.wood_type }}</p>
-              <div class="flex space-x-4 mt-1">
-                <p class="text-sm">Stock: <span x-text="stocks[{{p.id}}] ?? {{p.stock}}" class="font-medium"></span></p>
-                <p class="text-sm">Precio: <span class="font-medium text-[#45a049]">${{ p.price }}</span></p>
-              </div>
-            </div>
-            <!-- botón "⋮" -->
-            <div class="relative" x-data="{ open: false }">
-              <button @click="open = !open" class="p-2 rounded-full hover:bg-gray-200 transition-colors">
-                <i class="fas fa-ellipsis-v text-gray-600"></i>
-              </button>
-              <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-xl z-50 overflow-hidden">
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
-                  <i class="fas fa-edit mr-2 text-blue-500"></i> Editar
-                </a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
-                  <i class="fas fa-trash-alt mr-2 text-red-500"></i> Eliminar
-                </a>
-              </div>
+<!-- Lista de productos Existentes -->
+<div class="overflow-x-auto mb-8">
+  <table class="min-w-full table-auto border border-gray-300 bg-white shadow-md rounded-lg">
+    <thead class="bg-black text-white">
+      <tr>
+        <th class="px-4 py-2 text-left font-semibold border-b">Nombre</th>
+        <th class="px-4 py-2 text-left font-semibold border-b">Madera</th>
+        <th class="px-4 py-2 text-left font-semibold border-b">Stock</th>
+        <th class="px-4 py-2 text-left font-semibold border-b">Precio</th>
+        <th class="px-4 py-2 text-left font-semibold border-b">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      <tr id="prod-{{p.id}}" class="hover:bg-gray-50 transition-all">
+        <td class="px-4 py-2 border-b">{{ p.name }}</td>
+        <td class="px-4 py-2 border-b">{{ p.wood_type }}</td>
+        <td class="px-4 py-2 border-b">
+          <span x-text="stocks[{{p.id}}] ?? {{p.stock}}"></span>
+        </td>
+        <td class="px-4 py-2 border-b text-[#45a049] font-medium">${{ p.price }}</td>
+        <td class="px-4 py-2 border-b">
+          <div class="relative inline-block text-left" x-data="{ open: false }">
+            <button @click="open = !open" class="p-2 rounded-full hover:bg-gray-200 transition-colors">
+              <i class="fas fa-ellipsis-v text-gray-600"></i>
+            </button>
+            <div x-show="open" @click.away="open = false" x-cloak class="absolute z-50 mt-2 w-36 right-0 bg-white border rounded-lg shadow-xl overflow-hidden">
+              <a href="#" @click.prevent="openEditModal({{p.id}}, '{{p.name}}', '{{p.wood_type}}', {{p.stock}}, {{p.price}})" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
+                <i class="fas fa-edit mr-2 text-blue-500"></i> Editar
+              </a>
+              <a href="#" @click.prevent="openEditModal({{p.id}}, '{{p.name}}', '{{p.wood_type}}', {{p.stock}}, {{p.price}}); confirmDelete()" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
+                <i class="fas fa-trash-alt mr-2 text-red-500"></i> Eliminar
+              </a>
             </div>
           </div>
-          {% endfor %}
-        </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
         <!-- Nueva sección: Productos Agregados Recientemente -->
         <div class="mb-8 bg-gray-50 p-6 rounded-xl border border-gray-100">
@@ -355,11 +371,18 @@
           <input type="text" x-model="form.name" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50" required>
           <p x-text="errors.name" class="text-red-500 text-sm mt-1" x-show="errors.name"></p>
         </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-medium mb-1">Tipo de madera</label>
-          <input type="text" x-model="form.wood_type" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50">
-          <p x-text="errors.wood_type" class="text-red-500 text-sm mt-1" x-show="errors.wood_type"></p>
-        </div>
+          <div class="mb-4 input-group">
+            <label for="tipo_madera" class="block text-sm font-medium text-gray-700">Tipo de Madera</label>
+            <select id="tipo_madera" name="tipo_madera" required
+              class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="">Selecciona un tipo de madera </option>
+              {% for tipo in tipos_madera %}
+              <option value="{{ tipo.id }}" {% if producto.tipo_madera.id == tipo.id %}selected{% endif %}>
+                {{ tipo.nombre|upper }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
         <div class="mb-4">
           <label class="block text-gray-700 text-sm font-medium mb-1">Precio</label>
           <div class="mt-1 relative">
@@ -459,335 +482,319 @@
   
   <script>
 
+    function inventory() {
+  return {
+    openAdd: false,
+    openEdit: false,
+    openDelete: false,
+    form: { name: '', wood_type: '', price: '', stock: '' },
+    editForm: { id: '', name: '', wood_type: '', price: '', stock: '' },
+    errors: {},
+    stocks: {},
+    recentProducts: [],
     
-      function inventory() {
-            return {
-              openAdd: false,
-              openEdit: false,
-              openDelete: false,
-              form: { name: '', wood_type: '', price: '', stock: '' },
-              editForm: { id: '', name: '', wood_type: '', price: '', stock: '' },
-              errors: {},
-              stocks: {},
-              recentProducts: [],
-              
-              // Propiedades calculadas para estadísticas
-              get totalProducts() {
-                return document.querySelectorAll('#product-list > div').length + this.recentProducts.length;
-              },
-              
-              get totalStock() {
-                let stock = 0;
-                // Sumar stock de productos existentes
-                document.querySelectorAll('#product-list > div').forEach(el => {
-                  const stockSpan = el.querySelector('p:nth-child(3) span');
-                  if (stockSpan) {
-                    stock += parseInt(stockSpan.innerText || '0');
-                  }
-                });
-                
-                // Sumar stock de productos recientes
-                this.recentProducts.forEach(p => {
-                  stock += parseInt(p.stock || '0');
-                });
-                
-                return stock;
-              },
-              
-              get totalValue() {
-                let value = 0;
-                
-                // Valor de productos existentes
-                document.querySelectorAll('#product-list > div').forEach(el => {
-                  const priceText = el.querySelector('p:nth-child(4)').innerText;
-                  const price = parseFloat(priceText.replace('Precio: $', '')) || 0;
-                  const stockSpan = el.querySelector('p:nth-child(3) span');
-                  const stock = parseInt(stockSpan.innerText || '0');
-                  value += price * stock;
-                });
-                
-                // Valor de productos recientes
-                this.recentProducts.forEach(p => {
-                  value += parseFloat(p.price || '0') * parseInt(p.stock || '0');
-                });
-                
-                return value;
-              },
-          
-              closeAdd() {
-                this.openAdd = false;
-                this.form = { name: '', wood_type: '', price: '', stock: '' };
-                this.errors = {};
-              },
-              
-              // Métodos para el modal de edición
-              openEditModal(id, name, wood_type, stock, price) {
-                this.editForm = {
-                  id: id,
-                  name: name,
-                  wood_type: wood_type,
-                  stock: stock,
-                  price: price
-                };
-                this.openEdit = true;
-                this.errors = {};
-              },
-              
-              closeEdit() {
-                this.openEdit = false;
-                this.editForm = { id: '', name: '', wood_type: '', price: '', stock: '' };
-                this.errors = {};
-              },
-              
-              submitEdit() {
-                this.errors = {};
-                
-                // Validación básica del lado del cliente
-                if (!this.editForm.name.trim()) {
-                  this.errors.name = "El nombre es requerido";
-                  return;
-                }
-                
-                if (isNaN(parseFloat(this.editForm.price)) || parseFloat(this.editForm.price) <= 0) {
-                  this.errors.price = "El precio debe ser un número positivo";
-                  return;
-                }
-                
-                if (isNaN(parseInt(this.editForm.stock)) || parseInt(this.editForm.stock) < 0) {
-                  this.errors.stock = "El stock debe ser un número no negativo";
-                  return;
-                }
-                
-                fetch(`/inventory/update/${this.editForm.id}/`, {
-                  method: 'PUT',  // o 'PATCH' según tu API
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value,
-                    'X-Requested-With': 'XMLHttpRequest'
-                  },
-                  body: JSON.stringify(this.editForm)
-                })
-                .then(r => r.json().then(data => ({ status: r.status, body: data })))
-                .then(({ status, body }) => {
-                  if (status === 200 && body.success) {
-                    const p = body.product;
-                    
-                    // Actualizar en la lista principal
-                    const productElement = document.getElementById(`prod-${p.id}`);
-                    if (productElement) {
-                      productElement.querySelector('h2').textContent = p.name;
-                      productElement.querySelector('p:nth-child(2)').textContent = `Madera: ${p.wood_type}`;
-                      productElement.querySelector('p:nth-child(3) span').textContent = p.stock;
-                      productElement.querySelector('p:nth-child(4)').textContent = `Precio: $${p.price}`;
-                    }
-                    
-                    // Actualizar en productos recientes si existe
-                    const recentIndex = this.recentProducts.findIndex(item => item.id === p.id);
-                    if (recentIndex >= 0) {
-                      this.recentProducts[recentIndex] = {
-                        id: p.id,
-                        name: p.name,
-                        wood_type: p.wood_type,
-                        stock: p.stock,
-                        price: p.price
-                      };
-                    }
-                    
-                    // Actualizar stocks
-                    this.stocks[p.id] = p.stock;
-                    
-                    // Mostrar notificación de éxito
-                    this.showNotification('Producto actualizado con éxito', 'success');
-                    
-                    this.closeEdit();
-                  } else {
-                    this.errors = body.errors || { general: "Error al actualizar el producto" };
-                  }
-                })
-                .catch(error => {
-                  console.error("Error:", error);
-                  this.errors = { general: "Ocurrió un error al procesar tu solicitud" };
-                });
-              },
-              
-              confirmDelete() {
-                this.openDelete = true;
-              },
-              
-              deleteProduct() {
-                fetch(`/inventory/delete/${this.editForm.id}/`, {
-                  method: 'DELETE',
-                  headers: {
-                    'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value,
-                    'X-Requested-With': 'XMLHttpRequest'
-                  }
-                })
-                .then(r => r.json().then(data => ({ status: r.status, body: data })))
-                .then(({ status, body }) => {
-                  if (status === 200 && body.success) {
-                    // Eliminar del DOM
-                    const productElement = document.getElementById(`prod-${this.editForm.id}`);
-                    if (productElement) {
-                      productElement.remove();
-                    }
-                    
-                    // Eliminar de productos recientes
-                    this.recentProducts = this.recentProducts.filter(p => p.id !== this.editForm.id);
-                    
-                    // Eliminar de stocks
-                    delete this.stocks[this.editForm.id];
-                    
-                    // Mostrar notificación
-                    this.showNotification('Producto eliminado con éxito', 'success');
-                    
-                    this.openDelete = false;
-                    this.closeEdit();
-                  } else {
-                    this.showNotification('Error al eliminar el producto', 'error');
-                  }
-                })
-                .catch(error => {
-                  console.error("Error:", error);
-                  this.showNotification('Error al procesar la solicitud', 'error');
-                });
-              },
-              
-              // Sistema de notificaciones
-              showNotification(message, type = 'info') {
-                const notificationContainer = document.getElementById('notification-container');
-                if (!notificationContainer) {
-                  // Crear el contenedor si no existe
-                  const container = document.createElement('div');
-                  container.id = 'notification-container';
-                  container.className = 'fixed bottom-4 right-4 z-50 flex flex-col space-y-2';
-                  document.body.appendChild(container);
-                }
-                
-                const notification = document.createElement('div');
-                notification.className = `px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 flex items-center justify-between ${
-                  type === 'success' ? 'bg-green-100 text-green-800 border-l-4 border-green-500' :
-                  type === 'error' ? 'bg-red-100 text-red-800 border-l-4 border-red-500' :
-                  'bg-blue-100 text-blue-800 border-l-4 border-blue-500'
-                }`;
-                
-                notification.innerHTML = `
-                  <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      ${type === 'success' 
-                        ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>'
-                        : type === 'error'
-                          ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>'
-                          : '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v4a1 1 0 102 0V7zm0 8a1 1 0 10-2 0 1 1 0 002 0z" clip-rule="evenodd"></path>'
-                      }
-                    </svg>
-                    <span>${message}</span>
-                  </div>
-                  <button class="ml-4 focus:outline-none" onclick="this.parentElement.remove()">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                    </svg>
-                  </button>
-                `;
-                
-                document.getElementById('notification-container').appendChild(notification);
-                
-                // Auto-remove after 5 seconds
-                setTimeout(() => {
-                  if (notification.parentElement) {
-                    notification.classList.add('opacity-0', 'translate-x-full');
-                    setTimeout(() => notification.remove(), 300);
-                  }
-                }, 5000);
-              },
-              
-              submitAdd() {
-                this.errors = {};
-                
-                // Validación básica del lado del cliente
-                if (!this.form.name.trim()) {
-                  this.errors.name = "El nombre es requerido";
-                  return;
-                }
-                
-                if (isNaN(parseFloat(this.form.price)) || parseFloat(this.form.price) <= 0) {
-                  this.errors.price = "El precio debe ser un número positivo";
-                  return;
-                }
-                
-                if (isNaN(parseInt(this.form.stock)) || parseInt(this.form.stock) < 0) {
-                  this.errors.stock = "El stock debe ser un número no negativo";
-                  return;
-                }
-                
-                fetch("{% url 'inventory_list' %}", {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value,
-                    'X-Requested-With': 'XMLHttpRequest'
-                  },
-                  body: JSON.stringify(this.form)
-                })
-                .then(r => r.json().then(data => ({ status: r.status, body: data })))
-                .then(({ status, body }) => {
-                  if (status === 200 && body.success) {
-                    // Actualizar lista y stocks
-                    this.stocks[body.product.id] = body.product.stock;
-                    const p = body.product;
-                    
-                    // Agregar a la lista principal
-                    const html = `
-                      <div id="prod-${p.id}" class="bg-white p-4 rounded-lg shadow flex justify-between items-center">
-                        <div>
-                          <h2 class="font-semibold">${p.name}</h2>
-                          <p class="text-sm text-gray-600">Madera: ${p.wood_type}</p>
-                          <p class="text-sm">Stock: <span>${p.stock}</span></p>
-                          <p class="text-sm">Precio: $${p.price}</p>
-                        </div>
-                        <div class="relative" x-data="{ open: false }">
-                          <button @click="open = !open" class="p-2">⋮</button>
-                          <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-32 bg-white border rounded shadow">
-                            <a href="#" @click.prevent="$parent.openEditModal(${p.id}, '${p.name}', '${p.wood_type}', ${p.stock}, ${p.price})" class="block px-4 py-2 hover:bg-gray-100">Editar</a>
-                            <a href="#" @click.prevent="$parent.openEditModal(${p.id}, '${p.name}', '${p.wood_type}', ${p.stock}, ${p.price}); $parent.confirmDelete()" class="block px-4 py-2 hover:bg-gray-100">Eliminar</a>
-                          </div>
-                        </div>
-                      </div>`;
-                    document.getElementById('product-list').insertAdjacentHTML('afterbegin', html);
-                    
-                    // Agregar a productos recientes
-                    this.recentProducts.unshift({
-                      id: p.id,
-                      name: p.name,
-                      wood_type: p.wood_type,
-                      stock: p.stock,
-                      price: p.price
-                    });
-                    
-                    // Limitar a 6 productos recientes
-                    if (this.recentProducts.length > 6) {
-                      this.recentProducts.pop();
-                    }
-                    
-                    // Mostrar notificación
-                    this.showNotification('Producto agregado con éxito', 'success');
-                    
-                    this.closeAdd();
-                  } else {
-                    this.errors = body.errors || {};
-                  }
-                })
-                .catch(error => {
-                  console.error("Error:", error);
-                  this.errors = { general: "Ocurrió un error al procesar tu solicitud" };
-                });
-              },
-              
-              removeFromRecent(id) {
-                this.recentProducts = this.recentProducts.filter(p => p.id !== id);
-              }
-            }
-          }
+    // Propiedades calculadas para estadísticas
+    get totalProducts() {
+      // Contar los productos en la tabla
+      return document.querySelectorAll('table tbody tr').length;
+    },
+    
+    get totalStock() {
+      let stock = 0;
+      // Sumar stock de productos existentes
+      document.querySelectorAll('table tbody tr').forEach(el => {
+        const stockText = el.querySelectorAll('td')[2].innerText.trim();
+        stock += parseInt(stockText || '0');
+      });
+      
+      return stock;
+    },
+    
+    get totalValue() {
+      let value = 0;
+      
+      // Valor de productos existentes
+      document.querySelectorAll('table tbody tr').forEach(el => {
+        const priceText = el.querySelectorAll('td')[3].innerText.trim();
+        const price = parseFloat(priceText.replace('$', '').trim()) || 0;
+        const stockText = el.querySelectorAll('td')[2].innerText.trim();
+        const stock = parseInt(stockText || '0');
+        value += price * stock;
+      });
+      
+      return value;
+    },
 
+    closeAdd() {
+      this.openAdd = false;
+      this.form = { name: '', wood_type: '', price: '', stock: '' };
+      this.errors = {};
+    },
+    
+    // Métodos para el modal de edición
+    openEditModal(id, name, wood_type, stock, price) {
+      this.editForm = {
+        id: id,
+        name: name,
+        wood_type: wood_type,
+        stock: stock,
+        price: price
+      };
+      this.openEdit = true;
+      this.errors = {};
+    },
+    
+    closeEdit() {
+      this.openEdit = false;
+      this.editForm = { id: '', name: '', wood_type: '', price: '', stock: '' };
+      this.errors = {};
+    },
+    
+    submitEdit() {
+      this.errors = {};
+      
+      // Validación básica del lado del cliente
+      if (!this.editForm.name.trim()) {
+        this.errors.name = "El nombre es requerido";
+        return;
+      }
+      
+      if (isNaN(parseFloat(this.editForm.price)) || parseFloat(this.editForm.price) <= 0) {
+        this.errors.price = "El precio debe ser un número positivo";
+        return;
+      }
+      
+      if (isNaN(parseInt(this.editForm.stock)) || parseInt(this.editForm.stock) < 0) {
+        this.errors.stock = "El stock debe ser un número no negativo";
+        return;
+      }
+      
+      fetch(`/inventario/actualizar/${this.editForm.id}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value,
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(this.editForm)
+      })
+      .then(r => r.json().then(data => ({ status: r.status, body: data })))
+      .then(({ status, body }) => {
+        if (status === 200 && body.success) {
+          const p = body.product;
+          
+          // Actualizar en la tabla principal
+          const productRow = document.getElementById(`prod-${p.id}`);
+          if (productRow) {
+            const cells = productRow.querySelectorAll('td');
+            cells[0].textContent = p.name;
+            cells[1].textContent = p.wood_type;
+            cells[2].textContent = p.stock;
+            cells[3].textContent = `$${p.price}`;
+          }
+          
+          // Actualizar en productos recientes si existe
+          const recentIndex = this.recentProducts.findIndex(item => item.id === p.id);
+          if (recentIndex >= 0) {
+            this.recentProducts[recentIndex] = {
+              id: p.id,
+              name: p.name,
+              wood_type: p.wood_type,
+              stock: p.stock,
+              price: p.price
+            };
+          }
+          
+          // Actualizar stocks
+          this.stocks[p.id] = p.stock;
+          
+          // Mostrar notificación de éxito
+          this.showNotification('Producto actualizado con éxito', 'success');
+          
+          this.closeEdit();
+        } else {
+          this.errors = body.errors || { general: "Error al actualizar el producto" };
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        this.errors = { general: "Ocurrió un error al procesar tu solicitud" };
+      });
+    },
+    
+    confirmDelete() {
+      this.openDelete = true;
+    },
+    
+    deleteProduct() {
+      // Asegúrate de que esta URL coincida con tu configuración de urls.py en Django
+      fetch(`/producto/eliminar/${this.editForm.id}/`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value,
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => {
+        // Verificar si la respuesta está bien antes de intentar parsear JSON
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          // Eliminar del DOM
+          const productRow = document.getElementById(`prod-${this.editForm.id}`);
+          if (productRow) {
+            productRow.remove();
+          }
+          
+          // Eliminar de productos recientes
+          this.recentProducts = this.recentProducts.filter(p => p.id !== this.editForm.id);
+          
+          // Eliminar de stocks
+          delete this.stocks[this.editForm.id];
+          
+          // Mostrar notificación
+          this.showNotification('Producto eliminado con éxito', 'success');
+          
+          this.openDelete = false;
+          this.closeEdit();
+        } else {
+          this.showNotification(data.error || 'Error al eliminar el producto', 'error');
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        this.showNotification('Error al procesar la solicitud: ' + error.message, 'error');
+      });
+    },
+    
+    // Sistema de notificaciones
+    showNotification(message, type = 'info') {
+      const notificationContainer = document.getElementById('notification-container');
+      if (!notificationContainer) {
+        // Crear el contenedor si no existe
+        const container = document.createElement('div');
+        container.id = 'notification-container';
+        container.className = 'fixed bottom-4 right-4 z-50 flex flex-col space-y-2';
+        document.body.appendChild(container);
+      }
+      
+      const notification = document.createElement('div');
+      notification.className = `px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 flex items-center justify-between ${
+        type === 'success' ? 'bg-green-100 text-green-800 border-l-4 border-green-500' :
+        type === 'error' ? 'bg-red-100 text-red-800 border-l-4 border-red-500' :
+        'bg-blue-100 text-blue-800 border-l-4 border-blue-500'
+      }`;
+      
+      notification.innerHTML = `
+        <div class="flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            ${type === 'success' 
+              ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>'
+              : type === 'error'
+                ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>'
+                : '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v4a1 1 0 102 0V7zm0 8a1 1 0 10-2 0 1 1 0 002 0z" clip-rule="evenodd"></path>'
+            }
+          </svg>
+          <span>${message}</span>
+        </div>
+        <button class="ml-4 focus:outline-none" onclick="this.parentElement.remove()">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      `;
+      
+      document.getElementById('notification-container').appendChild(notification);
+      
+      // Auto-remove after 5 seconds
+      setTimeout(() => {
+        if (notification.parentElement) {
+          notification.classList.add('opacity-0', 'translate-x-full');
+          setTimeout(() => notification.remove(), 300);
+        }
+      }, 5000);
+    },
+    
+    submitAdd() {
+      this.errors = {};
+      
+      // Validación básica del lado del cliente
+      if (!this.form.name.trim()) {
+        this.errors.name = "El nombre es requerido";
+        return;
+      }
+      
+      if (isNaN(parseFloat(this.form.price)) || parseFloat(this.form.price) <= 0) {
+        this.errors.price = "El precio debe ser un número positivo";
+        return;
+      }
+      
+      if (isNaN(parseInt(this.form.stock)) || parseInt(this.form.stock) < 0) {
+        this.errors.stock = "El stock debe ser un número no negativo";
+        return;
+      }
+      
+      const currentUrl = window.location.pathname; // Obtener la ruta actual
+      
+      fetch(currentUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value,
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(this.form)
+      })
+      .then(r => r.json().then(data => ({ status: r.status, body: data })))
+      .then(({ status, body }) => {
+        if (status === 200 && body.success) {
+          // Actualizar lista y stocks
+          this.stocks[body.product.id] = body.product.stock;
+          const p = body.product;
+          
+          // Refrescar la página para mostrar el nuevo producto
+          location.reload();
+          
+          // Mostrar notificación
+          this.showNotification('Producto agregado con éxito', 'success');
+          
+          this.closeAdd();
+        } else {
+          this.errors = body.errors || {};
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        this.errors = { general: "Ocurrió un error al procesar tu solicitud" };
+      });
+    },
+    
+    removeFromRecent(id) {
+      this.recentProducts = this.recentProducts.filter(p => p.id !== id);
+    },
+    
+    // Inicialización: llamar cuando cargue la página
+    init() {
+      // Cargar los productos recientes del almacenamiento local si existen
+      const savedRecents = localStorage.getItem('recentProducts');
+      if (savedRecents) {
+        try {
+          this.recentProducts = JSON.parse(savedRecents);
+        } catch (e) {
+          console.error("Error cargando productos recientes:", e);
+          this.recentProducts = [];
+        }
+      }
+      
+      // Para depuración
+      console.log("Componente de inventario inicializado");
+    }
+  }
+}
   
 
   </script>

@@ -294,7 +294,11 @@
           </li>
           <li class="flex items-center">
             <span class="mx-2 text-gray-500">/</span>
-            <span class="text-gray-500">Gestión de Imagen</span>
+            <a href="{% url 'index' %}" class="text-gray-700 hover:text-[#ff9800]">Dashboard</a>
+          </li>
+          <li class="flex items-center">
+            <span class="mx-2 text-gray-500">/</span>
+            <span class="text-gray-500">Galeria de productos</span>
           </li>
         </ol>
       </nav>
@@ -344,10 +348,12 @@
           <span>Imágenes en Gestión</span>
         </h2>
         
-        <div id="productos-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div id="productos-container" >
           {% include 'libros/productos_partial.html' %}
         </div>
       </div>
+
+      <div>
 
       <!-- Footer -->
       <footer class="mt-12 text-center text-gray-500 text-sm">
@@ -367,6 +373,7 @@
   </div>
 
   <!-- Modal de Confirmación de Eliminación -->
+   
   <div id="modal-eliminar" class="modal hidden">
     <div class="modal-content">
       <span class="close" onclick="cerrarModal('modal-eliminar')">&times;</span>

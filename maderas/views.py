@@ -4,6 +4,7 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import make_password
+from django.contrib.staticfiles import finders
 from .models import Producto, datos, Folder, Document, TipoMadera, Product
 from .forms import ProductoForm, RegistroForm, TipoMaderaForm, ProductForm
 from django.core.mail import send_mail
@@ -21,6 +22,13 @@ from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 from datetime import datetime
 from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate
+from reportlab.platypus import Table, TableStyle
+
+
+
 
 # --------------------------
 # Vistas para páginas estáticas
@@ -494,43 +502,75 @@ def delete_document(request, doc_id):
 
 def download_benefits_pdf(request, folder_id):
     # Recupera la carpeta y sus datos
-    try:
-        folder = Folder.objects.get(pk=folder_id)
-    except Folder.DoesNotExist:
-        raise Http404("Carpeta no encontrada")
+    folder = get_object_or_404(Folder, pk=folder_id)
 
-    # Crea un buffer en memoria
     buffer = io.BytesIO()
-    p = canvas.Canvas(buffer)
+    p = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
 
-    # Título
+    # Logo a la izquierda
+    logo_path = finders.find('diseños/imagenes/logo.png')
+    logo_width = 80
+    logo_height = 80
+    logo_x = 40
+    logo_y = height - logo_height - 20
+
+    if os.path.exists(logo_path):
+        p.drawImage(logo_path, logo_x, logo_y, width=logo_width, height=logo_height, mask='auto')
+
+    # Nombre de la empresa centrado
+    p.setFont("Helvetica-Bold", 18)
+    empresa = "Maderas Isabella AEI S.A.S"
+    text_width = p.stringWidth(empresa, "Helvetica-Bold", 18)
+    text_x = (width - text_width) / 2
+    text_y = logo_y + (logo_height / 2) + 6
+    p.drawString(text_x, text_y, empresa)
+
+    # Título debajo del encabezado
     p.setFont("Helvetica-Bold", 16)
-    p.drawString(100, 800, f"Prestaciones de Carpeta: {folder.name}")
+    titulo = f"Prestaciones del trabajador: {folder.name}"
+    titulo_width = p.stringWidth(titulo, "Helvetica-Bold", 16)
+    titulo_x = (width - titulo_width) / 2
+    titulo_y = logo_y - 20
+    p.drawString(titulo_x, titulo_y, titulo)
 
-    # Datos línea a línea
-    p.setFont("Helvetica", 12)
-    line_y = 760
-    for label, attr in [
-        ("Fecha de inicio", folder.fecha_inicio),
-        ("Puesto designado", folder.puesto_designado),
-        ("Salario actual", folder.salario_actual),
-        ("Horas de trabajo", folder.horas_trabajo),
-        ("Tiempo de contrato", folder.tiempo_contrato),
-        ("Número de identidad", folder.numero_identidad),
-        ("Número de seguro social", folder.numero_seguro_social),
-        ("EPS", folder.eps),
-        ("AFP", folder.fondo_pensiones),
-        ("ARL", folder.arl),
-    ]:
-        p.drawString(80, line_y, f"{label}: {attr}")
-        line_y -= 20
+    # Tabla de prestaciones
+    data = [
+        ['Campo', 'Valor'],
+        ['Fecha de inicio', folder.fecha_inicio],
+        ['Puesto designado', folder.puesto_designado],
+        ['Salario actual', folder.salario_actual],
+        ['Horas de trabajo', folder.horas_trabajo],
+        ['Tiempo de contrato', folder.tiempo_contrato],
+        ['Número de identidad', folder.numero_identidad],
+        ['Número de seguro social', folder.numero_seguro_social],
+        ['EPS', folder.eps],
+        ['AFP', folder.fondo_pensiones],
+        ['ARL', folder.arl],
+    ]
 
-    p.showPage()
+    table = Table(data, colWidths=[180, 250])
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#307c0c')),
+        ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+        ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0,0), (-1,0), 12),
+        ('ALIGN', (0,0), (-1,-1), 'LEFT'),
+        ('GRID', (0,0), (-1,-1), 1, colors.HexColor('#307c0c')),
+        ('BACKGROUND', (0,1), (-1,-1), colors.whitesmoke),
+        ('FONTNAME', (0,1), (0,-1), 'Helvetica'),
+        ('FONTSIZE', (0,1), (-1,-1), 11),
+    ]))
+
+    # Calcula la posición de la tabla debajo del título
+    espacio_encabezado = 100  # Ajusta si necesitas más/menos espacio
+    table_height = 25 * len(data)
+    table.wrapOn(p, width, height)
+    table.drawOn(p, 90, height - espacio_encabezado - table_height)
+
     p.save()
     buffer.seek(0)
-
-    # Devuelve el PDF como descarga
-    return FileResponse(buffer, as_attachment=True, filename=f"prestaciones_{folder.id}.pdf")
+    return FileResponse(buffer, as_attachment=True, filename=f"prestaciones_{folder.name}.pdf")
 
 
 
@@ -636,7 +676,6 @@ def cambia_con(request, token):
 # --------------------------
 
 def vista_archivos(request, file_path):
-    """ Sirve archivos desde media/documentos con los headers adecuados """
     try:
         full_path = safe_join(settings.MEDIA_ROOT, "documentos", file_path)
     except ValueError:
@@ -868,5 +907,114 @@ def delete_product(request, product_id):
         return JsonResponse({'success': False, 'error': 'Producto no encontrado'}, status=404)
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@login_required
+def download_inventory_pdf(request):
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+    
+    logo_path = finders.find('diseños/imagenes/logo.png')
+    logo_width = 80
+    logo_height = 80
+    logo_x = 40  # margen derecho
+    logo_y = height - logo_height - 20  # margen superior
+    
+    if os.path.exists(logo_path):
+        p.drawImage(logo_path, logo_x, logo_y, width=logo_width, height=logo_height, mask='auto')
+        
+    p.setFont("Helvetica-Bold", 18)
+    empresa = "Maderas Isabella AEI S.A.S"
+    text_width = p.stringWidth(empresa, "Helvetica-Bold", 18)
+    text_x = (width - text_width) / 2
+    text_y = logo_y + (logo_height / 2) +6
+
+    p.drawString(text_x, text_y, empresa)
+
+    p.setFont("Helvetica", 12)
+    # Título del inventario debajo del encabezado
+    p.setFont("Helvetica-Bold", 16)
+    titulo = "Inventario de Productos"
+    titulo_width = p.stringWidth(titulo, "Helvetica-Bold", 16)
+    titulo_x = (width - titulo_width) / 2
+    titulo_y = logo_y - 20  # 20 px debajo del logo
+    p.drawString(titulo_x, titulo_y, titulo)
+    
+    
+    
+        
+    # --------- TABLA PRINCIPAL DE PRODUCTOS ---------
+    # Construye los datos de la tabla
+    data = [['Nombre', 'Tipo de Madera', 'Precio', 'Stock']]
+    total_productos = 0
+    total_stock = 0
+    total_valor = 0
+
+    for prod in Product.objects.all():
+        data.append([
+            str(prod.name),
+            str(prod.wood_type.name),
+            f"${prod.price}",
+            str(prod.stock)
+        ])
+        total_productos += 1
+        total_stock += prod.stock
+        total_valor += float(prod.price) * prod.stock
+
+    # Crea la tabla de productos
+    table = Table(data, colWidths=[140, 140, 100, 80])
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#000000')),
+        ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+        ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0,0), (-1,0), 12),
+        ('ALIGN', (0,0), (-1,-1), 'LEFT'),
+        ('GRID', (0,0), (-1,-1), 1, colors.HexColor('#000000')),
+        ('BACKGROUND', (0,1), (-1,-1), colors.whitesmoke),
+        ('FONTNAME', (0,1), (-1,-1), 'Helvetica'),
+        ('FONTSIZE', (0,1), (-1,-1), 11),
+    ]))
+
+    # Dibuja el título
+    p.setFont("Helvetica-Bold", 16)
+
+    # Dibuja la tabla de productos
+    table.wrapOn(p, width, height)
+    table_height = 25 * (len(data))  # Aproximado, puedes ajustar
+    table.drawOn(p, 50, height - 140 - table_height)
+
+    # Datos de la tabla resumen
+    resumen_data = [
+        ['Resumen del Inventario', ''],
+        ['Total de productos:', str(total_productos)],
+        ['Stock total:', str(total_stock)],
+        ['Valor total del inventario:', f"${total_valor:,.2f}"],
+    ]
+
+    # Crea la tabla
+    resumen_table = Table(resumen_data, colWidths=[180, 150])
+    resumen_table.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#307c0c')),
+        ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+        ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0,0), (-1,0), 12),
+        ('BOTTOMPADDING', (0,0), (-1,0), 10),
+        ('BACKGROUND', (0,1), (-1,-1), colors.whitesmoke),
+        ('GRID', (0,0), (-1,-1), 1, colors.HexColor('#307c0c')),
+        ('FONTNAME', (0,1), (0,-1), 'Helvetica-Bold'),
+        ('ALIGN', (0,0), (-1,-1), 'LEFT'),
+    ]))
+
+    # Dibuja la tabla en el canvas
+    resumen_y = height - 140 - table_height - 120
+    resumen_table.wrapOn(p, width, height)
+    resumen_table.drawOn(p, 50, resumen_y) 
+
+    p.save()
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename="inventario.pdf")
+
+
 
 

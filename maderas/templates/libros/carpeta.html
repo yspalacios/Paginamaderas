@@ -10,6 +10,7 @@
   
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/accessibility.css' %}">
 
  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,23 +81,19 @@
             <a href="{% url 'profile' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-user mr-2 text-[#ff9800]"></i> Perfil
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <i class="fas fa-star mr-2 text-[#ff9800]"></i> Calificaciones
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            
+            <a href="{% url 'calendar' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-calendar mr-2 text-[#ff9800]"></i> Calendario
             </a>
           </div>
           <div class="py-1">
             <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <i class="fas fa-file-alt mr-2 text-[#ff9800]"></i> Archivos privados
+              <i class="fas fa-file-alt mr-2 text-[#ff9800]"></i> Manual de Usuario
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            <a href="{% url 'informes' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-chart-bar mr-2 text-[#ff9800]"></i> Informes
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <i class="fas fa-cog mr-2 text-[#ff9800]"></i> Preferencias
-            </a>
+            
           </div>
           <div class="py-1">
             <a href="{% url 'logout' %}" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50">
@@ -122,22 +119,22 @@
         
         <a href="{% url 'gestionar_productos' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-images mr-3 text-[#ff9800] w-5"></i>
-          <span>Gestion de productos</span>
+          <span>Galería de Publicidad</span>
         </a>
         
         <a href="{% url 'inventory_list' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-boxes mr-3 text-[#ff9800] w-5"></i>
-          <span>Lista de inventario</span>
+          <span>Inventario</span>
         </a>
         
         <a href="{% url 'lista_login' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-users mr-3 text-[#ff9800] w-5"></i>
-          <span>Listado de Cuentas</span>
+          <span>Listado de Usuarios</span>
         </a>
         
         <a href="{% url 'carpeta' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-folder-open mr-3 text-[#ff9800] w-5"></i>
-          <span>Documentos de contratación</span>
+          <span>Documentación de Personal</span>
         </a>
         
         <a href="{% url 'manage_backups' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
@@ -162,7 +159,7 @@
       <nav class="flex mb-6 text-sm" aria-label="breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
           <li class="flex items-center">
-            <a href="{% url 'index' %}" class="text-gray-700 hover:text-[#ff9800]">
+            <a href="{% url 'inicio' %}" class="text-gray-700 hover:text-[#ff9800]">
               <i class="fas fa-home"></i>
             </a>
           </li>
@@ -180,7 +177,7 @@
 
       <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
         <div class="flex items-center justify-between mb-6">
-          <h1 class="text-2xl md:text-3xl font-bold text-[#4A4A4A]">Gestión de carpetas y documentos</h1>          
+          <h1 class="text-2xl md:text-3xl font-bold text-[#4A4A4A]">Gestión de personal y documentos</h1>          
             <button id="openNewFolderModalBtn" onclick="openNewFolderModal()" class="px-4 py-2 bg-[#ff9800] text-white rounded-lg hover:bg-[#e88c00] transition-colors duration-300 flex items-center">
           <i class="fas fa-plus mr-2" ></i> Crear nuevo trabajador </button> 
           <button id="downloadSelectedPdfBtn"
@@ -196,7 +193,7 @@
       <!-- Barra de búsqueda de carpetas -->
       <div class="rounded-xl shadow-lg p-6 mb-8">
         <div class="relative w-full">
-        <input type="text" id="searchInput" placeholder="Buscar carpeta..." 
+        <input type="text" id="searchInput" placeholder="Buscar trabajador por nombre..." 
         class="w-full px-4 py-2 rounded-full bg-[#5a5a5a] text-white focus:outline-none focus:ring-2 focus:ring-[#ff9800]">
           <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#ff9800]">
             <i class="fas fa-search"></i>
@@ -229,69 +226,139 @@
     </div>
 
     <!-- Modal para editar prestaciones -->
-    <div id="modal-editar" style="display:none;">
-      <div id="modal-content-editar">
-        <h2>Editar Prestaciones de Servicio</h2>
-        <div id="benefitsForm" class="barra">
-          <!-- .-.. campos existentes ... -->
+    <div id="modal-editar" class="hidden fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50 p-4">
+      <div id="modal-content-editar" class="bg-white rounded-2xl shadow-lg w-full max-w-lg overflow-hidden">
+        <div class="flex items-center justify-between bg-gradient-to-r from-gray-800 to-gray-700 px-6 py-3">
+        <h3 class="text-lg font-semibold text-white">Editar Prestaciones</h3>
+        <button onclick="closeModaleditar()" class="text-gray-300 hover:text-white p-1 rounded-md">
+          ✕
+        </button>
+      </div>
+        <div id="benefitsForm" class="barra px-6 py-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label>Fecha de inicio:</label>
-            <input type="text" id="fecha_inicio" placeholder="Ingrese el dato">
+            <label for="fecha_inicio" class="block text-sm font-medium text-gray-700">Fecha de inicio</label>
+            <input type="text" id="fecha_inicio"
+               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
           </div>
           <div>
-            <label>Puesto designado:</label>
-            <input type="text" id="puesto_designado" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Salario actual:</label>
-            <input type="text" id="salario_actual" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Horas de trabajo:</label>
-            <input type="text" id="horas_trabajo" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Tiempo de contrato:</label>
-            <input type="text" id="tiempo_contrato" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Número de identidad:</label>
-            <input type="text" id="numero_identidad" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Número de seguro social:</label>
-            <input type="text" id="numero_seguro_social" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>EPS:</label>
-            <input type="text" id="eps" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>Fondo de pensiones (AFP):</label>
-            <input type="text" id="fondo_pensiones" placeholder="Ingrese el dato">
-          </div>
-          <div>
-            <label>ARL:</label>
-            <input type="text" id="arl" placeholder="Ingrese el dato">
-          </div>
+          <label for="puesto_designado" class="block text-sm font-medium text-gray-700">Puesto designado</label>
+          <input type="text" id="puesto_designado"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
         </div>
-        <div style="text-align: right; margin-top: 10px;">
-          <button id="saveBenefitsBtn" class="btn">Guardar Prestaciones</button>
-          <button id="closeModalBtn" class="btn" onclick="closeModaleditar()">Cerrar</button>
+        <div>
+          <label for="salario_actual" class="block text-sm font-medium text-gray-700">Salario actual</label>
+          <input type="text" id="salario_actual"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
+        </div>
+        <div>
+          <label for="horas_trabajo" class="block text-sm font-medium text-gray-700">Horas de trabajo</label>
+          <input type="text" id="horas_trabajo"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
+        </div>
+        <div>
+          <label for="tiempo_contrato" class="block text-sm font-medium text-gray-700">Tiempo de contrato</label>
+          <input type="text" id="tiempo_contrato"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
+        </div>
+        <div>
+          <label for="numero_identidad" class="block text-sm font-medium text-gray-700">Número de identidad</label>
+          <input type="text" id="numero_identidad"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
+        </div>
+        <div>
+          <label for="numero_seguro_social" class="block text-sm font-medium text-gray-700">Número de seguro social</label>
+          <input type="text" id="numero_seguro_social"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
+        </div>
+        <div>
+          <label for="eps" class="block text-sm font-medium text-gray-700">EPS</label>
+          <input type="text" id="eps"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
+        </div>
+        <div>
+          <label for="fondo_pensiones" class="block text-sm font-medium text-gray-700">Fondo de pensiones</label>
+          <input type="text" id="fondo_pensiones"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
+        </div>
+        <div>
+          <label for="arl" class="block text-sm font-medium text-gray-700">ARL</label>
+          <input type="text" id="arl"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
+        </div>
+        </div>
+        <div class="flex justify-end bg-gray-50 px-6 py-4 space-x-2">
+          <button id="saveBenefitsBtn" class="btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+            Guardar Prestaciones</button>
+          <button id="closeModalBtn" class="btn px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition" onclick="closeModaleditar()">
+          Cerrar</button>
         </div>
       </div>
     </div>
 
     <!-- Modal para mostrar prestaciones guardadas -->
-    <div id="modal-mostrar" style="display:none;">
-      <div id="modal-content-mostrar">
-        <h2>Prestaciones de Servicio</h2>
-        <div id="benefitsDisplayContent"></div>
-        <div style="text-align: right; margin-top: 10px;">
-          <button id="closeShowBenefitsBtn" class="btn" onclick="closeModalmostrar()">Cerrar</button>
-        </div>
+<div id="modal-mostrar" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+  <div id="modal-content-mostrar" class="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-auto overflow-hidden">
+    <!-- Header -->
+    <div class="flex items-center justify-between bg-gradient-to-r from-gray-800 to-gray-700 px-6 py-4">
+      <h2 class="text-xl font-semibold text-white">Prestaciones de Servicio</h2>
+      <button onclick="closeModalmostrar()" class="text-gray-300 hover:text-white focus:outline-none">
+        ✕
+      </button>
+    </div>
+
+    <!-- Body: muestra en dos columnas los mismos campos del formulario de edición -->
+    <div id="benefitsDisplayContent" class="px-6 py-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-gray-700">Fecha de inicio</span>
+        <span id="disp_fecha_inicio" class="mt-1 text-gray-900">--</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-gray-700">Puesto designado</span>
+        <span id="disp_puesto_designado" class="mt-1 text-gray-900">--</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-gray-700">Salario actual</span>
+        <span id="disp_salario_actual" class="mt-1 text-gray-900">--</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-gray-700">Horas de trabajo</span>
+        <span id="disp_horas_trabajo" class="mt-1 text-gray-900">--</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-gray-700">Tiempo de contrato</span>
+        <span id="disp_tiempo_contrato" class="mt-1 text-gray-900">--</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-gray-700">Número de identidad</span>
+        <span id="disp_numero_identidad" class="mt-1 text-gray-900">--</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-gray-700">Número de seguro social</span>
+        <span id="disp_numero_seguro_social" class="mt-1 text-gray-900">--</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-gray-700">EPS</span>
+        <span id="disp_eps" class="mt-1 text-gray-900">--</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-gray-700">Fondo de pensiones (AFP)</span>
+        <span id="disp_fondo_pensiones" class="mt-1 text-gray-900">--</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-gray-700">ARL</span>
+        <span id="disp_arl" class="mt-1 text-gray-900">--</span>
       </div>
     </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end bg-gray-50 px-6 py-4">
+      <button onclick="closeModalmostrar()"
+              class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>
 
     <!-- Modal para ver el archivo (PDF, imagen, etc.) -->
     <div id="modal-ver" style="display:none;">
@@ -306,6 +373,8 @@
       </div>
     </div>
   </div>
+
+  <script src="{% static 'js/accessibility.js'%}"></script>
 
   <script>
     // Abrir modal de nueva carpeta

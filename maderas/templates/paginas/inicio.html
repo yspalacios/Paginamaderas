@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block titulo %}Maderas Isabella{% endblock %}</title>
   <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/accessibility.css' %}">
   <!--  Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- el alpine.js-->
@@ -58,7 +59,7 @@
       <li><a href="#nosotros" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">👷 Nosotros</a></li>
       <li><a href="#ubicanos" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">📌 Dirección</a></li>
       <li><a href="#contacto" class="text-white font-bold text-2xl px-4 py-2 rounded hover:bg-[#45a049] transition-colors block">📞 Contacto</a></li>
-      <li><a href="{% url 'login' %}" class="text-white font-bold text-2xl px-4 py-3 rounded bg-[#e88c00;] hover:text-madera-dark transition-colors block">Inicia sesión</a></li>
+      <li> {% include 'libros/inicio_sesion.html' %} </li>
     </ul>
   </nav>
 </header>
@@ -153,7 +154,7 @@ Expertos en maderas finas: compra de bosques, tala responsable y venta de madera
       </div>
     </section>
 
-  <section id="nosotros" class="relative mb-16 text-black max-w-5x1 mx-auto px-6 py-12 rounded-lg shadow-xlbg-contain bg-center bg-no-repeat" style="background-image: url('{% static 'diseños/imagenes/6.jpg' %}');">
+  <section id="nosotros" class="relative mb-16 text-black max-w-5x1 mx-auto px-6 py-12 rounded-lg shadow-xlbg-contain bg-center bg-no-repeat" >
   <div class="absolute inset-0 bg-white bg-opacity-80 rounded-lg"></div>
   <div class="relative z-10">
 
@@ -275,7 +276,9 @@ Expertos en maderas finas: compra de bosques, tala responsable y venta de madera
 
 
 
-  
+
+  <script src="{% static 'js/accessibility.js'%}"></script>
+
   
   <script>
     // Script para el carrusel

@@ -1,3 +1,8 @@
+
+
+
+
+
 class AccessibilityWidget {
   constructor() {
     this.isPanelOpen = false;
@@ -281,6 +286,7 @@ class AccessibilityWidget {
     }
   }
 }
+
 
 window.addEventListener('DOMContentLoaded', () => {
   new AccessibilityWidget();

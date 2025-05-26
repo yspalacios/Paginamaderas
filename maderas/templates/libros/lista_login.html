@@ -11,6 +11,7 @@
   
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/accessibility.css' %}">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,17 +64,20 @@
             <p class="text-xs text-gray-500">{{ user.email }}</p>
           </div>
           <div class="py-1">
-            <a href="{% url 'profile' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-user mr-2 text-[#ff9800]"></i> Perfil</a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-star mr-2 text-[#ff9800]"></i> Calificaciones</a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-calendar mr-2 text-[#ff9800]"></i> Calendario</a>
+            <a href="{% url 'profile' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-user mr-2 text-[#ff9800]">
+            </i> Perfil</a>
+            <a href="{% url 'calendar' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-calendar mr-2 text-[#ff9800]">
+            </i> Calendario</a>
           </div>
           <div class="py-1">
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-file-alt mr-2 text-[#ff9800]"></i> Archivos privados</a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-chart-bar mr-2 text-[#ff9800]"></i> Informes</a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-cog mr-2 text-[#ff9800]"></i> Preferencias</a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-file-alt mr-2 text-[#ff9800]">
+            </i> Manual de Usuario</a>
+            <a href="{% url 'informes' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-chart-bar mr-2 text-[#ff9800]">
+            </i> Informes</a>
           </div>
           <div class="py-1">
-            <a href="{% url 'logout' %}" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50"><i class="fas fa-sign-out-alt mr-2"></i> Cerrar sesión</a>
+            <a href="{% url 'logout' %}" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50"><i class="fas fa-sign-out-alt mr-2">
+            </i> Cerrar sesión</a>
           </div>
         </div>
       </div>
@@ -85,15 +89,29 @@
     <div class="p-5">
       <h2 class="text-lg font-semibold text-center mb-6 text-[#ff9800] border-b border-gray-600 pb-2">Panel de Control</h2>
       <nav class="space-y-1">
-        <a href="{% url 'index' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all"><i class="fas fa-home mr-3 text-[#ff9800] w-5"></i> Inicio</a>
-        <a href="{% url 'gestionar_productos' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all"><i class="fas fa-images mr-3 text-[#ff9800] w-5"></i> Galería de Publicidad</a>
-        <a href="{% url 'inventory_list' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all"><i class="fas fa-boxes mr-3 text-[#ff9800] w-5"></i> Lista de inventario</a>
-        <a href="{% url 'lista_login' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all active"><i class="fas fa-users mr-3 text-[#ff9800] w-5"></i> Listado de Cuentas</a>
-        <a href="{% url 'carpeta' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all"><i class="fas fa-folder-open mr-3 text-[#ff9800] w-5"></i> Documentos de contratación</a>
-        <a href="{% url 'manage_backups' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all"><i class="fas fa-database mr-3 text-[#ff9800] w-5"></i> Gestión de BD (backups)</a>
+        <a href="{% url 'index' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
+          <i class="fas fa-home mr-3 text-[#ff9800] w-5">
+          </i> Inicio</a>
+        <a href="{% url 'gestionar_productos' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
+          <i class="fas fa-images mr-3 text-[#ff9800] w-5">
+          </i> Galería de Publicidad</a>
+        <a href="{% url 'inventory_list' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
+          <i class="fas fa-boxes mr-3 text-[#ff9800] w-5">
+          </i> Inventario</a>
+        <a href="{% url 'lista_login' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all active">
+          <i class="fas fa-users mr-3 text-[#ff9800] w-5">
+          </i> Listado de Usuarios</a>
+        <a href="{% url 'carpeta' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
+          <i class="fas fa-folder-open mr-3 text-[#ff9800] w-5">
+          </i>Documentación de Personal</a>
+        <a href="{% url 'manage_backups' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
+          <i class="fas fa-database mr-3 text-[#ff9800] w-5">
+          </i> Gestión de BD (backups)</a>
       </nav>
       <div class="pt-6 mt-6 border-t border-gray-600">
-        <a href="{% url 'logout' %}" class="flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-red-600 hover:text-white transition-all"><i class="fas fa-sign-out-alt mr-3 w-5"></i>Cerrar Sesión</a>
+        <a href="{% url 'logout' %}" class="flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-red-600 hover:text-white transition-all">
+          <i class="fas fa-sign-out-alt mr-3 w-5">
+          </i>Cerrar Sesión</a>
       </div>
     </div>
   </aside>
@@ -106,7 +124,7 @@
       <nav class="flex mb-6 text-sm" aria-label="breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
           <li class="flex items-center">
-            <a href="{% url 'index' %}" class="text-gray-700 hover:text-[#ff9800]">
+            <a href="{% url 'inicio' %}" class="text-gray-700 hover:text-[#ff9800]">
               <i class="fas fa-home"></i>
             </a>
           </li>
@@ -116,14 +134,14 @@
           </li>
           <li class="flex items-center">
             <span class="mx-2 text-gray-500">/</span>
-            <span class="text-gray-500">Listado de usuarios</span>
+            <span class="text-gray-500">Listado de Usuarios</span>
           </li>
         </ol>
       </nav>
 
     <div class="max-w-[1500px] mx-auto bg-[rgba(255,255,255,0.77)] p-6 rounded-xl shadow-lg">
       <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-semibold text-[#4A4A4A]">Lista de Cuentas Registradas</h1>
+        <h1 class="text-2xl font-semibold text-[#4A4A4A]">Lista de Usuarios Registrados</h1>
         <div class="flex space-x-4">
           <button class="bg-[#ff9800] text-white py-2 px-4 rounded-full shadow hover:bg-[#e88c00] transition" type="button" onclick="openCreateAccountModal()">Crear Cuenta</button>
           <a href="{% url 'index' %}" class="bg-[#4A4A4A] text-white py-2 px-4 rounded-full shadow hover:bg-[#333333] transition">Regresar al inicio</a>
@@ -195,6 +213,9 @@
   </div>
 
   {% include 'libros/registro_form.html' %}
+
+  <script src="{% static 'js/accessibility.js'%}"></script>
+
 
   <script>
     // Script para marcar enlace activo

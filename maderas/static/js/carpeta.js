@@ -110,10 +110,35 @@ function renderFolders() {
       const container = document.getElementById('foldersContainer');
       container.innerHTML = "";
       folders.forEach(folder => {
+        
         // Contenedor principal de la carpeta
         const folderDiv = document.createElement('div');
         folderDiv.classList.add('folder');
         folderDiv.setAttribute('data-id', folder.id);
+
+         // Crea el input radio
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'selectedFolder';
+        radio.value = folder.id;
+        radio.id = `selectFolder${folder.id}`;
+        radio.className = 'mr-3';
+
+        // Crea el label
+        const label = document.createElement('label');
+        label.htmlFor = `selectFolder${folder.id}`;
+        label.className = 'flex-1';
+        label.textContent = folder.name;
+
+        // Agrega el radio y el label al div de la carpeta
+        folderDiv.appendChild(radio);
+        folderDiv.appendChild(label);
+
+        // ...aquí puedes agregar más info/botones de la carpeta si quieres...
+
+        // Agrega el div al contenedor
+        container.appendChild(folderDiv);
+
 
         // Encabezado de la carpeta
         const headerDiv = document.createElement('div');

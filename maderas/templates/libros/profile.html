@@ -11,6 +11,7 @@
   
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/accessibility.css' %}">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -120,23 +121,19 @@
             <a href="{% url 'profile' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-user mr-2 text-[#ff9800]"></i> Perfil
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <i class="fas fa-star mr-2 text-[#ff9800]"></i> Calificaciones
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            
+            <a href="{% url 'calendar' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-calendar mr-2 text-[#ff9800]"></i> Calendario
             </a>
           </div>
           <div class="py-1">
             <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <i class="fas fa-file-alt mr-2 text-[#ff9800]"></i> Archivos privados
+              <i class="fas fa-file-alt mr-2 text-[#ff9800]"></i> Manual de Usuario
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            <a href="{% url 'informes' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-chart-bar mr-2 text-[#ff9800]"></i> Informes
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <i class="fas fa-cog mr-2 text-[#ff9800]"></i> Preferencias
-            </a>
+            
           </div>
           <div class="py-1">
             <a href="{% url 'logout' %}" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50">
@@ -166,17 +163,17 @@
         
         <a href="{% url 'inventory_list' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-boxes mr-3 text-[#ff9800] w-5"></i>
-          <span>Lista de inventario</span>
+          <span>Inventario</span>
         </a>
         
         <a href="{% url 'lista_login' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-users mr-3 text-[#ff9800] w-5"></i>
-          <span>Listado de Cuentas</span>
+          <span>Listado de Usuarios</span>
         </a>
         
         <a href="{% url 'carpeta' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-folder-open mr-3 text-[#ff9800] w-5"></i>
-          <span>Documentos de contratación</span>
+          <span>Documentación de Personal</span>
         </a>
         
         <a href="{% url 'manage_backups' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
@@ -201,7 +198,7 @@
       <nav class="flex mb-6 text-sm" aria-label="breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
           <li class="flex items-center">
-            <a href="{% url 'index' %}" class="text-gray-700 hover:text-[#ff9800]">
+            <a href="{% url 'inicio' %}" class="text-gray-700 hover:text-[#ff9800]">
               <i class="fas fa-home"></i>
             </a>
           </li>
@@ -393,6 +390,9 @@
   </button>
 
   <input type="file" id="fileInput" accept="image/*" class="hidden">
+
+  <script src="{% static 'js/accessibility.js'%}"></script>
+
   <script src="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.js"></script>
   <script>
     // CSRF helper

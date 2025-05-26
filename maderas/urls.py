@@ -77,6 +77,9 @@ urlpatterns = [
     path('libros/inventory/', views.inventory_list, name='inventory_list'),
     path('producto/eliminar/<int:product_id>/', views.delete_product, name='delete_product'),
     path('inventario/actualizar/<int:product_id>/', views.update_product, name='update_product'),
+    path('download-inventory-pdf/', views.download_inventory_pdf, name='download_inventory_pdf'),
+    
+    
 
     #==================================================================
     #Ruta para el calendario e informes

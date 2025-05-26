@@ -14,6 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/accessibility.css' %}">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -77,22 +78,16 @@
             <a href="{% url 'profile' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-user mr-2 text-[#ff9800]"></i> Perfil
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <i class="fas fa-star mr-2 text-[#ff9800]"></i> Calificaciones
-            </a>
             <a href="{% url 'calendar' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-calendar mr-2 text-[#ff9800]"></i> Calendario
             </a>
           </div>
           <div class="py-1">
             <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <i class="fas fa-file-alt mr-2 text-[#ff9800]"></i> Archivos privados
+              <i class="fas fa-file-alt mr-2 text-[#ff9800]"></i> Manual de Usuario
             </a>
             <a href="{% url 'informes' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-chart-bar mr-2 text-[#ff9800]"></i> Informes
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <i class="fas fa-cog mr-2 text-[#ff9800]"></i> Preferencias
             </a>
           </div>
           <div class="py-1">
@@ -123,17 +118,17 @@
         
         <a href="{% url 'inventory_list' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-boxes mr-3 text-[#ff9800] w-5"></i>
-          <span>Lista de inventario</span>
+          <span>Inventario</span>
         </a>
         
         <a href="{% url 'lista_login' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-users mr-3 text-[#ff9800] w-5"></i>
-          <span>Listado de Cuentas</span>
+          <span>Listado de Usuarios</span>
         </a>
         
         <a href="{% url 'carpeta' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-folder-open mr-3 text-[#ff9800] w-5"></i>
-          <span>Documentos de contratación</span>
+          <span>Documentación de Personal</span>
         </a>
         
         <a href="{% url 'manage_backups' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
@@ -154,11 +149,23 @@
   <!-- Main Content -->
   <main class="pt-24 pb-8 px-6 ml-64 min-h-screen relative z-10">
     <div class="max-w-[1500px] mx-auto">
+
       <!-- Breadcrumb -->
       <nav class="flex mb-6 text-sm" aria-label="breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
-          <li><a href="{% url 'index' %}" class="text-gray-700 hover:text-[#ff9800]"><i class="fas fa-home"></i></a></li>
-          <li><span class="mx-2 text-gray-500">/</span>Informes</li>
+          <li class="flex items-center">
+            <a href="{% url 'inicio' %}" class="text-gray-700 hover:text-[#ff9800]">
+              <i class="fas fa-home"></i>
+            </a>
+          </li>
+          <li class="flex items-center">
+            <span class="mx-2 text-gray-500">/</span>
+            <a href="{% url 'index' %}" class="text-gray-700 hover:text-[#ff9800]">Dashboard</a>
+          </li>
+          <li class="flex items-center">
+            <span class="mx-2 text-gray-500">/</span>
+            <span class="text-gray-500">Informes</span>
+          </li>
         </ol>
       </nav>
 
@@ -189,6 +196,8 @@
       </footer>
     </div>
   </main>
+
+  <script src="{% static 'js/accessibility.js'%}"></script>
 
   <!-- Chart.js Scripts -->
   <script>

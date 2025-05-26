@@ -11,6 +11,7 @@
   
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/accessibility.css' %}">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,23 +122,19 @@
             <a href="{% url 'profile' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-user mr-2 text-[#ff9800]"></i> Perfil
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <i class="fas fa-star mr-2 text-[#ff9800]"></i> Calificaciones
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+           
+            <a href="{% url 'calendar' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-calendar mr-2 text-[#ff9800]"></i> Calendario
             </a>
           </div>
           <div class="py-1">
             <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <i class="fas fa-file-alt mr-2 text-[#ff9800]"></i> Archivos privados
+              <i class="fas fa-file-alt mr-2 text-[#ff9800]"></i> Manual de Usuario
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            <a href="{% url 'informes' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-chart-bar mr-2 text-[#ff9800]"></i> Informes
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              <i class="fas fa-cog mr-2 text-[#ff9800]"></i> Preferencias
-            </a>
+            
           </div>
           <div class="py-1">
             <a href="{% url 'logout' %}" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50">
@@ -162,22 +159,22 @@
         
         <a href="{% url 'gestionar_productos' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-images mr-3 text-[#ff9800] w-5"></i>
-          <span>Gestion de productos</span>
+          <span>Galeria de Publicidad</span>
         </a>
         
         <a href="{% url 'inventory_list' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-boxes mr-3 text-[#ff9800] w-5"></i>
-          <span>Lista de inventario</span>
+          <span>Inventario</span>
         </a>
         
         <a href="{% url 'lista_login' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-users mr-3 text-[#ff9800] w-5"></i>
-          <span>Listado de Cuentas</span>
+          <span>Listado de Usuarios</span>
         </a>
         
         <a href="{% url 'carpeta' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
           <i class="fas fa-folder-open mr-3 text-[#ff9800] w-5"></i>
-          <span>Documentos de contratación</span>
+          <span>Documentación de Personal</span>
         </a>
         
         <a href="{% url 'manage_backups' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 rounded-lg hover:bg-[#45a049] hover:text-white transition-all">
@@ -202,7 +199,7 @@
       <nav class="flex mb-6 text-sm" aria-label="breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
           <li class="flex items-center">
-            <a href="{% url 'index' %}" class="text-gray-700 hover:text-[#ff9800]">
+            <a href="{% url 'inicio' %}" class="text-gray-700 hover:text-[#ff9800]">
               <i class="fas fa-home"></i>
             </a>
           </li>
@@ -212,7 +209,7 @@
           </li>
           <li class="flex items-center">
             <span class="mx-2 text-gray-500">/</span>
-            <span class="text-gray-500">Lista de inventario</span>
+            <span class="text-gray-500">Inventario</span>
           </li>
         </ol>
       </nav>
@@ -221,6 +218,9 @@
       <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
         <div class="flex items-center justify-between mb-6">
           <h1 class="text-2xl md:text-3xl font-bold text-[#4A4A4A]">Inventario</h1>
+          <a href="{% url 'download_inventory_pdf' %}" class="px-4 py-2 bg-[#ff9800] text-white rounded-lg hover:bg-[#e88c00] transition-colors duration-300 flex items-center mb-4">
+            <i class="fas fa-file-pdf mr-2"></i> Descargar Inventario en PDF
+          </a>
           <button @click="openAdd = true" class="px-4 py-2 bg-[#ff9800] text-white rounded-lg hover:bg-[#e88c00] transition-colors duration-300 flex items-center">
             <i class="fas fa-plus mr-2"></i> Agregar Producto
           </button>
@@ -232,7 +232,7 @@
     <thead class="bg-black text-white">
       <tr>
         <th class="px-4 py-2 text-left font-semibold border-b">Nombre</th>
-        <th class="px-4 py-2 text-left font-semibold border-b">Madera</th>
+        <th class="px-4 py-2 text-left font-semibold border-b">Tipo de Madera</th>
         <th class="px-4 py-2 text-left font-semibold border-b">Stock</th>
         <th class="px-4 py-2 text-left font-semibold border-b">Precio</th>
         <th class="px-4 py-2 text-left font-semibold border-b">Acciones</th>
@@ -242,7 +242,7 @@
       {% for p in products %}
       <tr id="prod-{{p.id}}" class="hover:bg-gray-50 transition-all">
         <td class="px-4 py-2 border-b">{{ p.name }}</td>
-        <td class="px-4 py-2 border-b">{{ p.wood_type }}</td>
+        <td class="px-4 py-2 border-b">{{ p.wood_type.nombre }}</td>
         <td class="px-4 py-2 border-b">
           <span x-text="stocks[{{p.id}}] ?? {{p.stock}}"></span>
         </td>
@@ -377,7 +377,7 @@
               class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
               <option value="">Selecciona un tipo de madera </option>
               {% for tipo in tipos_madera %}
-              <option value="{{ tipo.id }}" {% if producto.tipo_madera.id == tipo.id %}selected{% endif %}>
+              <option value="{{ tipo.id }}">
                 {{ tipo.nombre|upper }}
               </option>
               {% endfor %}
@@ -425,11 +425,18 @@
           <input type="text" x-model="editForm.name" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50" required>
           <p x-text="errors.name" class="text-red-500 text-sm mt-1" x-show="errors.name"></p>
         </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-medium mb-1">Tipo de madera</label>
-          <input type="text" x-model="editForm.wood_type" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50">
-          <p x-text="errors.wood_type" class="text-red-500 text-sm mt-1" x-show="errors.wood_type"></p>
-        </div>
+        <div class="mb-4 input-group">
+            <label for="tipo_madera" class="block text-sm font-medium text-gray-700">Tipo de Madera</label>
+            <select id="tipo_madera" name="tipo_madera" required
+              class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="">Selecciona un tipo de madera </option>
+              {% for tipo in tipos_madera %}
+              <option value="{{ tipo.id }}" {% if producto.tipo_madera.id == tipo.id %}selected{% endif %}>
+                {{ tipo.nombre|upper }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
         <div class="mb-4">
           <label class="block text-gray-700 text-sm font-medium mb-1">Precio</label>
           <div class="mt-1 relative">
@@ -479,6 +486,8 @@
       </div>
     </div>
   </div>
+
+   <script src="{% static 'js/accessibility.js'%}"></script>
   
   <script>
 
@@ -796,6 +805,11 @@
   }
 }
   
+    // Descargar inventario en PDF
+    document.getElementById('downloadInventoryPdfBtn').addEventListener('click', function() {
+      // Cambia 'download_inventory_pdf' por el nombre real de tu URL en Django
+      window.location.href = "{% url 'download_inventory_pdf' %}";
+    });
 
   </script>
   

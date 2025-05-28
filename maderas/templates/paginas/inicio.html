@@ -150,7 +150,11 @@ Expertos en maderas finas: compra de bosques, tala responsable y venta de madera
         </div>
       {% endif %}
       <div class="text-center mt-8">
-        <a href="{% url 'gestionar_productos' %}" class="inline-block bg-madera-primary text-white px-6 py-3 rounded-md hover:bg-madera-secondary transition-colors">Volver a Gestión de Imágenes</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'gestionar_productos' %}" 
+          class="inline-block bg-madera-primary text-white px-6 py-3 rounded-md hover:bg-madera-secondary transition-colors">
+          Volver a Gestión de publicidad</a>
+        {% endif %}
       </div>
     </section>
 
@@ -274,7 +278,7 @@ Expertos en maderas finas: compra de bosques, tala responsable y venta de madera
     <img src="{% static 'diseños/imagenes/whst.webp' %}" alt="WhatsApp" class="w-14 h-14 rounded-full shadow-md transition-transform hover:scale-110">
   </a>
 
-
+  
 
 
   <script src="{% static 'js/accessibility.js'%}"></script>

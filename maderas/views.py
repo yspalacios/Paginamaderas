@@ -37,13 +37,13 @@ def inicio(request):
     imagenes_publicadas = Producto.objects.filter(publicado=True).order_by('tipo_madera__nombre','id')
     return render(request, 'paginas/inicio.html', {'imagenes_publicadas': imagenes_publicadas})
 
-
-# myapp/views.py
-from django.shortcuts import render
-
+@login_required(login_url="/libros/login/")
+@never_cache
 def calendar_view(request):
     return render(request, 'libros/calendario.html')
 
+@login_required(login_url="/libros/login/")
+@never_cache
 def informes_view(request):
     # Conteo de productos publicados y no publicados
     published_count = Producto.objects.filter(publicado=True).count()
@@ -70,8 +70,8 @@ def informes_view(request):
     }
     return render(request, 'libros/informes.html', context)
 
-
 @login_required(login_url="/libros/login/")
+@never_cache
 def manage_index(request):
     # 1. Conteos de cada módulo
     gallery_count   = Producto.objects.count()      # Galería de publicidad
@@ -156,6 +156,7 @@ def profile_view(request):
 def index(request):
     return render(request, "libros/index.html")
 
+@never_cache
 def login_view(request):
     context = {}
     if request.method == "POST":
@@ -184,6 +185,8 @@ def login_view(request):
         
     return render(request, 'paginas/inicio.html')
 
+@login_required(login_url="/libros/login/")
+@never_cache
 def logout_view(request):
     logout(request)
     return redirect('login')
@@ -192,6 +195,8 @@ def logout_view(request):
 # --------------------------
 # Vistas para espacio de búsqueda de productos
 # --------------------------
+@login_required(login_url="/libros/login/")
+@never_cache
 def gestionar_productos_ajax(request):
     query = request.GET.get('query', '').strip()
     wood_filter = request.GET.get('wood_filter', '').strip()
@@ -313,7 +318,8 @@ def quitar_publicidad(request, productoId):
     return JsonResponse({'success': False})
 
 
-@login_required
+@login_required(login_url="/libros/login/")
+@never_cache
 def crear_tipo_madera_ajax(request):
     if request.method == 'POST':
         form = TipoMaderaForm(request.POST)
@@ -330,6 +336,7 @@ def crear_tipo_madera_ajax(request):
 # Vistas para Registro y Gestión de Cuentas
 # --------------------------
 
+@login_required(login_url="/libros/login/")
 @never_cache
 def registro_login(request):
     if request.method == "POST":
@@ -348,11 +355,13 @@ def registro_login(request):
     # Se renderiza el template con el formulario en el contexto
     return render(request, 'libros/lista_login.html', {'form': form})
 
+
 @login_required(login_url="/libros/login/")
 @never_cache
 def cuentas_list(request):
     cuentas = datos.objects.all()
     return render(request, 'libros/lista_login.html', {'cuentas': cuentas})
+
 
 @login_required(login_url="/libros/login/")
 @never_cache
@@ -382,6 +391,7 @@ def editar_cuenta(request, cuenta_id):
         return redirect('lista_login')
     return render(request, 'libros/editar_cuenta.html', {'cuenta': cuenta})
 
+
 @login_required(login_url="/libros/login/")
 @never_cache
 def activar_cuenta(request, cuenta_id):
@@ -390,6 +400,7 @@ def activar_cuenta(request, cuenta_id):
     cuenta.save()
     messages.success(request, "Cuenta activada")
     return redirect('lista_login')
+
 
 @login_required(login_url="/libros/login/")
 @never_cache
@@ -400,6 +411,7 @@ def desactivar_cuenta(request, cuenta_id):
     messages.success(request, "Cuenta desactivada")
     return redirect('lista_login')
 
+
 @login_required(login_url="/libros/login/")
 @never_cache
 def eliminar_cuenta(request, cuenta_id):
@@ -408,12 +420,19 @@ def eliminar_cuenta(request, cuenta_id):
     messages.success(request, "Cuenta eliminada")
     return redirect('lista_login')
 
+
 # --------------------------
 # Vistas para gestión de documentos
 # --------------------------
+
+@login_required(login_url="/libros/login/")
+@never_cache
 def carpeta(request):
     return render(request, 'libros/carpeta.html')
 
+
+@login_required(login_url="/libros/login/")
+@never_cache
 def get_folders(request):
     folders = Folder.objects.all()
     folders_list = []
@@ -443,6 +462,9 @@ def get_folders(request):
         })
     return JsonResponse(folders_list, safe=False)
 
+
+@login_required(login_url="/libros/login/")
+@never_cache
 def create_folder(request):
     if request.method == "POST":
         folder_name = request.POST.get('folderName')
@@ -451,6 +473,9 @@ def create_folder(request):
             return JsonResponse({'message': 'Carpeta creada exitosamente', 'folder_id': folder.id}, status=201)
         return JsonResponse({'message': 'Por favor, ingrese un nombre para la carpeta.'}, status=400)
 
+
+@login_required(login_url="/libros/login/")
+@never_cache
 def update_folder_status(request, folder_id):
     folder = get_object_or_404(Folder, id=folder_id)
     status = request.POST.get('status')
@@ -460,6 +485,9 @@ def update_folder_status(request, folder_id):
         return JsonResponse({'message': 'Estado actualizado exitosamente'})
     return JsonResponse({'message': 'No se proporcionó un estado'}, status=400)
 
+
+@login_required(login_url="/libros/login/")
+@never_cache
 def upload_documents(request, folder_id):
     folder = get_object_or_404(Folder, id=folder_id)
     if request.method == 'POST' and request.FILES.getlist('documents'):
@@ -468,6 +496,9 @@ def upload_documents(request, folder_id):
         return JsonResponse({'message': 'Documentos subidos exitosamente'})
     return JsonResponse({'message': 'No se recibieron documentos'}, status=400)
 
+
+@login_required(login_url="/libros/login/")
+@never_cache
 def update_benefits(request, folder_id):
     folder = get_object_or_404(Folder, id=folder_id)
     if request.method == "POST":
@@ -485,6 +516,9 @@ def update_benefits(request, folder_id):
         return JsonResponse({'message': 'Prestaciones de servicio actualizadas exitosamente'})
     return JsonResponse({'message': 'No se recibieron prestaciones'}, status=400)
 
+
+@login_required(login_url="/libros/login/")
+@never_cache
 def delete_folder(request, folder_id):
     if request.method == 'POST':
         folder = get_object_or_404(Folder, id=folder_id)
@@ -492,6 +526,9 @@ def delete_folder(request, folder_id):
         return JsonResponse({'message': 'Carpeta eliminada exitosamente'})
     return JsonResponse({'message': 'Método no permitido'}, status=405)
 
+
+@login_required(login_url="/libros/login/")
+@never_cache
 def delete_document(request, doc_id):
     if request.method == 'POST':
         document = get_object_or_404(Document, id=doc_id)
@@ -500,6 +537,8 @@ def delete_document(request, doc_id):
     return JsonResponse({'message': 'Método no permitido'}, status=405)
 
 
+@login_required(login_url="/libros/login/")
+@never_cache
 def download_benefits_pdf(request, folder_id):
     # Recupera la carpeta y sus datos
     folder = get_object_or_404(Folder, pk=folder_id)
@@ -675,6 +714,8 @@ def cambia_con(request, token):
 # Vistas para gestion de archivos
 # --------------------------
 
+@login_required(login_url="/libros/login/")
+@never_cache
 def vista_archivos(request, file_path):
     try:
         full_path = safe_join(settings.MEDIA_ROOT, "documentos", file_path)
@@ -690,6 +731,8 @@ def vista_archivos(request, file_path):
     return response
 
 
+@login_required(login_url="/libros/login/")
+@never_cache
 def mi_vista(request):
     return render(request, 'mi_template.html', {
         'timestamp': datetime.now().timestamp()
@@ -821,10 +864,17 @@ def delete_backup(request):
 #Vistas para la gestion de lista de inventario
 #-----------------------------------------
 
+@login_required(login_url="/libros/login/")
+@never_cache
 def inventory_list(request):
     # AJAX POST para crear producto
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data = json.loads(request.body)
+        
+        tipo_id = data.get('wood_type')
+        tipo_obj = get_object_or_404(TipoMadera, pk=tipo_id)
+        data['wood_type'] = tipo_obj.nombre
+        
         form = ProductForm(data)
         if form.is_valid():
             p = form.save()
@@ -851,6 +901,8 @@ def inventory_list(request):
     return render(request, 'libros/inventory.html', context)
 
 
+@login_required(login_url="/libros/login/")
+@never_cache
 @require_POST
 def update_stock(request):
     # AJAX POST para actualizar stock
@@ -867,13 +919,19 @@ def update_stock(request):
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
     
-    
+
+@login_required(login_url="/libros/login/")
+@never_cache
 @require_http_methods(["PUT"])
 def update_product(request, product_id):
     """Vista para actualizar un producto existente mediante AJAX"""
     try:
         product = Product.objects.get(id=product_id)
         data = json.loads(request.body)
+        
+        tipo_id = data.get('wood_type')
+        tipo_obj = get_object_or_404(TipoMadera, pk=tipo_id)
+        data['wood_type'] = tipo_obj.nombre
         
         form = ProductForm(data, instance=product)
         if form.is_valid():
@@ -888,14 +946,17 @@ def update_product(request, product_id):
                     'stock': p.stock,
                 }
             })
-        else:
-            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+            
+        return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+    
     except Product.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Producto no encontrado'}, status=404)
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
+@login_required(login_url="/libros/login/")
+@never_cache
 @require_http_methods(["DELETE"])
 def delete_product(request, product_id):
     """Vista para eliminar un producto mediante AJAX"""
@@ -909,6 +970,8 @@ def delete_product(request, product_id):
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
+@login_required(login_url="/libros/login/")
+@never_cache
 @login_required
 def download_inventory_pdf(request):
     buffer = io.BytesIO()
@@ -954,7 +1017,7 @@ def download_inventory_pdf(request):
     for prod in Product.objects.all():
         data.append([
             str(prod.name),
-            str(prod.wood_type.name),
+            str(prod.wood_type),
             f"${prod.price}",
             str(prod.stock)
         ])

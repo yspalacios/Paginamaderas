@@ -36,6 +36,12 @@
   </script>
 </head>
 <body class="bg-[rgb(246,246,247)] m-0 overflow-x-hidden">
+
+  <script>
+    window.isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
+  </script>
+
+
   <!-- Fondo con overlay :3 -->
   <div class="fixed inset-0 bg-[url('{% static 'diseños/imagenes/14.jpg' %}')] bg-cover opacity-50 z-0"></div>
   <!-- Header y Navegación -->
@@ -284,7 +290,22 @@ Expertos en maderas finas: compra de bosques, tala responsable y venta de madera
   <script src="{% static 'js/accessibility.js'%}"></script>
 
   
+  
   <script>
+    // script para el modal de inicio de sesion para utenticar si ya esta iniciado en sesion
+    document.addEventListener('DOMContentLoaded', function() {
+    const loginBtn = document.getElementById('openLoginModalBtn');
+    if (loginBtn) {
+      loginBtn.addEventListener('click', function(e) {
+        if (window.isAuthenticated) {
+          e.preventDefault();
+          window.location.href = "{% url 'index' %}";
+        }
+      });
+    }
+  });
+
+
     // Script para el carrusel
     document.addEventListener('DOMContentLoaded', function() {
       const carousel = document.getElementById('productosCarousel');

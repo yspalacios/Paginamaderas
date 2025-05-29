@@ -1,7 +1,32 @@
+
+let deleteAccountId = null;
+
+
+function showFloatingAlert(message, type = 'success') {
+  // Elimina cualquier alerta previa
+  const oldAlert = document.getElementById('alerta-flotante');
+  if (oldAlert) oldAlert.remove();
+
+  // Crea el div de la alerta
+  const alertDiv = document.createElement('div');
+  alertDiv.id = 'alerta-flotante';
+  alertDiv.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 z-50 px-6 py-4 rounded shadow-lg transition-all';
+  alertDiv.style.background = 'white';
+  alertDiv.style.borderLeft = type === 'success' ? '6px solid #22c55e' : '6px solid #ef4444';
+  alertDiv.style.color = type === 'success' ? '#15803d' : '#b91c1c';
+  alertDiv.textContent = message;
+
+  document.body.appendChild(alertDiv);
+
+  setTimeout(() => {
+    alertDiv.remove();
+  }, 1500); 
+}
+
+
 // -------------------------------------
 // ELIMINAR CUENTA
 // -------------------------------------
-let deleteAccountId = null;
 
 function openDeleteModal(id) {
   deleteAccountId = id;
@@ -45,37 +70,37 @@ function validarCrearFormulario() {
   const phoneRegex = /^\d{0,10}$/;
   
   if (!nameRegex.test(nombres)) {
-      alert("El campo de Nombres solo debe contener letras.");
+      showFloatingAlert("El campo de Nombres solo debe contener letras.");
       return false;
   }
   
   if (!nameRegex.test(apellidos)) {
-      alert("El campo de Apellidos solo debe contener letras.");
+      showFloatingAlert("El campo de Apellidos solo debe contener letras.");
       return false;
   }
   
   if (!emailRegex.test(email)) {
-      alert("Ingrese un correo válido.");
+      showFloatingAlert("Ingrese un correo válido.");
       return false;
   }
   
   if (phone && !phoneRegex.test(phone)) {
-      alert("El Teléfono debe contener solo números y máximo 10 dígitos.");
+      showFloatingAlert("El Teléfono debe contener solo números y máximo 10 dígitos.");
       return false;
   }
   
   if (password.length < 6) {
-      alert("La contraseña debe tener al menos 6 caracteres.");
+      showFloatingAlert("La contraseña debe tener al menos 6 caracteres.");
       return false;
   }
   
   if (password !== confirmPassword) {
-      alert("Las contraseñas no coinciden.");
+      showFloatingAlert("Las contraseñas no coinciden.");
       return false;
   }
   
   if (!terminos) {
-      alert("Debe aceptar los Términos y Condiciones.");
+      showFloatingAlert("Debe aceptar los Términos y Condiciones.");
       return false;
   }
   
@@ -124,12 +149,12 @@ function validarEditarFormulario() {
         // La contraseña debe tener mínimo 8 caracteres, 1 letra mayúscula y 1 carácter especial (@!|./&)
         const regex = /^(?=.*[A-Z])(?=.*[@!|./&]).{8,}$/;
         if (!regex.test(password)) {
-            alert("La contraseña debe tener mínimo 8 caracteres, 1 letra mayúscula y un carácter especial (@!|./&).");
+            showFloatingAlert("La contraseña debe tener mínimo 8 caracteres, 1 letra mayúscula y un carácter especial (@!|./&).");
             return false;
         }
         
         if (password !== confirmPassword) {
-            alert("Las contraseñas no coinciden");
+            showFloatingAlert("Las contraseñas no coinciden");
             return false;
         }
     }
@@ -140,16 +165,7 @@ function validarEditarFormulario() {
 document.getElementById('editForm').onsubmit = validarEditarFormulario;
 
 
-// --------------------------------------------
-// Cierre automático de modales al hacer clic fuera del contenido
-// --------------------------------------------
-document.querySelectorAll('.modal').forEach(modal => {
-  modal.addEventListener('click', function (e) {
-    if (e.target === modal) {
-      cerrarModal(modal.id);
-    }
-  });
-});
+
 
 // --------------------------------------------
 // Función genérica para cerrar cualquier modal
@@ -165,3 +181,4 @@ function cerrarModal(id) {
   else if (id === 'deleteModal') closeDeleteModal();
   else if (id === 'createAccountModal') closeCreateAccountModal();
 }
+

@@ -361,22 +361,51 @@
 </div>
 
     <!-- Modal para ver el archivo (PDF, imagen, etc.) -->
-    <div id="modal-ver" style="display:none;">
-      <div id="modal-content-ver" style="width:60%; height:60%;">
-        <h2>Vista del Archivo</h2>
-        <div style="width:100%; height: calc(100% - 50px);">
-          <iframe id="fileIframe" src="" style="width:100%; height:100%; border: none;"></iframe>
-        </div>
-        <div style="text-align: right; margin-top: 10px;">
-          <button id="closeFileModalBtn" class="btn" style="background: #6c757d;">Cerrar</button>
-        </div>
-      </div>
+    <div id="modal-ver" class="fixed z-[9999] bg-black bg-opacity-70 transition-all duration-300 flex items-center justify-center"
+     style="display:none; top:5rem; left:16rem; width:calc(100vw - 16rem); height:calc(100vh - 5rem);">
+      <div id="modal-content-ver" class="relative bg-white rounded-2xl shadow-2xl w-[85vw] h-[100vh] flex flex-col"
+       style="max-width:85vw; max-height:100vh;">
+    <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-gray-800 to-gray-700 rounded-t-2xl">
+      <h2 class="text-xl font-semibold text-white">Vista del Archivo</h2>
+      <button id="closeFileModalBtn" class="text-gray-300 hover:text-white focus:outline-none">
+        ✕
+      </button>
+    </div>
+    <div class="flex-1 overflow-hidden">
+      <iframe id="fileIframe" src="" class="w-full h-full border-0"></iframe>
     </div>
   </div>
+</div>
 
   <script src="{% static 'js/accessibility.js'%}"></script>
 
   <script>
+    
+  // Cerrar modal al hacer clic fuera del contenido
+  function addOutsideClickClose(modalId, contentId, closeFn) {
+    const modal = document.getElementById(modalId);
+    const content = document.getElementById(contentId);
+    if (!modal || !content) return;
+    modal.addEventListener('mousedown', function(e) {
+      if (!content.contains(e.target)) {
+        closeFn();
+      }
+    });
+  }
+
+  // Para cada modal:
+  addOutsideClickClose('modal-ver', 'modal-content-ver', function() {
+    document.getElementById('modal-ver').style.display = 'none';
+  });
+  addOutsideClickClose('modal-editar', 'modal-content-editar', closeModaleditar);
+  addOutsideClickClose('modal-mostrar', 'modal-content-mostrar', closeModalmostrar);
+  addOutsideClickClose('modal-nueva-carpeta', 'modal-content-nueva-carpeta', closeNewFolderModal);
+
+  // Botón cerrar del modal de archivo
+  document.getElementById('closeFileModalBtn').onclick = function() {
+    document.getElementById('modal-ver').style.display = 'none';
+  };
+
     // Abrir modal de nueva carpeta
     document.getElementById('openNewFolderModalBtn').addEventListener('click', openNewFolderModal);
     function openNewFolderModal() {

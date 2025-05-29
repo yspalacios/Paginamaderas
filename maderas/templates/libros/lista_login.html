@@ -195,7 +195,7 @@
 
   <!-- Modales e includes -->
   <div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-    <div class="bg-white p-6 rounded-lg max-w-md w-full text-center">
+    <div id="deleteModalContent" class="bg-white p-6 rounded-lg max-w-md w-full text-center">
       <button class="absolute top-4 right-4 text-2xl" onclick="closeDeleteModal()">&times;</button>
       <h3 class="text-lg font-semibold mb-4">¿Estás seguro de eliminar esta cuenta?</h3>
       <div class="flex justify-center space-x-4">
@@ -204,9 +204,9 @@
       </div>
     </div>
   </div>
-
+  <!-- modal para editar cuenta -->
   <div id="editModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-    <div class="relative bg-white p-6 rounded-lg max-w-md w-full max-h-[90%] overflow-y-auto shadow-lg">
+    <div id="editModalContent" class="relative bg-white p-6 rounded-lg max-w-md w-full max-h-[90%] overflow-y-auto shadow-lg">
       <button class="absolute top-4 right-4 text-2xl" onclick="closeEditModal()">&times;</button>
       {% include 'libros/editar_cuenta_form.html' %}
     </div>
@@ -226,7 +226,60 @@
         link.classList.add('active');
       }
     });
+
   </script>
+
+
   <script src="{% static 'js/lista_login.js' %}?v={{ timestamp }}"></script>
+
+
+  <script>
+  // Función para cerrar modal al hacer clic fuera del contenido
+  function addOutsideClickClose(modalId, contentId, closeFn) {
+    const modal = document.getElementById(modalId);
+    const content = document.getElementById(contentId);
+    if (!modal || !content) return;
+    modal.addEventListener('mousedown', function(e) {
+      if (!content.contains(e.target)) {
+        closeFn();
+      }
+    });
+  }
+
+  // Función para cerrar el modal de crear cuenta
+  function closeCreateAccountModal() {
+    document.getElementById('createAccountModal').classList.add('hidden');
+  }
+
+  // Función para abrir el modal de crear cuenta (si la usas)
+  function openCreateAccountModal() {
+    document.getElementById('createAccountModal').classList.remove('hidden');
+  }
+
+  // Asocia el cierre al hacer clic fuera
+  addOutsideClickClose('createAccountModal', 'createAccountModalContent', closeCreateAccountModal);
+
+  
+// Editar cuenta
+function closeEditModal() {
+  document.getElementById('editModal').classList.add('hidden');
+}
+function openEditModal(/* tus parámetros */) {
+  document.getElementById('editModal').classList.remove('hidden');
+  // ...tu lógica para cargar datos...
+}
+addOutsideClickClose('editModal', 'editModalContent', closeEditModal);
+
+// Eliminar cuenta
+function closeDeleteModal() {
+  document.getElementById('deleteModal').classList.add('hidden');
+}
+function openDeleteModal(/* tus parámetros */) {
+  document.getElementById('deleteModal').classList.remove('hidden');
+  // ...tu lógica para cargar datos...
+}
+addOutsideClickClose('deleteModal', 'deleteModalContent', closeDeleteModal);
+</script>
+
 </body>
 </html>

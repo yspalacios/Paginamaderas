@@ -28,3 +28,4 @@ document.getElementById("back-to-top").addEventListener("click", function(e) {
     // Inicializa el carrusel
     showItem(currentIndex);
   })();
+

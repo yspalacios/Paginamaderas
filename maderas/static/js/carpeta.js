@@ -1,5 +1,31 @@
+
 // Variable global para almacenar el id de la carpeta en edición
 let currentFolderId = null;
+
+
+// la funcion funciona para ponerl el alert en flotante y ponerle que dure q.5 seg
+
+function showFloatingAlert(message, type = 'success') {
+  // Elimina cualquier alerta previa
+  const oldAlert = document.getElementById('alerta-flotante');
+  if (oldAlert) oldAlert.remove();
+
+  // Crea el div de la alerta
+  const alertDiv = document.createElement('div');
+  alertDiv.id = 'alerta-flotante';
+  alertDiv.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 z-50 px-6 py-4 rounded shadow-lg transition-all';
+  alertDiv.style.background = 'white';
+  alertDiv.style.borderLeft = type === 'success' ? '6px solid #22c55e' : '6px solid #ef4444';
+  alertDiv.style.color = type === 'success' ? '#15803d' : '#b91c1c';
+  alertDiv.textContent = message;
+
+  document.body.appendChild(alertDiv);
+
+  setTimeout(() => {
+    alertDiv.remove();
+  }, 1500); 
+}
+
 
 let selectedDownloadFolder = null; // Variable global para almacenar la carpeta seleccionada para descargar
 // Función para obtener el token CSRF (seguridad en Django)
@@ -50,7 +76,7 @@ function updateFolderStatus(folderId, newStatus) {
 function uploadDocuments(folderId) {
   const input = document.getElementById(`uploadInput-${folderId}`);
   if (input.files.length === 0) {
-    alert("Seleccione al menos un documento para subir.");
+    showFloatingAlert("Seleccione al menos un documento para subir.");
     return;
   }
   const formData = new FormData();
@@ -67,22 +93,31 @@ function uploadDocuments(folderId) {
     .then(response => response.json())
     .then(data => {
       if (data.message === 'Documentos subidos exitosamente') {
-        alert("Documentos subidos exitosamente");
+        showFloatingAlert("Documentos subidos exitosamente");
         renderFolders();
       } else {
-        alert(data.message);
+        showFloatingAlert(data.message, 'error');
       }
     })
     .catch(error => console.error('Error al subir documentos:', error));
+    showFloatingAlert('Error al subir documentos.', 'error');
+    console.error('Error al subir documentos:', error);
 }
 
 // Crear carpeta
-document.getElementById('createFolderBtn').addEventListener('click', () => {
+document.getElementById('createFolderBtn').addEventListener('click', function () {
+  const btn = this;
   const folderName = document.getElementById('folderName').value.trim();
+
+  // Deshabilita el botón para evitar doble click
+  btn.disabled = true;
+
   if (folderName === "") {
-    alert("Por favor, ingrese un nombre para la carpeta.");
+    showFloatingAlert("Por favor, ingrese un nombre para la carpeta.", 'error');
+    btn.disabled = false;
     return;
   }
+
   fetch('/create-folder/', {
     method: 'POST',
     headers: {
@@ -94,12 +129,21 @@ document.getElementById('createFolderBtn').addEventListener('click', () => {
     .then(response => response.json())
     .then(data => {
       if (data.message === 'Carpeta creada exitosamente') {
+        showFloatingAlert('Carpeta creada exitosamente', 'success');
+        document.getElementById('modal-nueva-carpeta').style.display = 'none';
         renderFolders();
+        document.getElementById('folderName').value = ""; // Limpia el input
       } else {
-        alert(data.message);
+        showFloatingAlert(data.message, 'error');
       }
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+      showFloatingAlert('Error al crear la carpeta.', 'error');
+      console.error('Error:', error);
+    })
+    .finally(() => {
+      btn.disabled = false;
+    });
 });
 
 // Renderizar las carpetas y sus documentos
@@ -422,11 +466,11 @@ document.getElementById('saveBenefitsBtn').addEventListener('click', () => {
     .then(response => response.json())
     .then(resp => {
       if (resp.message === 'Prestaciones de servicio actualizadas exitosamente') {
-        alert('Prestaciones guardadas correctamente');
+        showFloatingAlert('Prestaciones guardadas correctamente');
         document.getElementById('modal-editar').style.display = 'none';
         renderFolders();
       } else {
-        alert(resp.message);
+        showFloatingAlert(resp.message);
       }
     })
     .catch(error => console.error('Error:', error));

@@ -2,10 +2,9 @@
 <div x-data="{ showLoginModal: {{ show_login_modal|default:False|yesno:'true, false' }} }"
     x-init="if (showLoginModal) $nextTick(() => showLoginModal = true)"    >
   <!-- Botón para abrir el modal -->
-  <button
+  <button id="openLoginModalBtn"
     @click="showLoginModal = true"
-    class="text-white font-bold px-4 py-2 rounded bg-madera-secondary hover:bg-madera-accent hover:text-madera-dark transition-colors block"
-  >
+    class="text-white font-bold px-4 py-2 rounded bg-madera-secondary hover:bg-madera-accent hover:text-madera-dark transition-colors block">
     Iniciar sesión
   </button>
 
@@ -86,8 +85,9 @@
       setTimeout(function() {
         var alerta = document.getElementById('alerta-flotante');
         if (alerta) alerta.remove();
-      }, 3500);
+      }, 1500);
     </script>
   {% endfor %}
 {% endif %}
+
 

@@ -431,6 +431,8 @@ def carpeta(request):
     return render(request, 'libros/carpeta.html')
 
 
+
+
 @login_required(login_url="/libros/login/")
 @never_cache
 def get_folders(request):
@@ -1077,6 +1079,9 @@ def download_inventory_pdf(request):
     p.save()
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename="inventario.pdf")
+
+
+
 
 
 

@@ -245,30 +245,60 @@ Expertos en maderas finas: compra de bosques, tala responsable y venta de madera
 
   </main>
 
-  <footer id="contacto" class=" relative z-10 bg-gradient-to-r from-[#383838] to-[#4A4A4A] text-white py-8 px-6">
-    <div class="max-w-7xl mx-auto flex flex-row items-center gap-8">
-      <!-- Imagen -->
-      <div class="flex-shrink-0">
-        <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="w-36">
-      </div>
-  
-      <!-- Texto al lado de la imagen -->
-      <div class="flex flex-row items-center gap-8">
-        <div class="text-left">
-         
-          <h2 class="text-xl font-bold text-madera-accent mb-4">Contacto</h2>
-          <address class="not-italic text-sm">
-            <a href="https://web.facebook.com/people/Maderas-Isabella-AEI-SAS/100085008207707/" class="text-madera-accent hover:text-white transition-colors block mb-2">
-              Página de Facebook
-            </a>
-            📱 Teléfono: +57 3223280615 - +57 3103178649<br>
-            🧭 Dirección: Carrera 1 #No. 3-88, Socha, Boyacá, Colombia
-          </address>
-          <p class="text-sm text-gray-400 mt-4">&copy; 2024 Maderas Isabella. Todos los derechos reservados.</p>
-        </div>
+  <footer id="contacto" class="relative z-10 bg-gradient-to-r from-[#383838] to-[#4A4A4A] text-white py-10 px-6">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    
+    <!-- Logo -->
+    <div class="flex flex-col items-start">
+      <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="w-36 mb-4">
+      <p class="text-sm text-gray-300">Materia prima renovable, servicio con calidad y compromiso.</p>
+    </div>
+
+    <!-- Información de contacto -->
+    <div>
+      <h2 class="text-xl font-bold text-madera-accent mb-4">Contacto</h2>
+      <address class="not-italic text-sm leading-relaxed">
+        📱 <strong>Teléfonos:</strong> +57 3223280615 - +57 3103178649<br>
+        🧭 <strong>Dirección:</strong> Carrera 1 #No. 3-88, Socha, Boyacá, Colombia
+      </address>
+    </div>
+
+    <!-- Redes sociales -->
+<div>
+  <h2 class="text-xl font-bold text-madera-accent mb-4">Síguenos</h2>
+  <div class="flex space-x-4">
+    <!-- Facebook -->
+    <a href="https://web.facebook.com/people/Maderas-Isabella-AEI-SAS/100085008207707/" target="_blank" class="hover:text-blue-500" aria-label="Facebook">
+      <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+        <path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.988h-2.54v-2.89h2.54V9.845c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.772-1.63 1.562v1.875h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+      </svg>
+    </a>
+
+    <!-- WhatsApp -->
+    <a href="https://wa.me/573223280615" target="_blank" class="hover:text-green-400" aria-label="WhatsApp">
+      <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.09.54 4.05 1.49 5.765L0 24l6.42-1.68A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm6.656 17.158c-.28.785-1.64 1.538-2.27 1.64-.585.096-1.31.135-2.112-.13-1.39-.45-3.09-1.83-4.117-3.258-.58-.796-1.04-1.682-1.16-2.36-.24-.778.18-1.17.547-1.4.28-.175.63-.385.984-.32.244.044.44.22.617.535.19.33.63 1.1.686 1.18.054.08.09.18.02.28-.07.1-.112.16-.22.26-.112.1-.23.22-.33.35-.1.12-.21.25-.095.48.112.22.5.88 1.08 1.45.73.72 1.35.95 1.59 1.05.24.1.39.09.53-.04.14-.13.61-.71.77-.96.15-.25.32-.21.54-.13.22.09 1.41.66 1.65.78.24.12.4.18.46.28.06.1.06.91-.22 1.7z"/>
+      </svg>
+    </a>
+
+    <!-- Instagram -->
+    <a href="https://instagram.com/maderasisabella" target="_blank" class="hover:text-pink-400" aria-label="Instagram">
+      <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+        <path d="M7.75 2A5.75 5.75 0 002 7.75v8.5A5.75 5.75 0 007.75 22h8.5A5.75 5.75 0 0022 16.25v-8.5A5.75 5.75 0 0016.25 2h-8.5zm0 1.5h8.5A4.25 4.25 0 0120.5 7.75v8.5a4.25 4.25 0 01-4.25 4.25h-8.5a4.25 4.25 0 01-4.25-4.25v-8.5A4.25 4.25 0 017.75 3.5zM12 7a5 5 0 100 10 5 5 0 000-10zm0 1.5a3.5 3.5 0 110 7 3.5 3.5 0 010-7zm5.25-.88a1.13 1.13 0 11-2.25 0 1.13 1.13 0 012.25 0z"/>
+      </svg>
+    </a>
+  </div>
+</div>
+
       </div>
     </div>
-  </footer>
+  </div>
+
+  <div class="mt-8 text-center text-sm text-gray-400">
+    &copy; 2024 Maderas Isabella AEI S.A.S. Todos los derechos reservados.
+  </div>
+</footer>
+
 
   <!-- Botón flotante para volver arriba -->
   <a href="#" id="back-to-top" class="fixed bottom-5 right-5 bg-madera-primary text-white w-12 h-12 rounded-full flex items-center justify-center text-lg shadow-md opacity-0 invisible transition-all z-50 hover:bg-madera-secondary">↑</a>

@@ -36,45 +36,6 @@
   <!-- Fondo con overlay -->
   <div class="fixed inset-0 bg-[url('{% static 'diseños/imagenes/14.jpg' %}')] bg-cover opacity-50 z-0"></div>
 
-  <!-- Header y Navegación -->
-  <header class="relative z-10 bg-gradient-to-r from-[#383838] to-[#4A4A4A] shadow-md">
-    <div class="max-w-7xl mx-auto flex items-center justify-between p-4 md:px-6">
-      <a href="{% url 'inicio' %}" class="flex items-center">
-        <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="h-16">
-      </a>
-      <nav class="hidden md:block">
-        <ul class="flex space-x-4">
-          <li><a href="#inicio" class="text-white font-bold text-lg hover:text-madera-accent">🔰 Inicio</a></li>
-          <li><a href="#productos" class="text-white font-bold text-lg hover:text-madera-accent">👀 Aprende lo que hacemos</a></li>
-          <li><a href="#imagenespublicadas" class="text-white font-bold text-lg hover:text-madera-accent">🛒 Imágenes</a></li>
-          <li><a href="#nosotros" class="text-white font-bold text-lg hover:text-madera-accent">🧑‍💻 Nosotros</a></li>
-          <li><a href="#ubicanos" class="text-white font-bold text-lg hover:text-madera-accent">🗺️ Dirección</a></li>
-          <li><a href="#contacto" class="text-white font-bold text-lg hover:text-madera-accent">📱 Contacto</a></li>
-          <li><a href="{% url 'login' %}" class="text-white font-bold text-lg hover:text-madera-accent">Inicia sesión</a></li>
-        </ul>
-      </nav>
-      <!-- Mobile menu button -->
-      <div class="md:hidden">
-        <button @click="open = !open" x-data="{ open: false }" class="text-white focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x-show="!open" d="M4 6h16M4 12h16M4 18h16" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x-show="open" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-        <div x-show="open" class="mt-2 bg-[#383838] rounded-lg shadow-lg">
-          <ul class="flex flex-col">
-            <li><a href="#inicio" class="block px-4 py-2 text-white hover:bg-madera-secondary">🔰 Inicio</a></li>
-            <li><a href="#productos" class="block px-4 py-2 text-white hover:bg-madera-secondary">👀 Aprende</a></li>
-            <li><a href="#imagenespublicadas" class="block px-4 py-2 text-white hover:bg-madera-secondary">🛒 Imágenes</a></li>
-            <li><a href="#nosotros" class="block px-4 py-2 text-white hover:bg-madera-secondary">🧑‍💻 Nosotros</a></li>
-            <li><a href="#ubicanos" class="block px-4 py-2 text-white hover:bg-madera-secondary">🗺️ Dirección</a></li>
-            <li><a href="#contacto" class="block px-4 py-2 text-white hover:bg-madera-secondary">📱 Contacto</a></li>
-            <li><a href="{% url 'login' %}" class="block px-4 py-2 text-white hover:bg-madera-secondary">Inicia sesión</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </header>
 
   <!-- Formulario Recuperar Contraseña -->
   <div class="relative z-10 flex items-center justify-center py-16">
@@ -128,23 +89,5 @@
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer id="contacto" class="relative z-10 bg-gradient-to-r from-[#383838] to-[#4A4A4A] text-white py-8 px-6">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8">
-      <div class="flex-shrink-0">
-        <img src="{% static 'diseños/imagenes/logo.PNG' %}" alt="logo" class="w-36">
-      </div>
-      <div class="text-center md:text-left">
-        <p class="text-sm text-gray-400 mb-4">Somos un proveedor de maderas finas dedicada a la compra de bosques, tala y venta de madera y transformación de la misma.</p>
-        <h2 class="text-xl font-bold text-madera-accent mb-4">CONTACTO</h2>
-        <address class="not-italic text-sm">
-          <a href="https://web.facebook.com/people/Maderas-Isabella-AEI-SAS/100085008207707/" class="text-madera-accent hover:text-white block mb-2">Página de Facebook</a>
-          📱 Teléfono: +57 3223280615 - +57 3103178649<br>
-          🧭 Dirección: Carrera 1 #No. 3-88, Socha, Boyacá, Colombia
-        </address>
-        <p class="text-sm text-gray-400 mt-4">&copy; 2024 Maderas Isabella. Todos los derechos reservados.</p>
-      </div>
-    </div>
-  </footer>
 </body>
 </html>

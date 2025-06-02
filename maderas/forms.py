@@ -144,9 +144,9 @@ class RegistroForm(forms.ModelForm):
             self.add_error('confirm_password', "Las contraseñas no coinciden.")
         
         # Validación de la contraseña:
-        # La contraseña debe tener mínimo 12 caracteres, 1 letra mayúscula y 1 carácter especial (@!|./&)
-        if password and not re.fullmatch(r'^(?=.*[A-Z])(?=.*[@!|./&]).{12,}$', password):
-            self.add_error('password', "La contraseña debe tener mínimo 12 caracteres, 1 letra mayúscula y un carácter especial (@!|./&).")
+        # La contraseña debe tener mínimo 8 caracteres, 1 letra mayúscula y 1 carácter especial (@!|./&)
+        if password and not re.fullmatch(r'^(?=.*[A-Z])(?=.*[@!|./&]).{8,}$', password):
+            self.add_error('password', "La contraseña debe tener mínimo 8 caracteres, 1 letra mayúscula y un carácter especial (@!|./&).")
         
         return cleaned_data
 

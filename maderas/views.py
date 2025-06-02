@@ -16,7 +16,7 @@ from django.views.decorators.http import require_POST, require_http_methods
 from django.template.loader import render_to_string
 from django.db.models import Q, Sum
 from django.db import models
-import os, io, subprocess, datetime, shutil, json
+import os, io, subprocess, datetime, shutil, json, re
 from django.utils._os import safe_join
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
@@ -389,7 +389,7 @@ def editar_cuenta(request, cuenta_id):
         
         messages.success(request, "Cuenta actualizada exitosamente")
         return redirect('lista_login')
-    return render(request, 'libros/editar_cuenta.html', {'cuenta': cuenta})
+    return render(request, 'libros/editar_cuenta_form.html', {'cuenta': cuenta})
 
 
 @login_required(login_url="/libros/login/")
@@ -397,6 +397,7 @@ def editar_cuenta(request, cuenta_id):
 def activar_cuenta(request, cuenta_id):
     cuenta = get_object_or_404(datos, id=cuenta_id)
     cuenta.status = "Activo"
+    cuenta.is_active = True
     cuenta.save()
     messages.success(request, "Cuenta activada")
     return redirect('lista_login')
@@ -407,6 +408,7 @@ def activar_cuenta(request, cuenta_id):
 def desactivar_cuenta(request, cuenta_id):
     cuenta = get_object_or_404(datos, id=cuenta_id)
     cuenta.status = "No Activo"
+    cuenta.is_active = False
     cuenta.save()
     messages.success(request, "Cuenta desactivada")
     return redirect('lista_login')
@@ -697,8 +699,15 @@ def cambia_con(request, token):
         new_password = request.POST.get('new_password')
         confirm_password = request.POST.get('confirm_password')
         
-        if new_password != confirm_password:
+        # Validar que las contraseñas coincidan
+        if new_password and confirm_password and new_password != confirm_password:
             messages.error(request, "Las contraseñas no coinciden.")
+            return render(request, 'libros/cambia_con.html')
+
+        # Validación de la contraseña:
+        # Mínimo 8 caracteres, 1 mayúscula y 1 carácter especial (@!|./&)
+        if new_password and not re.fullmatch(r'^(?=.*[A-Z])(?=.*[@!|./&]).{8,}$', new_password):
+            messages.error(request, "La contraseña debe tener mínimo 8 caracteres, 1 letra mayúscula y un carácter especial (@!|./&).")
             return render(request, 'libros/cambia_con.html')
         
         # Se actualiza la contraseña en la base de datos
@@ -974,7 +983,6 @@ def delete_product(request, product_id):
 
 @login_required(login_url="/libros/login/")
 @never_cache
-@login_required
 def download_inventory_pdf(request):
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer, pagesize=letter)

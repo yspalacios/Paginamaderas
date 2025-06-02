@@ -33,23 +33,50 @@
   <!-- Fondo y overlay opcional -->
   <div class="fixed inset-0 bg-[url('{% static 'diseños/imagenes/14.jpg' %}')] bg-cover opacity-30"></div>
   <div class="relative z-10 w-full max-w-md mx-auto p-6 bg-white bg-opacity-90 rounded-2xl shadow-lg">
-    <form method="POST" onsubmit="return validatePasswordChange()" class="space-y-6">
+    <form method="POST" id="cambia-con-form" class="space-y-6">
       {% csrf_token %}
       <h2 class="text-3xl font-bold text-madera-dark text-center">Cambia Tu Contraseña</h2>
 
       
 
-      <div>
-        <label for="new_password" class="block text-madera-dark font-medium mb-1">Nueva Contraseña</label>
-        <input type="password" id="new_password" name="new_password" placeholder="Ingresa la nueva contraseña" required
-               class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-madera-primary" />
-      </div>
-
-      <div>
-        <label for="confirm_password" class="block text-madera-dark font-medium mb-1">Confirmar Nueva Contraseña</label>
-        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirma la nueva contraseña" required
-               class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-madera-primary" />
-      </div>
+      <div class="mb-4">
+  <label for="new_password" class="block text-sm font-medium text-gray-700">Nueva contraseña</label>
+  <div class="relative">
+    <input
+      type="password"
+      id="new_password"
+      name="new_password"
+      required
+      class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 pr-10"
+    />
+    <button type="button" id="toggle-new-password" tabindex="-1"
+      class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none">
+      <svg id="eye-icon-new" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 0c0 5-9 9-9 9s-9-4-9-9 9-9 9-9 9 4 9 9z" />
+      </svg>
+    </button>
+  </div>
+</div>
+<div class="mb-4">
+  <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirmar contraseña</label>
+  <div class="relative">
+    <input
+      type="password"
+      id="confirm_password"
+      name="confirm_password"
+      required
+      class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 pr-10"
+    />
+    <button type="button" id="toggle-confirm-password" tabindex="-1"
+      class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none">
+      <svg id="eye-icon-confirm" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 0c0 5-9 9-9 9s-9-4-9-9 9-9 9-9 9 4 9 9z" />
+      </svg>
+    </button>
+  </div>
+</div>
 
       <button type="submit" class="w-full py-3 rounded-full bg-madera-primary text-white font-bold hover:bg-madera-secondary transition-colors">
         Cambiar Contraseña
@@ -63,6 +90,57 @@
     </form>
   </div>
 
+  <!-- Alerta flotante para errores -->
+  <div id="floating-alert" 
+    style="display:none; position:fixed; top:30px; left:50%; transform:translateX(-50%); background:#f87171; color:white; padding:12px 24px; border-radius:6px; z-index:9999; box-shadow:0 2px 8px rgba(0,0,0,0.15); font-weight:bold;"></div>
+
+  <!-- Modal de confirmación -->
+  <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-6 rounded shadow-lg text-center">
+      <p class="mb-4">¿Estás seguro de cambiar tu contraseña?</p>
+      <button id="confirm-yes" class="bg-green-600 text-white px-4 py-2 rounded mr-2">Sí</button>
+      <button id="confirm-no" class="bg-gray-400 text-white px-4 py-2 rounded">No</button>
+    </div>
+  </div>
+
   <script src="{% static 'js/cambia_con.js' %}"></script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Nueva contraseña
+    var newPasswordInput = document.getElementById('new_password');
+    var toggleNewBtn = document.getElementById('toggle-new-password');
+    var eyeIconNew = document.getElementById('eye-icon-new');
+    var showingNew = false;
+
+    if (toggleNewBtn) {
+      toggleNewBtn.addEventListener('click', function() {
+        showingNew = !showingNew;
+        newPasswordInput.type = showingNew ? 'text' : 'password';
+        eyeIconNew.innerHTML = showingNew
+          ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4-9-7s4-7 9-7c1.657 0 3.216.417 4.563 1.138M15 12a3 3 0 11-6 0 3 3 0 016 0z" />'
+          : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 0c0 5-9 9-9 9s-9-4-9-9 9-9 9-9 9 4 9 9z" />';
+      });
+    }
+
+    // Confirmar contraseña
+    var confirmPasswordInput = document.getElementById('confirm_password');
+    var toggleConfirmBtn = document.getElementById('toggle-confirm-password');
+    var eyeIconConfirm = document.getElementById('eye-icon-confirm');
+    var showingConfirm = false;
+
+    if (toggleConfirmBtn) {
+      toggleConfirmBtn.addEventListener('click', function() {
+        showingConfirm = !showingConfirm;
+        confirmPasswordInput.type = showingConfirm ? 'text' : 'password';
+        eyeIconConfirm.innerHTML = showingConfirm
+          ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4-9-7s4-7 9-7c1.657 0 3.216.417 4.563 1.138M15 12a3 3 0 11-6 0 3 3 0 016 0z" />'
+          : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 0c0 5-9 9-9 9s-9-4-9-9 9-9 9-9 9 4 9 9z" />';
+      });
+    }
+  });
+</script>
+
+
 </body>
 </html>

@@ -413,8 +413,26 @@
     <i class="fas fa-bars"></i>
   </button>
 
+  <div id="floating-alert" 
+  style="display:none; position:fixed; top:30px; left:50%; transform:translateX(-50%); background:#22c55e; color:white; padding:12px 24px; border-radius:6px; z-index:9999; box-shadow:0 2px 8px rgba(0,0,0,0.15); font-weight:bold;"></div>
+
   <script src="{% static 'js/accessibility.js'%}"></script>
 
+
+  {% if messages %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var alertDiv = document.getElementById('floating-alert');
+      {% for message in messages %}
+        alertDiv.textContent = "{{ message|escapejs }}";
+        alertDiv.style.display = 'block';
+        setTimeout(function() {
+          alertDiv.style.display = 'none';
+        }, 3000);
+      {% endfor %}
+    });
+  </script>
+  {% endif %}
 
   <!-- Script para activación de menú actual -->
   <script>

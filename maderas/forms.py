@@ -171,3 +171,15 @@ class ProductForm(forms.ModelForm):
             'price':     forms.NumberInput(attrs={'class':'mt-1 block w-full','step':'0.01'}),
             'stock':     forms.NumberInput(attrs={'class':'mt-1 block w-full'}),
         }
+        
+    def clean_price(self):
+        price = self.cleaned_data.get('price')
+        if price is not None and price < 0:
+            raise forms.ValidationError("El precio no puede ser negativo.")
+        return price
+
+    def clean_stock(self):
+        stock = self.cleaned_data.get('stock')
+        if stock is not None and stock < 0:
+            raise forms.ValidationError("El stock no puede ser negativo.")
+        return stock

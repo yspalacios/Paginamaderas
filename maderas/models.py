@@ -1,6 +1,7 @@
 from django.db import models  # Importa el módulo de modelos de Django
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin  # Importa clases para crear usuarios personalizados
 from django.core.validators import RegexValidator  # Importa el validador para expresiones regulares
+from django.core.validators import MinValueValidator
 
 
 class TipoMadera(models.Model):
@@ -21,7 +22,7 @@ class Producto(models.Model):
     descripcion = models.TextField()  # Descripción detallada del producto
     imagen = models.ImageField(upload_to='productos/', null=True, blank=True)  # Imagen del producto 
     publicado = models.BooleanField(default=False)  # Indica si el producto está publicado
-    precio = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Precio del producto (máximo 10 dígitos, 2 decimales)
+    precio = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, validators=[MinValueValidator(0)])  # Precio del producto (máximo 10 dígitos, 2 decimales)
 
     def __str__(self):
         return self.nombre_producto  # Representación en cadena del objeto Producto
@@ -139,8 +140,8 @@ class Document(models.Model):
 class Product(models.Model):
     name            =models.CharField("Nombre", max_length=255)
     wood_type       =models.CharField("Tipo de madera", max_length=100, blank=True)
-    price           =models.DecimalField(max_digits=10, decimal_places=2)
-    stock           =models.PositiveIntegerField(default=0)
+    price           =models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
+    stock           =models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])
     created_at      =models.DateTimeField(auto_now_add=True)
     updated_at      =models.DateTimeField(auto_now=True)
 

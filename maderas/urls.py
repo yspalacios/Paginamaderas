@@ -18,6 +18,7 @@ urlpatterns = [
     path('libros/quitar_publicidad/<int:productoId>/', views.quitar_publicidad, name='quitar_publicidad'),
     path('productos/', views.inicio, name='inicio_publicados'),
     
+    
     #===================================================================
     # Rutas para la gestión de usuarios
     #===================================================================

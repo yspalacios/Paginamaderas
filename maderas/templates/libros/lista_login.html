@@ -234,6 +234,7 @@
 
 
   <script>
+    let deleteAccountId = null;
   // Función para cerrar modal al hacer clic fuera del contenido
   function addOutsideClickClose(modalId, contentId, closeFn) {
     const modal = document.getElementById(modalId);
@@ -264,9 +265,20 @@
 function closeEditModal() {
   document.getElementById('editModal').classList.add('hidden');
 }
-function openEditModal(/* tus parámetros */) {
+function openEditModal(id, email, phone, question, answer, recovery_email) {
   document.getElementById('editModal').classList.remove('hidden');
-  // ...tu lógica para cargar datos...
+  const form = document.getElementById('editForm');
+  form.action = "/libros/editar_cuenta/" + id + "/";
+  document.getElementById('email').value = email;
+  document.getElementById('phone').value = phone;
+  document.getElementById('security_question').value = question;
+  document.getElementById('security_answer').value = answer;
+  document.getElementById('recovery_email').value = recovery_email;
+  document.getElementById('password').value = '';
+  document.getElementById('confirm_password').value = '';
+}
+function closeEditModal() {
+  document.getElementById('editModal').classList.add('hidden');
 }
 addOutsideClickClose('editModal', 'editModalContent', closeEditModal);
 
@@ -274,9 +286,18 @@ addOutsideClickClose('editModal', 'editModalContent', closeEditModal);
 function closeDeleteModal() {
   document.getElementById('deleteModal').classList.add('hidden');
 }
-function openDeleteModal(/* tus parámetros */) {
+function openDeleteModal(id) {
+  deleteAccountId = id;
   document.getElementById('deleteModal').classList.remove('hidden');
-  // ...tu lógica para cargar datos...
+}
+function closeDeleteModal() {
+  deleteAccountId = null;
+  document.getElementById('deleteModal').classList.add('hidden');
+}
+function confirmDelete() {
+  if (deleteAccountId) {
+    window.location.href = `/libros/eliminar_cuenta/${deleteAccountId}/`;
+  }
 }
 addOutsideClickClose('deleteModal', 'deleteModalContent', closeDeleteModal);
 </script>

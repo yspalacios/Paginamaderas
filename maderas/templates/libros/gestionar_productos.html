@@ -432,7 +432,7 @@
       </div>
     </div>
   </div>
-
+ b 
   <!-- Modal nuevo tipo madera -->
   <div id="modal-tipo" class="modal hidden">
     <div class="modal-content max-w-md">
@@ -461,7 +461,7 @@
     // Referencias
     const modalTipo = document.getElementById('modal-tipo');
     const btnNuevoTipo = document.getElementById('btn-nuevo-tipo');
-    const btnCloseTipo = document.getElementById('btn-close-tipo');
+    const btnCloseTipo = document.getElementById('btn-cancelar-tipo');
     const formTipo = document.getElementById('form-tipo-madera');
     const selectTipo = document.getElementById('tipo_madera');
     const btnCancelarTipo = document.getElementById('btn-cancelar-tipo');
@@ -538,7 +538,58 @@
     }
   });
   </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('form-producto');
+  const nombreInput = document.getElementById('nombre_producto');
+  const tipoSelect = document.getElementById('tipo_madera');
 
+  // Modal de alerta
+  function mostrarAlerta(mensaje) {
+    const modal = document.getElementById('modal-alerta');
+    const mensajeAlerta = document.getElementById('mensaje-alerta');
+    mensajeAlerta.textContent = mensaje;
+    modal.classList.remove('hidden');
+  }
+  document.getElementById('cerrar-alerta').onclick = function() {
+    document.getElementById('modal-alerta').classList.add('hidden');
+  };
+  document.getElementById('btn-cerrar-alerta').onclick = function() {
+    document.getElementById('modal-alerta').classList.add('hidden');
+  };
+
+  // Validación de duplicados al enviar el formulario
+  form.addEventListener('submit', function(e) {
+    const nombre = nombreInput.value.trim();
+    const tipo = tipoSelect.value;
+
+    if (!nombre || !tipo) return; // Validación básica
+
+    e.preventDefault(); // Detiene el envío hasta validar
+
+    fetch(`/inventario/validar_existente/?nombre_producto=${encodeURIComponent(nombre)}&tipo_madera=${encodeURIComponent(tipo)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.existe) {
+          mostrarAlerta("Ya existe un producto con ese nombre y tipo de madera.");
+        } else {
+          form.submit(); // Si no existe, envía el formulario
+        }
+      })
+      .catch(() => {
+        mostrarAlerta("Error al validar duplicado.");
+      });
+  });
+});
+</script>
   <script src="{% static 'js/gestionar_productos.js' %}"></script>
+  <div id="modal-alerta" class="modal hidden">
+  <div class="modal-content max-w-sm text-center">
+    <span class="close" id="cerrar-alerta" style="float:right;cursor:pointer;">&times;</span>
+    <h3 class="text-lg font-semibold mb-4 text-[#e53e3e]">¡Atención!</h3>
+    <p id="mensaje-alerta" class="mb-6"></p>
+    <button id="btn-cerrar-alerta" class="bg-[#e53e3e] text-white px-4 py-2 rounded hover:bg-[#c53030]">Cerrar</button>
+  </div>
+</div>
 </body>
 </html>

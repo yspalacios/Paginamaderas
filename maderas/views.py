@@ -221,11 +221,30 @@ def gestionar_productos_ajax(request):
 # Vistas para gestión de productos
 # --------------------------
 
+
+
+from django.views.decorators.http import require_GET
+
+@require_GET
+@login_required(login_url="/libros/login/")
+def validar_producto_existente(request):
+    nombre = request.GET.get('nombre_producto') or request.GET.get('name')
+    tipo_id = request.GET.get('tipo_madera') or request.GET.get('wood_type')
+    existe = Producto.objects.filter(nombre_producto=nombre, tipo_madera_id=tipo_id).exists()
+    return JsonResponse({'existe': existe})
+
+ 
 @login_required(login_url="/libros/login/")
 @never_cache
 def gestionar_productos(request):
     if request.method == "POST":
         form = ProductoForm(request.POST, request.FILES)
+        nombre = request.POST.get('nombre_producto') 
+        tipo_id = request.POST.get('tipo_madera')
+           # Verifica si ya existe un producto con ese nombre y tipo de madera
+        if Producto.objects.filter(nombre_producto=nombre, tipo_madera_id=tipo_id).exists():
+            messages.error(request, "El producto ya existe.")
+            return redirect('gestionar_productos')
         if form.is_valid():
             form.save()
             return redirect('gestionar_productos')
@@ -434,21 +453,14 @@ def carpeta(request):
 
 
 
-
+# views.py
 @login_required(login_url="/libros/login/")
 @never_cache
 def get_folders(request):
     folders = Folder.objects.all()
-    folders_list = []
+    data = []
     for folder in folders:
-        docs_list = []
-        for doc in folder.documents.all():
-            docs_list.append({
-                'id': doc.id,
-                'name': doc.file.name,
-                'url': doc.file.url,  # Asegúrate de que MEDIA_URL esté configurado correctamente
-            })
-        folders_list.append({
+        data.append({
             'id': folder.id,
             'name': folder.name,
             'status': folder.status,
@@ -457,14 +469,35 @@ def get_folders(request):
             'salario_actual': folder.salario_actual,
             'horas_trabajo': folder.horas_trabajo,
             'tiempo_contrato': folder.tiempo_contrato,
+            'tipo_documento': folder.tipo_documento,
             'numero_identidad': folder.numero_identidad,
             'numero_seguro_social': folder.numero_seguro_social,
             'eps': folder.eps,
             'fondo_pensiones': folder.fondo_pensiones,
             'arl': folder.arl,
-            'documents': docs_list
         })
-    return JsonResponse(folders_list, safe=False)
+    return JsonResponse(data, safe=False)
+@login_required(login_url="/libros/login/")
+@never_cache
+def get_folder(request, folder_id):
+    folder = get_object_or_404(Folder, id=folder_id)
+    data = {
+        'id': folder.id,
+        'name': folder.name,
+        'status': folder.status,
+        'fecha_inicio': folder.fecha_inicio,
+        'puesto_designado': folder.puesto_designado,
+        'salario_actual': folder.salario_actual,
+        'horas_trabajo': folder.horas_trabajo,
+        'tiempo_contrato': folder.tiempo_contrato,
+        'tipo_documento': folder.tipo_documento,  # <-- ¡IMPORTANTE!
+        'numero_identidad': folder.numero_identidad,
+        'numero_seguro_social': folder.numero_seguro_social,
+        'eps': folder.eps,
+        'fondo_pensiones': folder.fondo_pensiones,
+        'arl': folder.arl,
+    }
+    return JsonResponse(data)
 
 
 @login_required(login_url="/libros/login/")
@@ -885,6 +918,8 @@ def inventory_list(request):
         tipo_id = data.get('wood_type')
         tipo_obj = get_object_or_404(TipoMadera, pk=tipo_id)
         data['wood_type'] = tipo_obj.nombre
+        
+        
         
         form = ProductForm(data)
         if form.is_valid():

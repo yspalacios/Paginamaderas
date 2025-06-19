@@ -17,7 +17,9 @@ urlpatterns = [
     path('libros/publicar_producto/<int:productoId>/', views.publicar_producto, name='publicar_producto'),
     path('libros/quitar_publicidad/<int:productoId>/', views.quitar_publicidad, name='quitar_publicidad'),
     path('productos/', views.inicio, name='inicio_publicados'),
-    
+    # urls.py
+    path('inventario/validar_existente/', views.validar_producto_existente, name='validar_producto_existente'),
+    path('get-folder/<int:folder_id>/', views.get_folder, name='get_folder'),
     
     #===================================================================
     # Rutas para la gestión de usuarios

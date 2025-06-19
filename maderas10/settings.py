@@ -154,8 +154,6 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Ruta al directorio bin de tu MySQL en Laragon;
 # ajústalo a la versión que tengas instalada:
-MYSQL_BIN_DIR = r"C:\laragon\bin\mysql\mysql‑8.0.30‑winx64\bin"
-
-# Rutas absolutas a los ejecutables
+MYSQL_BIN_DIR = r"C:\laragon\bin\mysql\mysql-8.0.30-winx64\bin"
 MYSQLDUMP_PATH = os.path.join(MYSQL_BIN_DIR, "mysqldump.exe")
 MYSQL_PATH     = os.path.join(MYSQL_BIN_DIR, "mysql.exe")

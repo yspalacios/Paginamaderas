@@ -31,29 +31,35 @@ class Producto(models.Model):
 # Modelo para la creación de cuentas de usuario
 #-------------------------------------------------
 
-# Manager personalizado para el modelo de Cuenta
+#modelo para crear eñ super usuario
 class CuentaManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
-        # Se valida que se provea un correo electrónico
         if not email:
             raise ValueError("El correo electrónico es obligatorio")
-        
-        # Validar que se hayan enviado nombres y apellidos
-        if 'nombres' not in extra_fields or not extra_fields['nombres']:
-            raise ValueError("El campo 'nombres' es obligatorio")
-        if 'apellidos' not in extra_fields or not extra_fields['apellidos']:
-            raise ValueError("El campo 'apellidos' es obligatorio")
-        
-        email = self.normalize_email(email)  # Normaliza el email
-        user = self.model(email=email, **extra_fields)  # Crea una instancia del usuario
-        user.set_password(password)  # Establece la contraseña del usuario
-        user.save(using=self._db)  # Guarda el usuario en la base de datos
+
+        # Solo validar nombres y apellidos si no es superusuario
+        if not extra_fields.get('is_superuser', False):
+            if 'nombres' not in extra_fields or not extra_fields['nombres']:
+                raise ValueError("El campo 'nombres' es obligatorio")
+            if 'apellidos' not in extra_fields or not extra_fields['apellidos']:
+                raise ValueError("El campo 'apellidos' es obligatorio")
+
+        # Asignar estado por defecto si no es superusuario
+        if not extra_fields.get('is_superuser', False):
+            extra_fields.setdefault('is_active', False)
+            extra_fields.setdefault('status', 'No Activo')
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, email, password, **extra_fields):
-        # Para un superusuario, se deben establecer los siguientes campos en True
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
+        extra_fields["is_active"] = True
+        extra_fields["status"] = "Activo"
         return self.create_user(email, password, **extra_fields)
 
 # Modelo personalizado de Cuenta que hereda de AbstractBaseUser y PermissionsMixin

@@ -12,21 +12,24 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Carga las variables de entorno del archivo .env
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$ew=_itxje^%gvhq!8e72d9_39jy*@2@d+p-)1@8yayic@+77&'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -78,12 +81,11 @@ WSGI_APPLICATION = 'maderas10.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'NAME': 'maderas20',
-        'USER': 'root',
-        'PASSWORD':'',
-        'HOST':'127.0.0.1',
-        'PORT': '3306' 
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'), # Este ahora será 'db', el nombre del servicio
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -144,13 +146,13 @@ APP_DIRS:True
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 
+# Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'lapruebaconesta@gmail.com'
-EMAIL_HOST_PASSWORD = 'gtfgwukwqizqyxru'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 

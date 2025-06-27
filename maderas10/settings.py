@@ -31,6 +31,8 @@ DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')
 
 ALLOWED_HOSTS = ['*']
 
+# MODIFICACIÓN 2: Añade tu dominio a los orígenes CSRF de confianza
+CSRF_TRUSTED_ORIGINS = ['https://maderasisabella.artisandev.site']
 
 # Application definition
 

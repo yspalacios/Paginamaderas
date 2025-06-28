@@ -1,39 +1,51 @@
+# =================================================================
+#  Archivo Docker Compose hace uso de las variables en .en
+#  Versión optimizada con documentación y buenas prácticas.
+#  NO Olvidar cambiar el nombre del proyecto en las variables (maderasisabella)
+# =================================================================
+
 services:
-  # --- Django Application Service ---
+  # --- Servicio de la Aplicación Django ---
   web:
-    # Build the image from the Dockerfile in the current directory
+    # Construye la imagen apartir del Dockerfile en la ruta actual
     build: .
-    # Name the custom image using the project name for easy identification
-    image: maderasisabella_web
-    # Name the running container
-    container_name: maderasisabella_app
+    image: maderasisabella_web  # Nombre de la imagen Docker construida
+    container_name: maderasisabella_app # Nombre del contenedor
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      # Mount local code into the container for live development
+      # Montal el codigo del proyecto dentro del contenedor en la carpeta /app
       - .:/app
-      # Use named volumes for persistent static and media files
+      # Monta un "volumen nombrado" para los archivos estáticos.
       - maderasisabella_static_volume:/app/staticfiles
       - maderasisabella_media_volume:/app/media
     ports:
-      - "8015:8000"
+	    # Mapea el puerto 8000 dentro del contenedor al puerto 8015 afuera, 
+	    # en tu máquina. Así, puedes acceder a tu app desde http://localhost:8015.
+      - "8015:8000" # OJO Puerto del Proxy Inverso.. (8015)
     networks:
-      - maderasisabella_network
+	    # Asegura que este contenedor pueda comunicarse con otros contenedores
+	    # en la misma red
+      - maderasisabella_network # Se conecta a la red definida abajo
     environment:
+	    # Carga las variables del archivo .env
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=${DEBUG}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
-      - DB_HOST=db # This should always be the service name of the database
+      - DB_HOST=db # Debe ser el nombre del servicio de la BD
       - DB_PORT=${DB_PORT}
       - EMAIL_HOST_USER=${EMAIL_HOST_USER}
       - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
     # This service will not start until the 'db' service reports as healthy
-    depends_on:
-      db:
+    depends_on: # Define el orden de arranque de los servicios.
+      # Le dice al servicio web que no intente arrancar hasta que el servicio 
+      # db no solo se haya iniciado
+      db: 
+	      # db debe estar reportando un estado "saludable" (healthcheck)
         condition: service_healthy
 
-  # --- MySQL Database Service ---
+  # --- Servicio de Base de Datos MySQL ---
   db:
     image: mysql:8.0
     container_name: maderasisabella_mysql_db
@@ -43,21 +55,22 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
-      # Use a named volume for persistent database data
+      # Usa un volumen nombrado para persistir la BD
       - maderasisabella_mysql_data:/var/lib/mysql
     networks:
       - maderasisabella_network
     ports:
-      - "3315:3306"
-    # Healthcheck ensures the database is fully initialized and ready
-    # for connections before other services start.
+      - "3315:3306" # Puerto mapeado
+    # Define un comando que Docker ejecuta periódicamente para verificar 
+    # si el servicio está realmente funcionando..
     healthcheck:
+	    # Es una forma ligera de preguntar a MySQL "¿estás vivo y aceptas conexiones?".
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      interval: 10s # Cada cuanto pregunta
+      timeout: 5s # Cuanto debe esperar por la respuesta
+      retries: 5 # Cuantos intentos debe hacer
 
-  # --- phpMyAdmin Service ---
+  # --- Servicio Opcional: phpMyAdmin ---
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: maderasisabella_phpmyadmin_gui
@@ -69,7 +82,6 @@ services:
       - "8030:80"
     networks:
       - maderasisabella_network
-    # This service also waits for the database to be healthy
     depends_on:
       db:
         condition: service_healthy
@@ -78,11 +90,15 @@ services:
 # A dedicated network for the project's services to communicate
 networks:
   maderasisabella_network:
+	  name: maderasisabella_network
     driver: bridge
 
 # --- Volume Definitions ---
-# Defines the named volumes for data persistence
+# Definimos los volumenes de persistencia de datos
 volumes:
-  maderasisabella_mysql_data: {}
-  maderasisabella_static_volume: {}
-  maderasisabella_media_volume: {}
+  maderasisabella_mysql_data:
+    name: maderasisabella_mysql_data
+  maderasisabella_static_data:
+    name: maderasisabella_static_volume
+  maderasisabella_media_data:
+    name: maderasisabella_media_volume
